@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace DAL.Models
@@ -23,6 +24,7 @@ namespace DAL.Models
         public DateTime End { get; set; }
 
         [Required]
+        [ForeignKey("Unit_Id")]
         public virtual Unit Unit { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual ICollection<Like> Likes { get; set; }

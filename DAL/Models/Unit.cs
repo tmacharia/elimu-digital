@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace DAL.Models
@@ -20,9 +21,11 @@ namespace DAL.Models
         [Required]
         public virtual Course Course { get; set; }
         public virtual Lecturer Lecturer { get; set; }
+
+        [ForeignKey("Exam_Id")]
         public virtual Exam Exam { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
-        public virtual ICollection<Student> Students { get; set; }
+        public virtual ICollection<StudentUnit> UnitStudents { get; set; }
         public virtual ICollection<Class> Classes { get; set; }
         public virtual ICollection<Content> Contents { get; set; }
     }

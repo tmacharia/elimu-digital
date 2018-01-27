@@ -20,9 +20,9 @@ namespace DAL.Contexts
         public virtual DbSet<Content> Contents { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Exam> Exams { get; set; }
-        public virtual DbSet<Lecturer> Lecturer { get; set; }
+        public virtual DbSet<Lecturer> Lecturers { get; set; }
         public virtual DbSet<Like> Likes { get; set; }
-        public virtual DbSet<Location> Location { get; set; }
+        public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Profile> Profiles { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<School> Schools { get; set; }
@@ -30,11 +30,25 @@ namespace DAL.Contexts
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<Unit> Units { get; set; }
         public virtual DbSet<Admin> Administrators { get; set; }
+        public virtual DbSet<StudentUnit> StudentUnits { get; set; }
 
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
+
+            builder.Entity<StudentUnit>()
+                   .HasKey(s => new { s.StudentId, s.UnitId });
+
+            builder.Entity<StudentUnit>()
+                   .HasOne(s => s.Student)
+                   .WithMany(s => s.StudentUnits)
+                   .HasForeignKey(s => s.StudentId);
+
+            builder.Entity<StudentUnit>()
+                   .HasOne(s => s.Unit)
+                   .WithMany(s => s.UnitStudents)
+                   .HasForeignKey(s => s.UnitId);
         }
     }
 }
