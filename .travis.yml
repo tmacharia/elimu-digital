@@ -5,5 +5,4 @@ dotnet: 2.0.2
 mono: latest
 
 script:
-  - dotnet restore
-  - dotnet build
+  - dotnet build DAL && dotnet build Services && dotnet build Web
