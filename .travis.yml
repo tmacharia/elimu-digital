@@ -1,0 +1,9 @@
+language: csharp
+solution: Learning Pad.sln
+
+dotnet: 2.0.2
+mono: latest
+
+script:
+  - dotnet restore
+  - dotnet build
