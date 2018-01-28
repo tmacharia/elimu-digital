@@ -5,4 +5,5 @@ mono: none
 dotnet: 1.1.5
 
 script:
+  - dotnet restore
   - dotnet build DAL && dotnet build Services && dotnet build Web
