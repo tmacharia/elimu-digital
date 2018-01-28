@@ -10,7 +10,9 @@ An e-learning application for universities that strives to easen the workflow be
 
 To get started working or running this project in your local machine. Just clone this repository by pasting the command below in your `git bash console` or `command prompt` provided you have `git` installed on your machine.
 
-``git clone https://github.com/devTimmy/learning-pad.git``
+```
+$ git clone https://github.com/devTimmy/learning-pad.git
+```
 
 
 ## Features
