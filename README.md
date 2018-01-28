@@ -1,4 +1,4 @@
-# Learning Pad
+# E-Learning Pad
 
 [![Build Status](https://travis-ci.org/devTimmy/learning-pad.svg?branch=master)](https://travis-ci.org/devTimmy/learning-pad)
 [![GitHub license](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](https://github.com/devTimmy/learning-pad/blob/master/LICENSE)
