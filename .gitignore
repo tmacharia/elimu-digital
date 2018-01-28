@@ -19,6 +19,7 @@ Web/bin/
 Web/obj/
 Web/wwwroot/lib/
 Web/Data/Migrations/
+TestConsole/
 
 # Build results
 [Dd]ebug/
