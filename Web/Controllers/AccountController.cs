@@ -365,7 +365,7 @@ namespace Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendCode()
+        public Task<IActionResult> SendCode()
         {
             throw new NotImplementedException();
         }
