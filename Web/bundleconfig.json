@@ -6,6 +6,28 @@
     // An array of relative input file paths. Globbing patterns supported
     "inputFiles": [
       "wwwroot/css/site.css"
+    ],
+    "minify": {
+      "gzip": true,
+      "enabled": true,
+      "outputMode": "multipleLines",
+      "renameLocals": true
+    },
+    "sourceMap": true
+  },
+  {
+    "outputFileName": "wwwroot/css/site.css",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "Assets/css/*.css",
+      "Assets/css/*/.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/site.js",
+    "inputFiles": [
+      "Assets/js/*.js",
+      "Assets/js/*/*.js"
     ]
   },
   {
@@ -15,10 +37,12 @@
     ],
     // Optionally specify minification options
     "minify": {
+      "gzip": true,
       "enabled": true,
+      "outputMode": "multipleLines",
       "renameLocals": true
     },
     // Optionally generate .map file
-    "sourceMap": false
+    "sourceMap": true
   }
 ]

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Common.AccountViewModels;
+using DAL.Contexts;
 using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -20,6 +22,7 @@ namespace Web.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly AppDbContext _appDbContext;
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
@@ -28,6 +31,7 @@ namespace Web.Controllers
         public AccountController(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
+            AppDbContext appDbContext,
             IOptions<IdentityCookieOptions> identityCookieOptions,
             IEmailSender emailSender,
             ISmsSender smsSender,
@@ -35,10 +39,51 @@ namespace Web.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _appDbContext = appDbContext;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+        }
+
+        [HttpGet]
+        public ActionResult List()
+        {
+            var users = _userManager.Users.ToList();
+            
+            return Ok(users);
+        }
+        public ActionResult Roles()
+        {
+            var roles = _appDbContext.Roles.ToList();
+
+            return Ok(roles);
+        }
+        public ActionResult SeedRoles()
+        {
+            List<AppRole> list = new List<AppRole>()
+            {
+                new AppRole()
+                {
+                    Name = "Admin",
+                    NormalizedName = "ADMIN"
+                },
+                new AppRole()
+                {
+                    Name = "Lecturer",
+                    NormalizedName = "Lecturer"
+                },
+                new AppRole()
+                {
+                    Name = "Student",
+                    NormalizedName = "Student"
+                }
+            };
+
+            _appDbContext.Roles.AddRange(list);
+            _appDbContext.SaveChanges();
+
+            return RedirectToAction("Roles");
         }
 
         //
