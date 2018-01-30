@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Web.Models;
-using Web.Models.ManageViewModels;
-using Web.Services;
+using Common.AccountViewModels;
+using DAL.Models;
+using Services;
+using Common.ManageViewModels;
 
 namespace Web.Controllers
 {
