@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DAL.Models
 {
-    public class AppUser : IdentityUser<Guid>
+    public class AppUser : IdentityUser
     {
     }
 }

@@ -24,7 +24,6 @@ namespace DAL.Models
         public DateTime End { get; set; }
 
         [Required]
-        [ForeignKey("Unit_Id")]
         public virtual Unit Unit { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual ICollection<Like> Likes { get; set; }

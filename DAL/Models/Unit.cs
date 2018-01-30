@@ -22,8 +22,7 @@ namespace DAL.Models
         public virtual Course Course { get; set; }
         public virtual Lecturer Lecturer { get; set; }
 
-        [ForeignKey("Exam_Id")]
-        public virtual Exam Exam { get; set; }
+        public virtual ICollection<Exam> Exams { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
         public virtual ICollection<StudentUnit> UnitStudents { get; set; }
         public virtual ICollection<Class> Classes { get; set; }

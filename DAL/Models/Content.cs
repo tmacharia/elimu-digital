@@ -9,8 +9,10 @@ namespace DAL.Models
     public class Content : Base
     {
         [Required]
-        [DefaultValue(Models.ContentType.Document)]
-        public ContentType Type { get; set; }
+        public string FileName { get; set; }
+        [Required]
+        [DefaultValue(Models.FormatType.Document)]
+        public FormatType Type { get; set; }
         [Required]
         [MaxLength(50)]
         public string Title { get; set; }

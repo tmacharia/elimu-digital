@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DAL.Models
 {
-    public class AppRole : IdentityRole<Guid>
+    public class AppRole : IdentityRole
     {
 
     }
