@@ -37,7 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\css\" />
     <Folder Include="Assets\js\" />
   </ItemGroup>
 

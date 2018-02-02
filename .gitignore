@@ -10,12 +10,9 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
-*/bin/
-*/obj/
-*/Migrations/
-*/Data/Migrations/
-*/wwwroot/lib/
-ConsoleApp1/
+bin/
+obj/
+wwwroot/lib/
 
 # Build results
 [Dd]ebug/
