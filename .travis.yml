@@ -4,11 +4,15 @@ solution: Learning Pad.sln
 mono: none
 dotnet: 1.1.5
 
-# safelist
+# blacklist
+branches:
+  except:
+    - master
+
+# whitelist
 branches:
   only:
-  - master
-  - web
+    - web
 
 script:
   - dotnet restore
