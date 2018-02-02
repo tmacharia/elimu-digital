@@ -45,7 +45,10 @@ namespace Common.Models
             // Get file format
             _format = GetFileFormat();
         }
+        public FormFile()
+        {
 
+        }
         public FormatType Format => _format;
 
         private FormatType GetFileFormat()
