@@ -6,12 +6,15 @@
 /*================================
      Global styles & overrides
  *===============================*/
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 html, body {
     margin: 0px;
     padding: 0px;
-    font-family: 'Roboto, sans-serif';
+    font-family: 'Roboto', sans-serif;
     background: #d8d8d8;
 }
+
 /*================================
      Text styles & overrides
  *===============================*/
