@@ -6,18 +6,28 @@
 /*================================
      Global styles & overrides
  *===============================*/
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
 html, body {
     margin: 0px;
     padding: 0px;
-    font-family: 'Roboto', sans-serif;
-    background: #d8d8d8;
+    direction:initial;
 }
 
 /*================================
      Text styles & overrides
  *===============================*/
+
+.ion-2x{
+    font-size:24px !important;
+}
+.ion-3x{
+    font-size:30px !important;
+}
+.ion-4x{
+    font-size:36px !important;
+}
+.ion-5x {
+    font-size: 40px !important;
+}
 
 /*================================
      Button styles & overrides

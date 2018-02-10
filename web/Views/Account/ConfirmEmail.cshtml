@@ -1,10 +1,27 @@
 ﻿@{
-    ViewData["Title"] = "Confirm Email";
+    Layout = "~/Views/Shared/_LoginPartial.cshtml";
+    ViewBag.Title = "Confirm Email";
+    string error = (string)ViewBag.error;
 }
 
-<h2>@ViewData["Title"].</h2>
-<div>
-    <p>
-        Thank you for confirming your email. Please <a asp-controller="Account" asp-action="Login">Click here to Log in</a>.
-    </p>
+<div class="py-5 text-center w-100">
+    <span>
+        <i class="ion ion-university ion-5x"></i>
+    </span>
+    <h3>
+        <i class="ion ion-checkmark-circled ion-3x text-success"></i>
+        Success!
+    </h3>
+    <br />
+
+    <div class="mx-auto w-xxl w-auto-xs">
+        <div class="px-3">
+            <div>
+                <h5> <span class="my-3">Thank you for confirming your email.</span></h5>
+            </div>
+            <div class="py-4">
+                <a class="btn primary" asp-controller="Account" asp-action="Login">Proceed to login</a>
+            </div>
+        </div>
+    </div>
 </div>

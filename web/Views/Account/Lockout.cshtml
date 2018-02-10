@@ -1,8 +1,24 @@
 ﻿@{
-    ViewData["Title"] = "Locked out";
+    Layout = "~/Views/Shared/_LoginPartial.cshtml";
+    ViewBag.Title = "Locked out";
+    string error = (string)ViewBag.error;
 }
 
-<header>
-    <h1 class="text-danger">Locked out.</h1>
-    <p class="text-danger">This account has been locked out, please try again later.</p>
-</header>
+<div class="py-5 text-center w-100">
+    <span>
+        <i class="ion ion-university ion-5x"></i>
+    </span>
+    <h3 class="text-danger">
+        <i class="ion ion-locked ion-3x"></i>
+        Locked out.
+    </h3>
+    <br />
+
+    <div class="mx-auto w-xxl w-auto-xs">
+        <div class="px-3">
+            <div>
+                <h5> <span class="my-3">This account has been locked out, please try again later.</span></h5>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DAL.Contexts;
 using DAL.Models;
+using Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,7 @@ namespace web
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+            
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -36,12 +38,15 @@ namespace web
         {
             // Add framework services.
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(DbConnection));
 
             services.AddDbContext<LePadContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                    options.UseSqlServer(DbConnection));
 
-            services.AddIdentity<AppUser, AppRole>()
+            services.AddIdentity<AppUser, AppRole>(config => 
+                {
+                    config.SignIn.RequireConfirmedEmail = true;
+                })
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -51,9 +56,10 @@ namespace web
                         options.SerializerSettings.Formatting = Formatting.Indented;
                     });
 
-            // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
+            // Add application services
+            services.AddTransient<IEmailSender>(e => new AuthMessageSender(MailTitle,AdminEmail,MailPassword));
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<IUploader>(u => new UploaderService(BlobAccount));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,5 +92,57 @@ namespace web
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+
+        #region Private Section
+        /// <summary>
+        /// Gets connection string to use based on current build configuration
+        /// </summary>
+        private string DbConnection
+        {
+            get
+            {
+                if (Helpers.IsDebug)
+                {
+                    return Configuration.GetConnectionString("Development");
+                }
+                else
+                {
+                    return Configuration.GetConnectionString("Production");
+                }
+            }
+        }
+        /// <summary>
+        /// Get connection string to blobl storage account
+        /// </summary>
+        private string BlobAccount
+        {
+            get
+            {
+                return Configuration.GetConnectionString("BlobStorage");
+            }
+        }
+        private string MailTitle
+        {
+            get
+            {
+                return Configuration.GetSection("SMTP")["MailTitle"];
+            }
+        }
+        private string MailPassword
+        {
+            get
+            {
+                return Configuration.GetSection("SMTP")["Password"];
+            }
+        }
+
+        private string AdminEmail
+        {
+            get
+            {
+                return Configuration.GetSection("SMTP")["Email"];
+            }
+        }
+        #endregion
     }
 }
