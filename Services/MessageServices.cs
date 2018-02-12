@@ -40,7 +40,7 @@ namespace Services
 
             using (var client = new SmtpClient())
             {
-                client.LocalDomain = (Helpers.IsDebug) ? "localhost" : "e-learningpad.com";
+                client.LocalDomain = /*(Helpers.IsDebug) ? "localhost" : */"e-learningpad.com";
                 var smtp = settings.GetSMTPServer(mail);
 
 
