@@ -6,6 +6,7 @@
     "jquery": "2.2.0",
     "jquery-validation": "1.14.0",
     "jquery-validation-unobtrusive": "3.2.6",
-    "Ionicons": "ionicons#v2.0.1"
+    "Ionicons": "ionicons#v2.0.1",
+    "moment": "2.20.1"
   }
 }

@@ -19,6 +19,11 @@ namespace DAL.Models
             this.AccountId = identityId;
         }
 
+        public Lecturer()
+        {
+
+        }
+
         [Required]
         public Guid AccountId { get; set; }
 

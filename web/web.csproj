@@ -55,6 +55,7 @@
 
   <ItemGroup>
     <Folder Include="Assets\js\" />
+    <Folder Include="Views\Shared\Profiles\" />
   </ItemGroup>
 
 </Project>

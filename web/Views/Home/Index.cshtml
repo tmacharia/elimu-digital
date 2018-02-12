@@ -1,51 +1,237 @@
-﻿@{
-    ViewData["Title"] = "Home";
+﻿@{ 
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    ViewBag.Title = "Dashboard";
 }
 
-<div class="jumbotron">
-    <h2>E-Learning Pad</h2>
-    <h5>Jomo Kenyatta University of Agriculture &amp; Technology</h5>
-    <button class="btn btn-primary">Get Started</button>
+<div class="padding">
+    <div class="row">
+        <div class="col-sm-6 col-lg-3">
+            <div class="box list-item">
+                <span class="avatar w-40 text-center circle success"><span class="fa fa-dollar"></span></span>
+                <div class="list-body">
+                    <h4 class="m-0 text-md"><a href="#">75 <span class="text-sm">Sales</span></a></h4><small class="text-muted">6 waiting payment.</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="box list-item">
+                <span class="avatar w-40 text-center circle theme"><span class="fa fa-female"></span></span>
+                <div class="list-body">
+                    <h4 class="m-0 text-md"><a href="#">40 <span class="text-sm">Orders</span></a></h4><small class="text-muted">38 Shipped.</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="box list-item">
+                <span class="avatar w-40 text-center circle cyan"><span class="fa fa-bookmark"></span></span>
+                <div class="list-body">
+                    <h4 class="m-0 text-md"><a href="#">6k <span class="text-sm">Members</span></a></h4><small class="text-muted">632 VIP.</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="box list-item">
+                <span class="avatar w-40 text-center circle warning"><span class="fa fa-comment"></span></span>
+                <div class="list-body">
+                    <h4 class="m-0 text-md"><a href="#">69 <span class="text-sm">Comments</span></a></h4><small class="text-muted">5 approved.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row no-gutters box">
+        <div class="col-sm-4">
+            <div class="padding">
+                <h6>Sales Statistical Overview</h6>
+                <p class="text-muted my-3">Sale information on advertising, exhibitions, market research, online media, customer desires, PR and much more</p>
+                <p><i class="fa fa-arrow-circle-o-up text-success mr-1"></i><span class="text-success">15%</span> more than last week</p><a class="btn btn-sm btn-rounded success theme" href="#">Update</a> <a class="btn btn-sm btn-rounded white" href="#">See detail</a>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="padding light lt">
+                <canvas data-plugin="chart" height="120" id="chart-bubble"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="box">
+                <div class="box-header">
+                    <h3>Messages</h3>
+                </div>
+                <div class="list inset">
+                    <div class="list-item" data-id="item-5">
+                        <span class="w-40 avatar circle blue-grey"><img alt="." src="../assets/images/a5.jpg"></span>
+                        <div class="list-body">
+                            <a class="item-title _500" href="#">Radionomy</a>
+                            <div class="item-except text-sm text-muted h-1x">
+                                Competitive gaming ladders
+                            </div>
+                            <div class="item-tag tag hide"></div>
+                        </div>
+                        <div>
+                            <span class="item-date text-xs text-muted">09:50</span>
+                        </div>
+                    </div>
+                    <div class="list-item" data-id="item-14">
+                        <span class="w-40 avatar circle brown">BW</span>
+                        <div class="list-body">
+                            <a class="item-title _500" href="#">Brielle Williamson</a>
+                            <div class="item-except text-sm text-muted h-1x">
+                                Looking for some client-work
+                            </div>
+                            <div class="item-tag tag hide"></div>
+                        </div>
+                        <div>
+                            <span class="item-date text-xs text-muted">08:00</span>
+                        </div>
+                    </div>
+                    <div class="list-item" data-id="item-8">
+                        <span class="w-40 avatar circle teal"><img alt="." src="../assets/images/a8.jpg"></span>
+                        <div class="list-body">
+                            <a class="item-title _500" href="#">RYD</a>
+                            <div class="item-except text-sm text-muted h-1x">
+                                Added you to repo
+                            </div>
+                            <div class="item-tag tag hide"></div>
+                        </div>
+                        <div>
+                            <span class="item-date text-xs text-muted">14:00</span>
+                        </div>
+                    </div>
+                    <div class="list-item" data-id="item-1">
+                        <span class="w-40 avatar circle grey"><img alt="." src="../assets/images/a1.jpg"></span>
+                        <div class="list-body">
+                            <a class="item-title _500" href="#">Summerella</a>
+                            <div class="item-except text-sm text-muted h-1x">
+                                Send you a message
+                            </div>
+                            <div class="item-tag tag hide"></div>
+                        </div>
+                        <div>
+                            <span class="item-date text-xs text-muted">July 21</span>
+                        </div>
+                    </div>
+                    <div class="list-item" data-id="item-2">
+                        <span class="w-40 avatar circle light-blue"><img alt="." src="../assets/images/a2.jpg"></span>
+                        <div class="list-body">
+                            <a class="item-title _500" href="#">Kygo</a>
+                            <div class="item-except text-sm text-muted h-1x">
+                                What&#x27;s the project progress now
+                            </div>
+                            <div class="item-tag tag hide"></div>
+                        </div>
+                        <div>
+                            <span class="item-date text-xs text-muted">08:05</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="box">
+                <div class="box-header">
+                    <h3>Members</h3>
+                </div>
+                <div class="list inset">
+                    <div class="list-item" data-id="item-11">
+                        <span class="w-40 avatar circle blue"><i class="on b-white avatar-right"></i> TN</span>
+                        <div class="list-body">
+                            <a class="item-title _500" href="#">Tiger Nixon</a>
+                            <div class="item-except text-sm text-muted h-1x">
+                                tiger-nixon@gmail.com
+                            </div>
+                            <div class="item-tag tag hide"></div>
+                        </div>
+                        <div>
+                            <div class="item-action dropdown">
+                                <a class="text-muted" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-ellipsis-v"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right text-color" role="menu">
+                                    <a class="dropdown-item"><i class="fa fa-tag"></i> Action</a> <a class="dropdown-item"><i class="fa fa-pencil"></i> Another action</a> <a class="dropdown-item"><i class="fa fa-reply"></i> Something else here</a>
+                                    <div class="dropdown-divider"></div><a class="dropdown-item"><i class="fa fa-ellipsis-h"></i> Separated link</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-item" data-id="item-15">
+                        <span class="w-40 avatar circle indigo"><i class="on b-white avatar-right"></i> GW</span>
+                        <div class="list-body">
+                            <a class="item-title _500" href="#">Garrett Winters</a>
+                            <div class="item-except text-sm text-muted h-1x">
+                                garrett-winters@gmail.com
+                            </div>
+                            <div class="item-tag tag hide"></div>
+                        </div>
+                        <div>
+                            <div class="item-action dropdown">
+                                <a class="text-muted" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-ellipsis-v"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right text-color" role="menu">
+                                    <a class="dropdown-item"><i class="fa fa-tag"></i> Action</a> <a class="dropdown-item"><i class="fa fa-pencil"></i> Another action</a> <a class="dropdown-item"><i class="fa fa-reply"></i> Something else here</a>
+                                    <div class="dropdown-divider"></div><a class="dropdown-item"><i class="fa fa-ellipsis-h"></i> Separated link</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-item" data-id="item-10">
+                        <span class="w-40 avatar circle blue"><i class="on b-white avatar-right"></i> P</span>
+                        <div class="list-body">
+                            <a class="item-title _500" href="#">Postiljonen</a>
+                            <div class="item-except text-sm text-muted h-1x">
+                                postiljonen@gmail.com
+                            </div>
+                            <div class="item-tag tag hide"></div>
+                        </div>
+                        <div>
+                            <div class="item-action dropdown">
+                                <a class="text-muted" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-ellipsis-v"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right text-color" role="menu">
+                                    <a class="dropdown-item"><i class="fa fa-tag"></i> Action</a> <a class="dropdown-item"><i class="fa fa-pencil"></i> Another action</a> <a class="dropdown-item"><i class="fa fa-reply"></i> Something else here</a>
+                                    <div class="dropdown-divider"></div><a class="dropdown-item"><i class="fa fa-ellipsis-h"></i> Separated link</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-item" data-id="item-3">
+                        <span class="w-40 avatar circle green"><i class="away b-white avatar-right"></i> JS</span>
+                        <div class="list-body">
+                            <a class="item-title _500" href="#">Jeremy Scott</a>
+                            <div class="item-except text-sm text-muted h-1x">
+                                jeremy-scott@gmail.com
+                            </div>
+                            <div class="item-tag tag hide"></div>
+                        </div>
+                        <div>
+                            <div class="item-action dropdown">
+                                <a class="text-muted" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-ellipsis-v"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right text-color" role="menu">
+                                    <a class="dropdown-item"><i class="fa fa-tag"></i> Action</a> <a class="dropdown-item"><i class="fa fa-pencil"></i> Another action</a> <a class="dropdown-item"><i class="fa fa-reply"></i> Something else here</a>
+                                    <div class="dropdown-divider"></div><a class="dropdown-item"><i class="fa fa-ellipsis-h"></i> Separated link</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-item" data-id="item-5">
+                        <span class="w-40 avatar circle blue-grey"><i class="on b-white avatar-right"></i> R</span>
+                        <div class="list-body">
+                            <a class="item-title _500" href="#">Radionomy</a>
+                            <div class="item-except text-sm text-muted h-1x">
+                                radionomy@gmail.com
+                            </div>
+                            <div class="item-tag tag hide"></div>
+                        </div>
+                        <div>
+                            <div class="item-action dropdown">
+                                <a class="text-muted" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-ellipsis-v"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right text-color" role="menu">
+                                    <a class="dropdown-item"><i class="fa fa-tag"></i> Action</a> <a class="dropdown-item"><i class="fa fa-pencil"></i> Another action</a> <a class="dropdown-item"><i class="fa fa-reply"></i> Something else here</a>
+                                    <div class="dropdown-divider"></div><a class="dropdown-item"><i class="fa fa-ellipsis-h"></i> Separated link</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="row">
-    <div class="col-md-3">
-        <h2>Application uses</h2>
-        <ul>
-            <li>Sample pages using ASP.NET Core MVC</li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518004">Bower</a> for managing client-side libraries</li>
-            <li>Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>How to</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600">Add a Controller and View</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699318">Add client packages using Bower.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Overview</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET Core</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET Core such as Startup and middleware.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">Security</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Run &amp; Deploy</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">Run tools such as EF migrations and more</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure Web Apps</a></li>
-        </ul>
-    </div>
-</div>
+

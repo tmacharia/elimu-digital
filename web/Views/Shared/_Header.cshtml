@@ -1,0 +1,179 @@
+@using DAL.Extensions
+@{
+    bool isUserNew = (bool)ViewBag.IsNew;
+}
+
+<div class="navbar navbar-expand-lg">
+    <a class="d-lg-none mx-2" data-target="#aside" data-toggle="modal">
+        <svg height="24" viewbox="0 0 512 512" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M80 304h352v16H80zM80 248h352v16H80zM80 192h352v16H80z"></path>
+        </svg>
+    </a>
+    <div class="navbar-text nav-title flex" id="pageTitle">
+        Dashboard
+    </div>
+    <ul class="nav flex-row order-lg-2">
+        <li class="nav-item dropdown">
+            <a class="nav-link px-3" data-toggle="dropdown">
+                <i class="fa fa-bell text-muted"></i>
+                <span class="badge badge-pill up danger">@ViewBag.Notifications</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right w-md animate fadeIn mt-2 p-0">
+                <div class="scrollable hover" style="max-height: 250px">
+                    <div class="list">
+                        <div class="list-item" data-id="item-11">
+                            <span class="w-24 avatar circle blue"><span class="fa fa-code-fork"></span></span>
+                            <div class="list-body">
+                                <a class="item-title _500" href="#">Tiger Nixon</a>
+                                <div class="item-except text-sm text-muted h-1x">
+                                    Looking for some client-work
+                                </div>
+                                <div class="item-tag tag hide"></div>
+                            </div>
+                            <div>
+                                <span class="item-date text-xs text-muted">16:00</span>
+                            </div>
+                        </div>
+                        <div class="list-item" data-id="item-2">
+                            <span class="w-24 avatar circle light-blue"><span class="fa fa-git"></span></span>
+                            <div class="list-body">
+                                <a class="item-title _500" href="#">Kygo</a>
+                                <div class="item-except text-sm text-muted h-1x">
+                                    What&#x27;s the project progress now
+                                </div>
+                                <div class="item-tag tag hide"></div>
+                            </div>
+                            <div>
+                                <span class="item-date text-xs text-muted">08:05</span>
+                            </div>
+                        </div>
+                        <div class="list-item" data-id="item-12">
+                            <span class="w-24 avatar circle green"><span class="fa fa-dot-circle-o"></span></span>
+                            <div class="list-body">
+                                <a class="item-title _500" href="#">Ashton Cox</a>
+                                <div class="item-except text-sm text-muted h-1x">
+                                    Looking for some client-work
+                                </div>
+                                <div class="item-tag tag hide"></div>
+                            </div>
+                            <div>
+                                <span class="item-date text-xs text-muted">11:30</span>
+                            </div>
+                        </div>
+                        <div class="list-item" data-id="item-4">
+                            <span class="w-24 avatar circle pink"><span class="fa fa-male"></span></span>
+                            <div class="list-body">
+                                <a class="item-title _500" href="#">Judith Garcia</a>
+                                <div class="item-except text-sm text-muted h-1x">
+                                    Eddel upload a media
+                                </div>
+                                <div class="item-tag tag hide"></div>
+                            </div>
+                            <div>
+                                <span class="item-date text-xs text-muted">12:05</span>
+                            </div>
+                        </div>
+                        <div class="list-item" data-id="item-14">
+                            <span class="w-24 avatar circle brown"><span class="fa fa-bell"></span></span>
+                            <div class="list-body">
+                                <a class="item-title _500" href="#">Brielle Williamson</a>
+                                <div class="item-except text-sm text-muted h-1x">
+                                    Looking for some client-work
+                                </div>
+                                <div class="item-tag tag hide"></div>
+                            </div>
+                            <div>
+                                <span class="item-date text-xs text-muted">08:00</span>
+                            </div>
+                        </div>
+                        <div class="list-item" data-id="item-9">
+                            <span class="w-24 avatar circle cyan"><span class="fa fa-puzzle-piece"></span></span>
+                            <div class="list-body">
+                                <a class="item-title _500" href="#">Pablo Nouvelle</a>
+                                <div class="item-except text-sm text-muted h-1x">
+                                    It&#x27;s been a Javascript kind of day
+                                </div>
+                                <div class="item-tag tag hide"></div>
+                            </div>
+                            <div>
+                                <span class="item-date text-xs text-muted">15:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex px-3 py-2 b-t">
+                    <div class="flex">
+                        <span>6 Notifications</span>
+                    </div><a href="setting.html">See all <i class="fa fa-angle-right text-muted"></i></a>
+                </div>
+            </div>
+        </li>
+        <li class="dropdown d-flex align-items-center">
+            <a class="d-flex align-items-center" data-toggle="dropdown" href="#">
+                <span class="avatar w-32">
+                    <img alt="user avatar" src="@Url.Content(User.PhotoUrl())">
+                </span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right w pt-0 mt-2 animate fadeIn">
+                <div class="row no-gutters b-b mb-2">
+                    <div class="col-4 b-r">
+                        <a class="py-2 pt-3 d-block text-center" href="app.user.html"><i class="fa text-md fa-phone-square text-muted"></i> <small class="d-block">Call</small></a>
+                    </div>
+                    <div class="col-4 b-r">
+                        <a class="py-2 pt-3 d-block text-center" href="app.message.html"><i class="fa text-md fa-comment text-muted"></i> <small class="d-block">Chat</small></a>
+                    </div>
+                    <div class="col-4">
+                        <a class="py-2 pt-3 d-block text-center" href="app.inbox.html"><i class="fa text-md fa-envelope text-muted"></i> <small class="d-block">Email</small></a>
+                    </div>
+                </div>
+                <a class="dropdown-item" href="profile.html"><span>Profile</span></a>
+                <a class="dropdown-item" href="setting.html"><span>Settings</span></a>
+                <a class="dropdown-item" href="app.inbox.html">
+                    <span class="float-right">
+                        <span class="badge info">6</span>
+                    </span>
+                    <span>Inbox</span>
+                </a>
+                <a class="dropdown-item" href="app.message.html"><span>Message</span></a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/account/signout">Sign out</a>
+            </div>
+        </li>
+        <li class="d-lg-none d-flex align-items-center">
+            <a class="mx-2" data-target="#navbarToggler" data-toggle="collapse" href="#">
+                <svg height="18" viewbox="0 0 512 512" width="18" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M64 144h384v32H64zM64 240h384v32H64zM64 336h384v32H64z"></path>
+                </svg>
+            </a>
+        </li>
+    </ul>
+    <div class="collapse navbar-collapse no-grow order-lg-1" id="navbarToggler">
+        <form class="input-group m-2 my-lg-0">
+            <span class="input-group-btn">
+                <button class="btn no-border no-bg no-shadow" type="button">
+                    <span class="input-group-btn">
+                        <i class="fa fa-search"></i>
+                    </span>
+                </button>
+            </span>
+            <input class="form-control no-border no-bg no-shadow" placeholder="Search directory..." type="text">
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        checkPristineUser();
+    });
+
+    function checkPristineUser()
+    {
+        var val = '@isUserNew';
+
+        if (val === 'True') {
+            $('#profRegModal').modal('show');
+        }
+    }
+</script>

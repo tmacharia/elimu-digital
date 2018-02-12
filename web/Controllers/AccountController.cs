@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Common.AccountViewModels;
+using Common.Models;
 using DAL.Contexts;
 using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Services;
@@ -23,7 +25,9 @@ namespace web.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly AppDbContext _appDbContext;
+        private readonly LePadContext _lepadContext;
         private readonly IEmailSender _emailSender;
+        private readonly IUploader _uploader;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly string _externalCookieScheme;
@@ -32,16 +36,20 @@ namespace web.Controllers
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             AppDbContext appDbContext,
+            LePadContext lePadContext,
             IOptions<IdentityCookieOptions> identityCookieOptions,
             IEmailSender emailSender,
+            IUploader uploader,
             ISmsSender smsSender,
             ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _appDbContext = appDbContext;
+            _lepadContext = lePadContext;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
             _emailSender = emailSender;
+            _uploader = uploader;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
@@ -99,6 +107,92 @@ namespace web.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<ActionResult> Profile()
+        {
+            try
+            {
+                int type = int.Parse(Request.Form["Type"]);
+
+                var user = await _userManager.GetUserAsync(User);
+
+                var profile = new Profile
+                {
+                    FullNames = Request.Form["FullNames"],
+                    NationalID = int.Parse(Request.Form["ID"])
+                };
+
+                if (Request.Form.Files.Count > 0)
+                {
+                    IFile file = new FormFile(Request.Form.Files[0]);
+                    profile.PhotoUrl = await _uploader.Upload(file);
+                }
+
+                if (type == 1)
+                {
+                    //lec
+                    Lecturer lecturer = new Lecturer(Guid.Parse(user.Id))
+                    {
+                        Profile = profile
+                    };
+                    _lepadContext.Lecturers.Add(lecturer);
+                    _lepadContext.SaveChanges();
+
+                    user.AccountId = lecturer.Id;
+                    user.AccountType = AccountType.Lecturer;
+                }
+                else if (type == 2)
+                {
+                    //student
+                    Student student = new Student(Guid.Parse(user.Id))
+                    {
+                        YearOfStudy = int.Parse(Request.Form["YrOfStudy"]),
+                        AcademicYear = Request.Form["AcademicYr"],
+                        RegNo = Request.Form["RegNo"],
+                        Profile = profile,
+                        Course = new Course()
+                        {
+                            Name = "Bsc Computer Technology",
+                            Code = Guid.NewGuid()
+                        }
+                    };
+                    _lepadContext.Students.Add(student);
+                    _lepadContext.SaveChanges();
+
+                    user.AccountId = student.Id;
+                    user.AccountType = AccountType.Student;
+                }
+
+                // add claims we need in the app (userId, accountType)
+
+                var claims = new List<Claim>
+                    {
+                        new Claim("UserId", user.Id),
+                        new Claim("FullNames", profile.FullNames),
+                        new Claim("PhotoUrl", profile.PhotoUrl),
+                        new Claim("Role", CheckRole(user))
+                    };
+
+                await _userManager.AddClaimsAsync(user, claims);
+
+                //update user identity account
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Logout");
+                }
+                else
+                {
+                    return Content(result.Errors.First().Description);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.Message);
+            }
+        }
+
         //
         // POST: /Account/Login
         [HttpPost]
@@ -127,6 +221,7 @@ namespace web.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
+
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -149,6 +244,62 @@ namespace web.Controllers
             return View(model);
         }
 
+        private Profile GetProfile(AppUser user)
+        {
+            Profile profile = null;
+
+            switch (user.AccountType)
+            {
+                case AccountType.Administrator:
+                    profile = _lepadContext.Administrators
+                                        .Include(x => x.Profile)
+                                        .FirstOrDefault(x => x.AccountId.ToString() == user.Id)
+                                        ?.Profile;
+                    break;
+                case AccountType.Lecturer:
+                    profile = _lepadContext.Lecturers
+                                        .Include(x => x.Profile)
+                                        .FirstOrDefault(x => x.AccountId.ToString() == user.Id)
+                                        ?.Profile;
+                    break;
+                case AccountType.Student:
+                    profile = _lepadContext.Students
+                                        .Include(x => x.Profile)
+                                        .FirstOrDefault(x => x.AccountId.ToString() == user.Id)
+                                        ?.Profile;
+                    break;
+                case AccountType.None:
+                    break;
+                default:
+                    break;
+            }
+
+            if (profile == null)
+                return new Profile()
+                {
+                    FullNames = "",
+                    PhotoUrl = ""
+                };
+            else
+                return profile;
+        }
+        private string CheckRole(AppUser user)
+        {
+            switch (user.AccountType)
+            {
+                case AccountType.Administrator:
+                    return "Administrator";
+                case AccountType.Lecturer:
+                    return "Lecturer";
+                case AccountType.Student:
+                    return "Student";
+                case AccountType.None:
+                    return "Unregistered";
+                default:
+                    return "Unregistered";
+            }
+        }
+
         //
         // GET: /Account/Register
         [HttpGet]
@@ -169,7 +320,7 @@ namespace web.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new AppUser { UserName = model.Email, Email = model.Email };
+                var user = new AppUser { UserName = model.Email, Email = model.Email, AccountType = AccountType.None };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -194,8 +345,7 @@ namespace web.Controllers
 
         //
         // POST: /Account/Logout
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

@@ -19,6 +19,7 @@ namespace DAL.Models
         /// e.g mp4, vob
         /// </summary>
         Video,
+        Image,
         /// <summary>
         /// A document file format is a text or binary file format for storing
         /// documents on a storage media

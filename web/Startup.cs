@@ -101,14 +101,7 @@ namespace web
         {
             get
             {
-                if (Helpers.IsDebug)
-                {
-                    return Configuration.GetConnectionString("Development");
-                }
-                else
-                {
-                    return Configuration.GetConnectionString("Production");
-                }
+                return Configuration.GetConnectionString("Db");
             }
         }
         /// <summary>

@@ -65,7 +65,7 @@ namespace Services
         {
             get
             {
-                return $"\n\nThank you,\n {Title} Support Team.";
+                return $"<br/><br/>Thank you,<br/> {Title} Support Team.";
             }
         }
         #endregion

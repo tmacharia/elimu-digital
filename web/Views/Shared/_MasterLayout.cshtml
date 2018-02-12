@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title | E-Learning Pad</title>
+    <meta content="e-learning, university" name="description">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,minimal-ui" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black-translucent" name="apple-mobile-web-app-status-barstyle">
+    <link href="~/images/logo.png" rel="apple-touch-icon">
+    <meta content="E-Learning pad" name="apple-mobile-web-app-title">
+    <meta content="yes" name="mobile-web-app-capable">
+    <link href="~/images/logo.png" rel="shortcut icon" sizes="196x196">
+    <link rel="stylesheet" href="~/css/app.min.css" />
+    <link href="~/libs/Ionicons/css/ionicons.min.css" rel="stylesheet" />
+    <link href="~/libs/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="~/css/site.min.css" rel="stylesheet">
+
+    <environment names="Development">
+        <script src="~/libs/jquery/dist/jquery.js"></script>
+        <script src="~/libs/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        @*<script src="~/libs/bootstrap-modal/bootstrap-modal.js"></script>*@
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+                asp-fallback-src="~/libs/jquery/dist/jquery.min.js"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+                crossorigin="anonymous">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"
+                asp-fallback-src="~/libs/jquery-validation/dist/jquery.validate.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.validator"
+                crossorigin="anonymous"
+                integrity="sha384-Fnqn3nxp3506LP/7Y3j/25BlWeA3PXTyT1l78LjECcPaKCV12TsZP7yyMxOe/G/k">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"
+                asp-fallback-src="~/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"
+                crossorigin="anonymous"
+                integrity="sha384-JrXK+k53HACyavUKOsL+NkmSesD2P+73eDMrbTtTk0h4RmOF8hF8apPlkp26JlyH">
+        </script>
+        @*<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-modal/2.2.6/js/bootstrap-modal.min.js"
+                    asp-fallback-src="~/libs/bootstrap-modal/bootstrap-modal.js"
+                    integrity="sha256-UEFikFBinV4tAScIYbW3+7BCI2zpM74VWtUa1MIR738="
+                    crossorigin="anonymous">
+            </script>*@
+    </environment>
+
+</head>
+<body>
+    <div class="app" id="app">
+        <div aria-hidden="true" class="app-aside fade box-shadow-x nav-expand white" id="aside">
+            @Html.Partial("_Sidebar")
+        </div>
+        <div class="app-content box-shadow-4 box-radius-4" id="content" role="main">
+            <div class="content-header white box-shadow-4" id="content-header">
+                @Html.Partial("_Header")
+            </div>
+
+
+            <div class="content-main" id="content-main">
+                @RenderBody()
+            </div>
+            <div class="content-footer white" id="content-footer">
+                <div class="d-flex p-3">
+                    <span class="text-sm text-muted flex">&copy; Copyright. E-Learning Pad @DateTime.Now.Year</span>
+                    <div class="text-sm text-muted">
+                        Version 1.0
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--New User Create Profile Modal-->
+    @{
+        Html.RenderPartial("~/Views/Shared/Profiles/_Create.cshtml");
+    }
+    <!--End-->
+
+    <script src="~/js/site.js"></script>
+    <script src="~/js/app.min.js"></script>
+</body>
+</html>

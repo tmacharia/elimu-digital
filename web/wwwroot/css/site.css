@@ -32,3 +32,8 @@ html, body {
 /*================================
      Button styles & overrides
  *===============================*/
+@media(min-width: 992px){
+    .app-aside{
+        width:16rem;
+    }
+}

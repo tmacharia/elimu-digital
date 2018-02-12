@@ -18,6 +18,10 @@ namespace DAL.Models
         {
             this.AccountId = identityId;
         }
+        public Admin()
+        {
+
+        }
 
         [Required]
         public Guid AccountId { get; set; }

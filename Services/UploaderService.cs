@@ -46,6 +46,9 @@ namespace Services
                 case FormatType.Document:
                     container = blobClient.GetContainerReference("documents");
                     break;
+                case FormatType.Image:
+                    container = blobClient.GetContainerReference("images");
+                    break;
                 default:
                     break;
             }

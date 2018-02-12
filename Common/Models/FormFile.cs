@@ -14,6 +14,7 @@ namespace Common.Models
         private readonly string[] _videoTypes;
         private readonly string[] _audioTypes;
         private readonly string[] _docTypes;
+        private readonly string[] _imageTypes;
 
         private readonly string _mime;
         private readonly long _length;
@@ -41,6 +42,7 @@ namespace Common.Models
             _videoTypes = new string[] { "video/x-flv", "video/mp4", "video/3gpp", "application/x-mpegURL", "video/MP2T", "video/quicktime", "video/x-msvideo", "video/x-ms-wmv" };
             _audioTypes = new string[] { "audio/basic", "auido/L24", "audio/mid", "audio/mpeg", "audio/mp4", "audio/x-aiff", "audio/x-mpegurl", "audio/vnd.rn-realaudio", "audio/vnd.rn-realaudio", "audio/ogg", "audio/vorbis", "audio/vnd.wav" };
             _docTypes = new string[] { "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/vnd.ms-access" };
+            _imageTypes = new string[] { "image/gif", "image/jpeg", "image/png" };
 
             // Get file format
             _format = GetFileFormat();
@@ -64,6 +66,10 @@ namespace Common.Models
             else if(_docTypes.Contains(_mime))
             {
                 return FormatType.Document;
+            }
+            else if (_imageTypes.Contains(_mime))
+            {
+                return FormatType.Image;
             }
             else
             {

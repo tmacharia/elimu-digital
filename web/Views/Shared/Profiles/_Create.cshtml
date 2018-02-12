@@ -1,0 +1,154 @@
+@using DAL.Extensions
+
+<style>
+    .modal-header{
+        border:none;
+    }
+    .modal-footer{
+        border:none;
+    }
+    #userImgPrw {
+        width: 150px;
+    }
+</style>
+
+<div class="modal fade" data-backdrop="true" id="profRegModal">
+    <div class="modal-dialog animate" id="animate">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Profile Registration
+                </h5>
+            </div>
+            <div class="modal-body p-lg">
+                <p>This form appears once, fill it to the best of your ability.</p>
+
+                <form role="form" id="profileForm" method="post" enctype="multipart/form-data" action="/account/profile">
+                    <div class="form-group">
+                        <span class="w-96">
+                            <img id="userImgPrw" class="img-thumbnail" src="@Url.Content(User.PhotoUrl())" />
+                            <i class="on"></i>
+                        </span>
+                        <input type="file" name="file" id="userImg" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Full names</label>
+                        <input class="form-control" required name="FullNames" id="fullNames" placeholder="Fullnames" type="text" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>ID Number</label>
+                        <input class="form-control" required name="ID" id="idNum" placeholder="National ID Number" type="number" />
+                    </div>
+
+                    <div class="form-group">
+                        <select class="form-control" onchange="onAccountChange()" id="accountType" name="Type" required>
+                            <option value="">Select account type</option>
+                            <option value="2">Student</option>
+                            <option value="1">Lecturer</option>
+                        </select>
+                    </div>
+
+                    <fieldset id="others" style="display:none;">
+                        <div class="form-group">
+                            <label>Year of Study</label>
+                            <input class="form-control" required name="YrOfStudy" placeholder="e.g 2, 4" type="number" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Academic Year</label>
+                            <input class="form-control" required name="AcademicYr" placeholder="e.g 2018/2019" type="text" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Registration Number</label>
+                            <input class="form-control" required name="RegNo" placeholder="" type="text" />
+                        </div>
+                    </fieldset>
+
+                    <div class="modal-footer">
+                        <button class="btn dark-white p-x-md" data-dismiss="modal" type="button">Cancel</button>
+                        <button class="btn danger p-x-md" id="btnSubmit" type="submit">Create Profile</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script>
+    var selectedFile;
+
+    $('#userImg').change(function () {
+        readFileURL(this);
+    });
+    function onAccountChange() {
+        var val = $('#accountType').val();
+
+        if (val === '2') {
+            $('#others').show();
+        } else {
+            $('#others').hide();
+        }
+    }
+    //$('#profileForm').submit(function (e) {
+    //    e.preventDefault();
+
+    //    console.log('submitting...');
+
+    //    var form = $('#profileForm')[0];
+
+    //    var data = new FormData();
+        
+    //    if (selectedFile) {
+    //        data.append('file', selectedFile);
+    //    }
+
+    //    data.append('FullNames', $('#fullNames').val());
+    //    data.append('IdNumber', $('#idNum').val());
+    //    data.append('Type', $('#accountType').val());
+
+    //    toggleBtn('busy');
+
+    //    console.log(selectedFile);
+
+    //    jQuery.ajax({
+    //        url: '/account/profile',
+    //        data: data,
+    //        contentType: undefined,
+    //        method: 'POST',
+    //        type: 'POST',
+    //        success: function (res) {
+    //            console.log(res);
+    //            toggleBtn('off');
+    //        },
+    //        error: function (res) {
+    //            console.log(res);
+    //            toggleBtn('off');
+    //        }
+    //    });
+    //})
+    function toggleBtn(val) {
+        if (val === 'busy') {
+            $('#btnSubmit').text('Creating profile..');
+            $('#btnSubmit').prop('disabled', true);
+        } else{
+            $('#btnSubmit').text('Create profile');
+            $('#btnSubmit').prop('disabled', false);
+        }
+    }
+    function readFileURL(input) {
+        if (input.files && input.files[0]) {
+            selectedFile = input.files[0];
+
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#userImgPrw').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
