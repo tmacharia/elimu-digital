@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Services;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace web
 {
@@ -55,11 +56,14 @@ namespace web
                     {
                         options.SerializerSettings.Formatting = Formatting.Indented;
                     });
+            services.AddSwagger();
 
             // Add application services
+            services.AddAutoMapper();
             services.AddTransient<IEmailSender>(e => new AuthMessageSender(MailTitle,AdminEmail,MailPassword));
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddTransient<IUploader>(u => new UploaderService(BlobAccount));
+            services.AddTransient<IRepositoryFactory, RepositoryFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,6 +94,11 @@ namespace web
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger UI for E-Learning Pad");
             });
         }
 

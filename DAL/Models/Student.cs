@@ -40,7 +40,6 @@ namespace DAL.Models
         public string AcademicYear { get; set; }
 
         public virtual Profile Profile { get; set; }
-        [Required]
         public virtual Course Course { get; set; }
         public virtual ICollection<StudentUnit> StudentUnits { get; set; }
         public virtual ICollection<Score> Scores { get; set; }

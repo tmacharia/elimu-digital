@@ -17,6 +17,7 @@ namespace DAL.Models
         public Guid Code { get; set; }
 
 
+        public virtual School School { get; set; }
         public virtual ICollection<Unit> Units { get; set; }
         public virtual ICollection<Student> Students { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
