@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace web.API_s
 {
     [Route("api/accounts")]
-    public class AccountsController : SecureController
+    public class AccountsController : Controller
     {
         public AccountsController()
         {

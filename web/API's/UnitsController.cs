@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace web.API_s
 {
     [Route("api/units")]
-    public class UnitsController : SecureController
+    public class UnitsController : Controller
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryFactory _repos;

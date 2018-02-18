@@ -18,7 +18,7 @@ namespace web.API_s
 {
     [Route("api/contents")]
     [Authorize]
-    public class ContentsController : SecureController
+    public class ContentsController : Controller
     {
         private readonly IRepositoryFactory _repos;
         private readonly UserManager<AppUser> _userManager;

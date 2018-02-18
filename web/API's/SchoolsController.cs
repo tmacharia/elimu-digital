@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace web.API_s
 {
     [Route("api/schools")]
-    public class SchoolsController : SecureController
+    public class SchoolsController : Controller
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryFactory _repos;

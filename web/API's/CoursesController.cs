@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace web.API_s
 {
     [Route("api/courses")]
-    public class CoursesController : SecureController
+    public class CoursesController : Controller
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryFactory _repos;
