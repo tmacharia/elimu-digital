@@ -21,6 +21,8 @@ namespace Services
         IRepository<Score> Scores { get; }
         IRepository<Unit> Units { get; }
         IRepository<Student> Students { get; }
+        IRepository<Lecturer> Lecturers { get; }
+        IRepository<Admin> Administrators { get; }
 
         void Commit();
     }

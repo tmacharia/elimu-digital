@@ -13,8 +13,8 @@ namespace DAL.Factories
         {
             DbContextOptionsBuilder<LePadContext> builder = new DbContextOptionsBuilder<LePadContext>();
 
-            //builder.UseSqlServer("Server=TIMOTHY-PC;Database=le_pad_db;Trusted_Connection=True;MultipleActiveResultSets=true");
-            builder.UseSqlServer("Server=tcp:uczaep277a.database.windows.net,1433;Database=le_pad_db;User ID=phoneguru;Password=304MPS203#;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;MultipleActiveResultSets=True");
+            //builder.UseSqlServer("");
+            builder.UseSqlServer("");
 
             return new LePadContext(builder.Options);
         }

@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace DAL.Models
+namespace Common.ViewModels
 {
-    public class Comment : Base
+    public class CommentViewModel
     {
         [MinLength(1, ErrorMessage = "Comment messages such small are not allowed.")]
         [DataType(DataType.Html)]
         public string Message { get; set; }
-
-        [Required]
-        public virtual Profile By { get; set; }
     }
 }

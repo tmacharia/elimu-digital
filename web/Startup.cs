@@ -84,17 +84,19 @@ namespace web
             }
 
             app.UseStaticFiles();
-
+            
             app.UseIdentity();
 
-            // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 
+            // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
+            app.UseSecurity();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

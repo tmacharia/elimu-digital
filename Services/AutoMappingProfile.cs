@@ -19,6 +19,12 @@ namespace Services
 
             CreateMap<Unit, UnitViewModel>();
             CreateMap<UnitViewModel, Unit>();
+
+            CreateMap<Content, ContentViewModel>();
+            CreateMap<ContentViewModel, Content>();
+
+            CreateMap<Comment, CommentViewModel>();
+            CreateMap<CommentViewModel, Comment>();
         }
     }
 }

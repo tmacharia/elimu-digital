@@ -11,7 +11,7 @@ namespace DAL.Models
         [Required]
         public string FileName { get; set; }
         [Required]
-        [DefaultValue(Models.FormatType.Document)]
+        [DefaultValue(FormatType.Unknown)]
         public FormatType Type { get; set; }
         [Required]
         [MaxLength(50)]

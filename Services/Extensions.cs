@@ -7,6 +7,10 @@ using System.Text;
 using System.Reflection;
 using Common.ViewModels;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using Microsoft.AspNetCore.Builder;
+using Services.Security;
 
 namespace Services
 {
@@ -101,6 +105,10 @@ namespace Services
                 return true;
             else
                 return false;
+        }
+        public static IApplicationBuilder UseSecurity(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<SecurityMiddleware>();
         }
     }
 }

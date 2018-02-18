@@ -4,6 +4,7 @@ using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace web.API_s
 {
     [Route("api/units")]
-    public class UnitsController : Controller
+    public class UnitsController : SecureController
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryFactory _repos;
