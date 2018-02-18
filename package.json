@@ -1,0 +1,22 @@
+{
+  "name": "e-learning-pad",
+  "version": "1.0.0",
+  "description": "e-learning services for higher institutions of learning.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devTimmy/E-Learning-Pad.git"
+  },
+  "keywords": [
+    "e-learning"
+  ],
+  "author": "Timothy Maina",
+  "license": "SEE LICENSE IN ./LICENSE",
+  "bugs": {
+    "url": "https://github.com/devTimmy/E-Learning-Pad/issues"
+  },
+  "homepage": "https://github.com/devTimmy/E-Learning-Pad#readme"
+}
