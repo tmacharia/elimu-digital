@@ -22,11 +22,23 @@ namespace Services.Security
             IHeaderDictionary headers = context.Request.Headers;
             headers.TryGetValue("Authorization", out StringValues authToken);
 
-            context.Response.Headers.Add("Ujinga", authToken[0]);
-
-            // Authorization: Basic
-
-            // Authorization: Bearer
+            if(authToken.Count < 1)
+            {
+                context.Response.Headers.Add("Authorization", "Failed");
+            }
+            else
+            {
+                // Authorization: Basic
+                if (authToken[0].StartsWith("Basic"))
+                {
+                    context.Response.Headers.Add("Authorization", "Pending...");
+                }
+                // Authorization: Bearer
+                if (authToken[0].StartsWith("Bearer"))
+                {
+                    context.Response.Headers.Add("Authorization", "Verified");
+                }
+            }
 
             // call the next middleware delegate in the pipeline
             await _next.Invoke(context);
