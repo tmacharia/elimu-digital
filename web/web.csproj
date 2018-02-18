@@ -59,4 +59,8 @@
     <Folder Include="Views\Shared\Profiles\" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="bower install" />
+  </Target>
+
 </Project>
