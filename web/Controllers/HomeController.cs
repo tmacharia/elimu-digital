@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Common.ViewModels;
 using DAL.Contexts;
 using DAL.Models;
+using DAL.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services;
 
 namespace web.Controllers
 {
@@ -13,12 +16,12 @@ namespace web.Controllers
     public class HomeController : Controller
     {
         private readonly AppDbContext _appContext;
-        private readonly LePadContext _lepadContext;
+        private readonly IRepositoryFactory _repos;
 
-        public HomeController(AppDbContext appDbContext, LePadContext lePadContext)
+        public HomeController(AppDbContext appDbContext, IRepositoryFactory factory)
         {
             _appContext = appDbContext;
-            _lepadContext = lePadContext;
+            _repos = factory;
         }
 
         public IActionResult Index()
@@ -34,6 +37,26 @@ namespace web.Controllers
                 ViewBag.IsNew = false;
             }
 
+            if (User.Role() == "Administrator")
+            {
+                // create summary view model
+                var summary = new SummaryViewModel
+                {
+                    Total_Classes = _repos.Classes.List.Count(),
+                    Students_Total = _repos.Students.List.Count(),
+                    Lec_Total = _repos.Lecturers.List.Count(),
+                    Courses_Total = _repos.Courses.List.Count(),
+                    Lec_NoProfile = _repos.Lecturers.ListWith("Profile")
+                                                    .Count(x => x.Profile == null),
+                    Students_Enrolled = _repos.Students.ListWith("Course")
+                                                       .Count(x => x.Course != null),
+                    Units_NoClass = _repos.Units.ListWith("Classes")
+                                                .Count(x => x.Classes == null || x.Classes.Count < 1)
+                };
+                ViewBag.summary = summary;
+            }
+            ViewBag.lecturers = _repos.Lecturers.ListWith("Profile").ToList();
+            ViewBag.students = _repos.Students.ListWith("Profile").ToList();
             ViewBag.Notifications = 8;
 
             return View();

@@ -110,5 +110,12 @@ namespace Services
         {
             return builder.UseMiddleware<SecurityMiddleware>();
         }
+        public static string Uni
+        {
+            get
+            {
+                return "Greenstalk University";
+            }
+        }
     }
 }

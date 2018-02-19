@@ -14,7 +14,7 @@ namespace DAL.Factories
             DbContextOptionsBuilder<LePadContext> builder = new DbContextOptionsBuilder<LePadContext>();
 
             //builder.UseSqlServer("");
-            builder.UseSqlServer("");
+            builder.UseSqlServer("Server=.;Database=le_pad_db;Trusted_Connection=True;MultipleActiveResultSets=true");
 
             return new LePadContext(builder.Options);
         }

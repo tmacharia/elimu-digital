@@ -1,0 +1,47 @@
+﻿@using Common.ViewModels
+@{
+    var summary = (SummaryViewModel)ViewBag.summary;
+}
+
+<div class="row">
+    <div class="col-sm-6 col-lg-3">
+        <div class="box list-item">
+            <span class="avatar w-40 text-center circle success"><span class="fa fa-user-secret"></span></span>
+            <div class="list-body">
+                <h4 class="m-0 text-md">
+                    <a href="#">@summary.Lec_Total <span class="text-sm">Lecturer(s)</span></a>
+                </h4><small class="text-muted">@summary.Lec_NoProfile with no profiles.</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="box list-item">
+            <span class="avatar w-40 text-center circle theme"><span class="fa fa-leaf"></span></span>
+            <div class="list-body">
+                <h4 class="m-0 text-md">
+                    <a href="#">@summary.Courses_Total <span class="text-sm">Course(s)</span></a>
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="box list-item">
+            <span class="avatar w-40 text-center circle cyan"><span class="fa fa-users"></span></span>
+            <div class="list-body">
+                <h4 class="m-0 text-md">
+                    <a href="#">@summary.Students_Total <span class="text-sm">Student(s)</span></a>
+                </h4><small class="text-muted">@summary.Students_Enrolled enrolled to courses</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="box list-item">
+            <span class="avatar w-40 text-center circle warning"><span class="fa fa-comment"></span></span>
+            <div class="list-body">
+                <h4 class="m-0 text-md">
+                    <a href="#">@summary.Total_Classes <span class="text-sm">Total Classes</span></a>
+                </h4><small class="text-muted">@summary.Units_NoClass units with no classes.</small>
+            </div>
+        </div>
+    </div>
+</div>

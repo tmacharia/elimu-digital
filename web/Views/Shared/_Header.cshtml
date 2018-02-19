@@ -1,6 +1,16 @@
 @using DAL.Extensions
 @{
-    bool isUserNew = (bool)ViewBag.IsNew;
+    bool isUserNew;
+
+    if (ViewBag.IsNew == null)
+    {
+        isUserNew = false;
+    }
+    else
+    {
+        isUserNew = (bool)ViewBag.IsNew;
+    }
+
 }
 
 <div class="navbar navbar-expand-lg">
@@ -10,7 +20,7 @@
         </svg>
     </a>
     <div class="navbar-text nav-title flex" id="pageTitle">
-        Dashboard
+        Dashboard <span class="text-muted h6"> <i class="ion ion-arrow-right-b"></i> Greenstalk University</span>
     </div>
     <ul class="nav flex-row order-lg-2">
         <li class="nav-item dropdown">
@@ -136,7 +146,9 @@
                 </a>
                 <a class="dropdown-item" href="app.message.html"><span>Message</span></a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/account/signout">Sign out</a>
+                <form role="form" method="post" action="/account/logout">
+                    <input class="dropdown-item pointer" type="submit" value="Sign out"/>
+                </form>
             </div>
         </li>
         <li class="d-lg-none d-flex align-items-center">

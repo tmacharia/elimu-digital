@@ -46,6 +46,7 @@
                             <option value="">Select account type</option>
                             <option value="2">Student</option>
                             <option value="1">Lecturer</option>
+                            <option value="0">Administrator</option>
                         </select>
                     </div>
 
@@ -87,8 +88,14 @@
         var val = $('#accountType').val();
 
         if (val === '2') {
+            $('#others').find('input').each(function () {
+                $(this).removeAttr('required');
+            });
             $('#others').show();
         } else {
+            $('#others').find('input').each(function () {
+                $(this).removeAttr('required');
+            });
             $('#others').hide();
         }
     }

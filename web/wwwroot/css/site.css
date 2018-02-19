@@ -32,6 +32,32 @@ html, body {
 /*================================
      Button styles & overrides
  *===============================*/
+.no-btn{
+    padding:unset;
+    margin:unset;
+    border:none;
+    background:none;
+}
+
+
+/*================================
+    Other styles
+*================================*/
+.pointer {
+    cursor: pointer;
+}
+
+.window{
+    margin:20px;
+}
+
+.modal-header {
+    border: none;
+}
+
+.modal-footer {
+    border: none;
+}
 @media(min-width: 992px){
     .app-aside{
         width:16rem;

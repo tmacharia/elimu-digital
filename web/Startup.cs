@@ -47,16 +47,23 @@ namespace web
             services.AddIdentity<AppUser, AppRole>(config => 
                 {
                     config.SignIn.RequireConfirmedEmail = true;
+                    config.SecurityStampValidationInterval = TimeSpan.Zero;
                 })
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
-
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.CookieHttpOnly = true;
+            });
             services.AddMvc()
                     .AddJsonOptions(options =>
                     {
                         options.SerializerSettings.Formatting = Formatting.Indented;
                     });
             services.AddSwagger();
+            
 
             // Add application services
             services.AddAutoMapper();
@@ -90,6 +97,7 @@ namespace web
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
             app.UseSecurity();
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

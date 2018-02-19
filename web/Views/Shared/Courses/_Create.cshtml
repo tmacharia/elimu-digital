@@ -1,0 +1,29 @@
+﻿@using DAL.Extensions
+
+<div class="modal fade" data-backdrop="true" id="newCourseModal">
+    <div class="modal-dialog animate" id="animate">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <span>
+                        <i class="fa fa-fw fa-leaf"></i>  Add course
+                    </span>
+                </h5>
+            </div>
+            <div class="modal-body p-lg">
+                <form role="form" id="profileForm" method="post" action="/courses/create">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input class="form-control" required name="name" placeholder="e.g Bsc Computer Science" type="text" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn dark-white p-x-md" data-dismiss="modal" type="button">Cancel</button>
+                        <button class="btn danger p-x-md" id="btnSubmit" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

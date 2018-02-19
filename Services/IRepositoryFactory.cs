@@ -11,6 +11,7 @@ namespace Services
         IRepository<Answer> Answers { get; }
         IRepository<Comment> Comments { get; }
         IRepository<Content> Contents { get; }
+        IRepository<Class> Classes { get; }
         IRepository<Course> Courses { get; }
         IRepository<Exam> Exams { get; }
         IRepository<Like> Likes { get; }

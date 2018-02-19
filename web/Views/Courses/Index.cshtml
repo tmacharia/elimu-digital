@@ -1,0 +1,70 @@
+﻿@using Services
+@using DAL.Models
+@using System.Linq
+@model IList<Course>
+@{
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    ViewBag.Title = "Courses";
+}
+<div class="padding">
+    <h4>
+        Courses
+        <span class="pull-right h6">
+            <button class="btn btn-sm success theme-accent btn-block" type="button" data-target="#newCourseModal" data-toggle="modal">
+                <i class="fa fa-fw fa-plus"></i>
+                <span class="hidden-folded d-inline">New Course</span>
+            </button>
+        </span>
+    </h4>
+    <br />
+    <div class="">
+        <div class="box">
+            <div class="box-header d-flex">
+                <p>All courses at @Extensions.Uni</p><span class="ml-auto"><b class="badge danger">@Model.Count</b></span>
+            </div>
+            <table class="table container">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Units</th>
+                        <th>Students</th>
+                        <th>Likes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        var item = Model.ElementAt(i);
+                        <tr>
+                            <td>@i+1</td>
+                            <td>@item.Code</td>
+                            <td>@item.Name</td>
+                            <td>@item.Units.Count</td>
+                            <td>@item.Students.Count</td>
+                            <td>
+                                <span>
+                                    <i class="ion ion-thumbsup"></i> @item.Likes.Count
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+            @if (Model.Count < 1)
+            {
+                <br />
+                <div>
+                    <center>
+                        No courses. Start adding courses offered at <strong>@Extensions.Uni</strong>
+                    </center>
+                </div>
+                <br />
+            }
+        </div>
+    </div>
+</div>
+
+@Html.Partial("Courses/_Create")

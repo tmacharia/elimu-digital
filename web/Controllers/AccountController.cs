@@ -150,18 +150,43 @@ namespace web.Controllers
                         AcademicYear = Request.Form["AcademicYr"],
                         RegNo = Request.Form["RegNo"],
                         Profile = profile,
-                        Course = new Course()
-                        {
-                            Name = "Bsc Computer Technology",
-                            Code = Guid.NewGuid()
-                        }
                     };
                     _lepadContext.Students.Add(student);
                     _lepadContext.SaveChanges();
 
                     user.AccountId = student.Id;
                     user.AccountType = AccountType.Student;
+                }else if(type == 0)
+                {
+                    // admin 
+                    Admin admin = new Admin(Guid.Parse(user.Id))
+                    {
+                        Profile = profile
+                    };
+
+                    _lepadContext.Administrators.Add(admin);
+                    _lepadContext.SaveChanges();
+
+                    user.AccountId = admin.Id;
+                    user.AccountType = AccountType.Administrator;
                 }
+
+                // add user to role
+                switch (user.AccountType)
+                {
+                    case AccountType.Lecturer:
+                        await _userManager.AddToRoleAsync(user, "Lecturer");
+                        break;
+                    case AccountType.Student:
+                        await _userManager.AddToRoleAsync(user, "Student");
+                        break;
+                    case AccountType.Administrator:
+                        await _userManager.AddToRoleAsync(user, "Admin");
+                        break;
+                    default:
+                        break;
+                }
+
 
                 // add claims we need in the app (userId, accountType)
 
@@ -180,7 +205,9 @@ namespace web.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Logout");
+                    await _signInManager.SignOutAsync();
+
+                    return RedirectPermanent("/");
                 }
                 else
                 {
@@ -345,12 +372,13 @@ namespace web.Controllers
 
         //
         // POST: /Account/Logout
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+
+            return RedirectPermanent("/");
         }
 
         //

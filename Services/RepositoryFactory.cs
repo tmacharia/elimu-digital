@@ -27,6 +27,7 @@ namespace Services
         private readonly IRepository<Student> _students;
         private readonly IRepository<Lecturer> _lecturers;
         private readonly IRepository<Admin> _admins;
+        private readonly IRepository<Class> _classes;
         #endregion
 
         public RepositoryFactory(LePadContext context)
@@ -48,6 +49,7 @@ namespace Services
             _students = new Repository<Student>(_context);
             _lecturers = new Repository<Lecturer>(_context);
             _admins = new Repository<Admin>(_context);
+            _classes = new Repository<Class>(_context);
         }
 
         public IRepository<Answer> Answers => _answers;
@@ -79,6 +81,8 @@ namespace Services
         public IRepository<Lecturer> Lecturers => _lecturers;
 
         public IRepository<Admin> Administrators => _admins;
+
+        public IRepository<Class> Classes => _classes;
 
         public void Commit()
         {

@@ -31,26 +31,33 @@ namespace Services
 
         public async Task SendEmailAsync(string email, string subject, string message)
         {
-            var mime = new MimeMessage();
-
-            mime.From.Add(new MailboxAddress(Title, mail));
-            mime.To.Add(new MailboxAddress("", email));
-            mime.Subject = subject;
-            mime.Body = new TextPart(TextFormat.Html) { Text = message + Footer };
-
-            using (var client = new SmtpClient())
+            try
             {
-                client.LocalDomain = /*(Helpers.IsDebug) ? "localhost" : */"e-learningpad.com";
-                var smtp = settings.GetSMTPServer(mail);
+                var mime = new MimeMessage();
+
+                mime.From.Add(new MailboxAddress(Title, mail));
+                mime.To.Add(new MailboxAddress("", email));
+                mime.Subject = subject;
+                mime.Body = new TextPart(TextFormat.Html) { Text = message + Footer };
+
+                using (var client = new SmtpClient())
+                {
+                    client.LocalDomain = /*(Helpers.IsDebug) ? "localhost" : */"e-learningpad.com";
+                    var smtp = settings.GetSMTPServer(mail);
 
 
-                await client.ConnectAsync(smtp.Host, 25, SecureSocketOptions.StartTls).ConfigureAwait(false);
+                    await client.ConnectAsync(smtp.Host, 25, SecureSocketOptions.StartTls).ConfigureAwait(false);
 
-                client.AuthenticationMechanisms.Remove("XOAUTH2");
-                client.Authenticate(smtp.UserName, _password);
+                    client.AuthenticationMechanisms.Remove("XOAUTH2");
+                    client.Authenticate(smtp.UserName, _password);
 
-                await client.SendAsync(mime).ConfigureAwait(false);
-                await client.DisconnectAsync(true).ConfigureAwait(false);
+                    await client.SendAsync(mime).ConfigureAwait(false);
+                    await client.DisconnectAsync(true).ConfigureAwait(false);
+                }
+            }
+            catch (System.Exception)
+            {
+
             }
         }
 

@@ -8,7 +8,16 @@ namespace DAL.Extensions
 {
     public static class Helpers
     {
-        private const string avatar = "https://devtimmystorage.blob.core.windows.net/images/avatar-1577909_960_720.png";
+        private const string online = "https://devtimmystorage.blob.core.windows.net/images/avatar-1577909_960_720.png";
+        private const string local = "~/images/avatar-1577909_960_720.png";
+
+        private static string avatar
+        {
+            get
+            {
+                return local;
+            }
+        }
 
         public static string PhotoUrl(this ClaimsPrincipal principal)
         {
@@ -70,6 +79,5 @@ namespace DAL.Extensions
                 return "Unknown";
             }
         }
-
     }
 }
