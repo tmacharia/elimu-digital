@@ -16,6 +16,8 @@
 */Data/Migrations/
 web/wwwroot/libs/
 bower_components/
+web/appsettings.json
+web/Properties/PublishProfiles/
 
 ConsoleApp1/
 resources/
