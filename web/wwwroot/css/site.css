@@ -28,6 +28,12 @@ html, body {
 .ion-5x {
     font-size: 40px !important;
 }
+.text-info {
+    color: #53a6fa !important;
+}
+.text-danger {
+    color: #ea2e49 !important;
+}
 
 /*================================
      Button styles & overrides
@@ -57,6 +63,10 @@ html, body {
 
 .modal-footer {
     border: none;
+}
+
+table tbody tr:hover{
+    cursor:pointer;
 }
 @media(min-width: 992px){
     .app-aside{

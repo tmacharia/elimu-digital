@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using System;
@@ -22,6 +23,8 @@ namespace web.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            ViewBag.Action = "Courses";
+
             var courses = _repos.Courses
                                 .ListWith("Units","Students","Likes")
                                 .ToList();
@@ -29,28 +32,71 @@ namespace web.Controllers
             return View(courses);
         }
 
+        [HttpGet]
+        [Route("courses/{id}/{name}")]
+        public IActionResult Details(int id, string name)
+        {
+            ViewBag.Action = "Courses";
+            string error = string.Empty;
+
+            if (id < 1)
+            {
+                error = "Invalid course Id. Provide a valid 'Id' value greater than 0.";
+            }
+
+            Course course = _repos.Courses
+                                  .GetWith(id, 
+                                           "Units", 
+                                           "Students", 
+                                           "Likes");
+
+            if(course == null)
+            {
+                error = "No record of courses with that id exist.";
+            }
+
+            ViewBag.error = error;
+
+            return View("~/Views/Courses/Details.cshtml", course);
+        }
+        [HttpGet]
+        public IActionResult Search(string q)
+        {
+            ViewBag.Action = "Courses";
+            ViewBag.Query = q;
+
+            string pattern = "(" + q + ")";
+
+            IList<Course> courses = _repos.Courses
+                                          .ListWith("Units")
+                                          .Where(SearchFuncs.Course(q))
+                                          .ToList();
+
+            return View(courses);
+        }
         [HttpPost]
-        [AllowAnonymous]
-        public IActionResult Create()
+        public IActionResult Create(string name)
         {
             try
             {
-                string name = Request.Form["name"];
-
-                if (!string.IsNullOrWhiteSpace(name))
+                if (string.IsNullOrWhiteSpace(name))
                 {
-                    this.AddNotification($"Posted! Data contents: {name}", "Info");
-                }
-                else
-                {
-                    this.AddNotification("Sorry, no data received.", "Error");
+                    return BadRequest("Specify course name.");
                 }
 
-                return RedirectToActionPermanent("Index");
+                Course course = new Course()
+                {
+                    Name = name,
+                };
+
+                _repos.Courses.Create(course);
+                _repos.Commit();
+
+                return Ok("Course created successfully.");
             }
             catch (Exception ex)
             {
-                throw ex;
+                return this.Error(ex.Message);
             }
         }
     }

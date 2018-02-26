@@ -4,11 +4,11 @@ using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
-using Services.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Paginator;
+using Paginator.Models;
 
 namespace web.API_s
 {
@@ -27,19 +27,17 @@ namespace web.API_s
 
         // Index
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(int page=1, int itemsperpage=10)
         {
-            IList<Unit> units = _repos.Units.List
-                                      .ToList();
+            Result<Unit> rest = _repos.Units
+                                      .ListWith("Lecturer", "Students", "Course")
+                                      .ToPaged(page, itemsperpage);
 
-            var entities = _mapper.Map<List<UnitViewModel>>(units);
-
-            return Ok(entities);
+            return View(rest);
         }
 
         // Create
         [HttpPost]
-        [Route("{courseId}")]
         [Authorize(Roles = "Admin, Lecturer")]
         public IActionResult Create(int courseId, UnitViewModel model)
         {
@@ -49,6 +47,7 @@ namespace web.API_s
             }
 
             Unit unit = _mapper.Map<Unit>(model);
+            unit.Code = Guid.NewGuid();
 
             // get course
             var course = _repos.Courses.Get(courseId);
@@ -62,7 +61,7 @@ namespace web.API_s
             unit = _repos.Units.Create(unit);
             _repos.Commit();
 
-            return Created($"/api/units/{unit.Id}", unit);
+            return Ok("Created!");
         }
 
         // Get

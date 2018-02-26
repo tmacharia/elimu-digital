@@ -1,0 +1,167 @@
+@using Services
+@model DAL.Models.Course
+@{
+    if (Model != null)
+    {
+        ViewBag.Title = Model.Name;
+    }
+    else
+    {
+        ViewBag.Title = "Details";
+    }
+    ViewBag.Action = "Courses";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    string error = (string)ViewBag.error;
+}
+<style>
+    h2 span {
+        font-size: .65rem !important;
+    }
+</style>
+
+
+<div class="padding">
+    @if (Model != null)
+    {
+        <h2>
+            @Model.Name
+
+            <span class="badge badge-primary" title="Likes">
+                <i class="fa fa-thumbs-up" title="Likes"></i> @Model.Likes.Count
+            </span>
+
+            <span class="pull-right">
+                <span><i class="fa fa-calendar-o"></i> @string.Format("{0:D}", Model.Timestamp)</span>
+                <br />
+                <br />
+                <b class="pull-right">Created</b>
+            </span>
+        </h2>
+        <p>
+            <i>Course code: </i> <b>@Model.Code.ToString().Substring(0, 6).ToUpper()</b>
+        </p>
+
+        <div class="row">
+            <input hidden="hidden" id="CourseId" value="@Model.Id" />
+
+            <div class="col-sm-6">
+                <div class="box">
+                    <div class="box-header">
+                        <h3>
+                            Units
+
+                            <span class="pull-right h6 text-muted" title="add unit" data-toggle="modal" data-target="#newUnitModal">
+                                <i class="ion ion-plus pointer" title="add unit"></i>
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="list inset">
+                        @if (Model.Units != null && Model.Units.Count > 0)
+                        {
+                            foreach (var item in Model.Units)
+                            {
+                                <div class="list-item" data-id="item-5">
+                                    <span class="">
+                                        <i class="fa fa-umbrella fa-2x"></i>
+                                    </span>
+                                    <div class="list-body">
+                                        <a class="item-title _500" href="/units/@item.Id/@item.GenerateSlug()">@item.Name</a>
+                                        <div class="item-except text-sm text-muted h-1x">
+                                            @if(item.Lecturer != null) {
+                                                if(item.Lecturer.Profile != null) { 
+                                                    <i>Lecturer: </i> @item.Lecturer.Profile.FullNames
+                                                }
+                                                else { 
+                                                    <span class="text-warning">
+                                                        <i class="fa fa-exclamation-triangle"></i> pending registration...
+                                                    </span>
+                                                }
+                                            }
+                                            else { 
+                                                <span class="text-danger">
+                                                    <i class="fa fa-ban"></i> no lecturer
+                                                </span>
+                                            }
+                                        </div>
+                                        <div class="item-tag tag hide"></div>
+                                    </div>
+                                    <div>
+                                        <span class="item-date text-xs text-muted">
+                                            @string.Format("{0:D}", item.Timestamp)
+                                            <br />
+                                            <span class="pull-right">
+                                                <i>Code: </i> <b>@item.Code.ToString().Substring(0, 5).ToUpper()</b>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                        }
+
+                        }
+                        else
+                        {
+                            <br />
+                            <center>
+                                No units exist for this course. <b class="text-muted">Start adding units today.</b>
+                            </center>
+                            <br />
+                            <br />
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="box">
+                    <div class="box-header">
+                        <h3>
+                            Students
+                        </h3>
+                    </div>
+                    <div class="list inset">
+                        @if (Model.Students != null && Model.Students.Count > 0)
+                        {
+                            foreach (var item in Model.Students)
+                            {
+                                <div class="list-item" data-id="item-5">
+                                    <span class="w-40 avatar circle blue-grey">
+                                        <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
+                                    </span>
+                                    <div class="list-body">
+                                        <a class="item-title _500" href="#">@item.Profile.FullNames</a>
+                                        <div class="item-except text-sm text-muted h-1x">
+                                            Student
+                                        </div>
+                                        <div class="item-tag tag hide"></div>
+                                    </div>
+                                    <div>
+                                        <span class="item-date text-xs text-muted">@item.Timestamp.ToString()</span>
+                                    </div>
+                                </div>
+                        }
+
+                        }
+                        else
+                        {
+                            <br />
+                            <center>
+                                <i class="ion ion-e"></i> No students have enrolled to this course yet.
+                            </center>
+                            <br />
+                            <br />
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <h2>Error</h2>
+
+        <span class="badge badge-danger h3">@error</span>
+    }
+</div>
+
+@Html.Partial("Units/_Create")
+

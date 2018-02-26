@@ -1,5 +1,7 @@
 @using DAL.Extensions
+@{ 
 
+}
 <div class="sidenav hv">
         <div class="navbar lt">
             <a class="navbar-brand" href="/">
@@ -31,15 +33,43 @@
                 <div class="nav-active-text" data-nav="">
                     <ul class="nav">
                         <li class="nav-header"><span class="text-xs hidden-folded">Quick access</span></li>
-                        <li class="active">
-                            <a href="/"><span class="nav-icon"><i class="fa fa-home"></i></span> <span class="nav-text">Home</span></a>
-                        </li>
-                        <li>
-                            <a href="/courses"><span class="nav-icon"><i class="fa fa-leaf"></i></span> <span class="nav-text">Courses</span></a>
-                        </li>
-                        <li>
-                            <a href="/units"><span class="nav-icon"><i class="fa fa-gear"></i></span> <span class="nav-text">Units</span></a>
-                        </li>
+                        @if(ViewBag.Action == "Dashboard")
+                        {
+                            <li class="active">
+                                <a href="/"><span class="nav-icon"><i class="fa fa-home"></i></span> <span class="nav-text">Home</span></a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="/"><span class="nav-icon"><i class="fa fa-home"></i></span> <span class="nav-text">Home</span></a>
+                            </li>                        
+                        }
+                        @if(ViewBag.Action == "Courses")
+                        {
+                            <li class="active">
+                                <a href="/courses"><span class="nav-icon"><i class="fa fa-leaf"></i></span> <span class="nav-text">Courses</span></a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="/courses"><span class="nav-icon"><i class="fa fa-leaf"></i></span> <span class="nav-text">Courses</span></a>
+                            </li>                        
+                        }
+
+                        @if(ViewBag.Action == "Units")
+                        {
+                            <li class="active">
+                                <a href="/units"><span class="nav-icon"><i class="fa fa-umbrella"></i></span> <span class="nav-text">Units</span></a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="/units"><span class="nav-icon"><i class="fa fa-umbrella"></i></span> <span class="nav-text">Units</span></a>
+                            </li>
+                        }
                         <li>
                             <a href="/lecturers"><span class="nav-icon"><i class="fa fa-user-secret"></i></span> <span class="nav-text">Lecturers</span></a>
                         </li>

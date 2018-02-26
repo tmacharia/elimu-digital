@@ -8,8 +8,10 @@ namespace Common.ViewModels
 {
     public class CourseViewModel
     {
+        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public CourseType Type { get; set; }
         public Guid Code { get; set; }
 
         public virtual ICollection<Unit> Units { get; set; }

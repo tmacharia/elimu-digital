@@ -3,6 +3,7 @@ using Common.ViewModels;
 using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Services;
 using Services.Security;
 using System;
@@ -129,7 +130,27 @@ namespace web.API_s
             return Ok(schools);
         }
         
-        
+        // Courses
+        [HttpGet]
+        [Route("{schoolId}/courses")]
+        public IActionResult GetCourses(int schoolId)
+        {
+            if(schoolId < 1)
+            {
+                return BadRequest("Invalid school id.");
+            }
+
+            var courses = _repos.Schools
+                                .ListWith("Courses")
+                                .FirstOrDefault(x => x.Id == schoolId)
+                                .Courses
+                                .ToList();
+
+            IList<CourseViewModel> model = _mapper.Map<List<CourseViewModel>>(courses);
+
+            return Ok(model);
+        }
+
         // Delete
         [HttpDelete]
         [Route("{id}")]

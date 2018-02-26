@@ -32,6 +32,13 @@ namespace Services
                 Data = obj
             };
         }
+        public static LepadActionResult Success(this ControllerBase controller, object obj)
+        {
+            return new LepadActionResult(HttpStatusCode.OK)
+            {
+                Data = obj
+            };
+        }
 
         public static LepadActionResult Error(this ControllerBase controller, string message)
         {

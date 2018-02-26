@@ -26,6 +26,8 @@ namespace web.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Action = "Dashboard";
+
             AppUser user = _appContext.Users.FirstOrDefault(x => x.Email == User.Identity.Name);
 
             if(user.AccountId < 1 || user.AccountType == AccountType.None)

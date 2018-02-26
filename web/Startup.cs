@@ -51,12 +51,6 @@ namespace web
                 })
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
-            services.AddSession(options =>
-            {
-                // Set a short timeout for easy testing.
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
-                options.CookieHttpOnly = true;
-            });
             services.AddMvc()
                     .AddJsonOptions(options =>
                     {
@@ -97,7 +91,6 @@ namespace web
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
             app.UseSecurity();
-            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

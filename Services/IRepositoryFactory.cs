@@ -24,6 +24,7 @@ namespace Services
         IRepository<Student> Students { get; }
         IRepository<Lecturer> Lecturers { get; }
         IRepository<Admin> Administrators { get; }
+        IRepository<Notification> Notifications { get; }
 
         void Commit();
     }

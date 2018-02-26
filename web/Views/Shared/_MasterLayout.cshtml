@@ -8,21 +8,26 @@
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="black-translucent" name="apple-mobile-web-app-status-barstyle">
-    <link href="~/images/logo.png" rel="apple-touch-icon">
+    <link href="~/images/Graduation_Hat-512.ico" rel="apple-touch-icon">
     <meta content="E-Learning pad" name="apple-mobile-web-app-title">
     <meta content="yes" name="mobile-web-app-capable">
-    <link href="~/images/logo.png" rel="shortcut icon" sizes="196x196">
+    <link href="~/images/Graduation_Hat-512.ico" rel="shortcut icon" sizes="196x196">
+
     <link rel="stylesheet" href="~/css/app.min.css" />
     <link href="~/libs/Ionicons/css/ionicons.min.css" rel="stylesheet" />
     <link href="~/libs/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="~/css/site.min.css" rel="stylesheet">
+    <link href="~/css/toastr.css" rel="stylesheet" />
+    <link href="~/libs/jquery-confirm2/dist/jquery-confirm.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet">
+
 
     <environment names="Development">
         <script src="~/libs/jquery/dist/jquery.js"></script>
-        <script src="~/libs/jquery-validation/dist/jquery.validate.js"></script>
-        <script src="~/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-        @*<script src="~/libs/bootstrap-modal/bootstrap-modal.js"></script>*@
+        <script src="~/js/app.min.js"></script>
+        <script src="~/libs/jquery-confirm2/js/jquery-confirm.js"></script>
+        <script src="~/js/toastr.js"></script>
     </environment>
+
     <environment names="Staging,Production">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
                 asp-fallback-src="~/libs/jquery/dist/jquery.min.js"
@@ -41,15 +46,23 @@
                 crossorigin="anonymous"
                 integrity="sha384-JrXK+k53HACyavUKOsL+NkmSesD2P+73eDMrbTtTk0h4RmOF8hF8apPlkp26JlyH">
         </script>
-        @*<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-modal/2.2.6/js/bootstrap-modal.min.js"
-                    asp-fallback-src="~/libs/bootstrap-modal/bootstrap-modal.js"
-                    integrity="sha256-UEFikFBinV4tAScIYbW3+7BCI2zpM74VWtUa1MIR738="
-                    crossorigin="anonymous">
-            </script>*@
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"
+                asp-fallback-src="~/libs/notifyjs/dist/notify.js"
+                integrity="sha256-tSRROoGfGWTveRpDHFiWVz+UXt+xKNe90wwGn25lpw8="
+                crossorigin="anonymous">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"
+                asp-fallback-src="~/libs/jquery-confirm2/dist/jquery-confirm.min.js">
+        </script>
     </environment>
-
 </head>
 <body>
+
+    <noscript>
+        Javascript has to be enabled in browser settings for this application
+        to run properly.
+    </noscript>
+
     <div class="app" id="app">
         <div aria-hidden="true" class="app-aside fade box-shadow-x nav-expand white" id="aside">
             @Html.Partial("_Sidebar")
@@ -67,7 +80,7 @@
                 <div class="d-flex p-3">
                     <span class="text-sm text-muted flex">&copy; Copyright. E-Learning Pad @DateTime.Now.Year</span>
                     <div class="text-sm text-muted">
-                        Version 1.0
+                        Version @System.Reflection.Assembly.GetEntryAssembly().GetName().Version
                     </div>
                 </div>
             </div>
@@ -79,8 +92,8 @@
         Html.RenderPartial("~/Views/Shared/Profiles/_Create.cshtml");
     }
     <!--End-->
-
+    
     <script src="~/js/site.js"></script>
-    <script src="~/js/app.min.js"></script>
+
 </body>
 </html>

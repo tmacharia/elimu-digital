@@ -160,7 +160,7 @@
         </li>
     </ul>
     <div class="collapse navbar-collapse no-grow order-lg-1" id="navbarToggler">
-        <form class="input-group m-2 my-lg-0">
+        <form class="input-group m-2 my-lg-0" id="searchForm" method="get" action="/@ViewBag.Action/search">
             <span class="input-group-btn">
                 <button class="btn no-border no-bg no-shadow" type="button">
                     <span class="input-group-btn">
@@ -168,7 +168,7 @@
                     </span>
                 </button>
             </span>
-            <input class="form-control no-border no-bg no-shadow" placeholder="Search directory..." type="text">
+            <input class="form-control no-border no-bg no-shadow" name="q" id="searchQuery" placeholder="Search @ViewBag.Action..." type="text">
         </form>
     </div>
 </div>
@@ -176,8 +176,26 @@
 
 
 <script>
+    var search_log = ['courses','units','lecturers','students'];
+
     $(document).ready(function () {
         checkPristineUser();
+
+        var action = '@ViewBag.Action';
+        action = action.toLowerCase();
+
+        if(search_log.indexOf(action) < 0){
+            $('#searchForm').submit(function(e){
+                e.preventDefault();
+
+                $.confirm({
+                    title: 'Warning!',
+                    type: 'orange',
+                    icon: 'fa fa-exclamation-circle',
+                    content: 'Search functionality not enabled on this page.'
+                });
+            })
+        }
     });
 
     function checkPristineUser()
@@ -188,4 +206,6 @@
             $('#profRegModal').modal('show');
         }
     }
+    
+
 </script>

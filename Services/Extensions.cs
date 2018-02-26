@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Services.Security;
+using System.Text.RegularExpressions;
 
 namespace Services
 {
@@ -110,12 +111,51 @@ namespace Services
         {
             return builder.UseMiddleware<SecurityMiddleware>();
         }
+        public static string Trancate(this string s)
+        {
+            if(s.Length < 25)
+            {
+                return s;
+            }
+            else
+            {
+                return s.Substring(0, 24) + "...";
+            }
+        }
         public static string Uni
         {
             get
             {
                 return "Greenstalk University";
             }
+        }
+        private static string RemoveAccent(string s)
+        {
+            byte[] bytes = Encoding.GetEncoding("Cyrillic").GetBytes(s);
+
+            return Encoding.ASCII.GetString(bytes);
+        }
+        public static string GenerateSlug<T>(this T entity) where T : class
+        {
+            string name = typeof(T).GetProperty("Name").GetValue(entity).ToString();
+
+            string phrase = string.Format("{0}", name);
+
+            string str = RemoveAccent(phrase).ToLower();
+
+            // remove invalid characters
+            str = Regex.Replace(str, @"[^a-z0-9\s-]", "");
+
+            // convert multiple spaces into single spaces
+            str = Regex.Replace(str, @"\s+", " ").Trim();
+
+            // cut and trim
+            str = str.Substring(0, str.Length <= 45 ? str.Length : 45).Trim();
+
+            // replace single-spaces with hyphens
+            str = Regex.Replace(str, @"\s", "-");
+
+            return str;
         }
     }
 }

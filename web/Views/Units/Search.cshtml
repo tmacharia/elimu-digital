@@ -1,0 +1,201 @@
+@using Services
+@using DAL.Models
+@using Paginator
+@using Paginator.Models
+@model Result<Unit>
+@{
+    ViewBag.Title = "Search Results(Units)";
+    ViewBag.Action = "Units";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<style>
+    .top-right {
+        font-size: .65rem !important;
+    }
+</style>
+
+<div class="padding">
+    <h2>
+        Search Results : @ViewBag.Query
+        <span class="ml-auto h6"><b class="badge danger">@Model.TotalItems</b></span>
+
+        <span class="h6 pull-right top-right">
+            <i>
+                Includes units across all courses offered at
+            </i>
+            <br />
+            <b class="pull-right">
+                @Extensions.Uni
+            </b>
+        </span>
+    </h2>
+
+    <div class="">
+        <div class="box">
+            <div class="box-header">
+                <h3>
+                    Units search
+                    <span class="h6 top-right pull-right">
+                        Search using the search box on the top right corner
+                    </span>
+                </h3>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped b-t">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Course</th>
+                            <th>Lecturer</th>
+                            <th>Total students</th>
+                            <th>Likes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.List.Count > 0)
+                        {
+                            foreach (var item in Model.List)
+                            {
+                                <tr>
+                                    <td><b>@item.Code.ToString().Substring(0, 6).ToUpper()</b></td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Course.Name</td>
+                                    <td>
+                                        @if (item.Lecturer != null)
+                                        {
+                                            if (item.Lecturer.Profile != null)
+                                            {
+                                                <span class="text-success">
+                                                    <i class="fa fa-check"></i> @item.Lecturer.Profile.FullNames
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-warning">
+                                                    <i class="fa fa-exclamation-triangle"></i> pending registration...
+                                                </span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger">
+                                                <i class="fa fa-times"></i> no lecturer
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>@item.UnitStudents.Count</td>
+                                    <td>
+                                        <i class="fa fa-thumbs-up" title="Likes"></i> @item.Likes.Count
+                                    </td>
+                                </tr>
+                            }
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <footer class="light lt p-2">
+                @if (Model != null)
+                {
+                    <div class="row">
+                        <div class="col-sm-4 d-block-sm">
+                        </div>
+                        <div class="col-sm-4">
+                            <small class="text-muted py-2 d-block text-center">
+                                @{
+                                    if (Model.Page != Model.TotalPages)
+                                    {
+                                        <span>
+                                            showing @((Model.Page - 1) * Model.ItemsPerPage) - @(Model.Page * Model.ItemsPerPage) of @Model.TotalItems items
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            showing @Model.List.Count of @Model.TotalItems items
+                                        </span>
+                                    }
+                                }
+
+                            </small>
+                        </div>
+                        <div class="col-sm-4">
+                            <ul class="pagination justify-content-sm-end m-0">
+                                <li class="page-item">
+                                    @if (Model.Page > 1)
+                                    {
+                                        <a aria-label="Previous" class="page-link" href="/units/search?q=@ViewBag.Query&page=@(Model.Page - 1)&itemsperpage=@Model.ItemsPerPage">
+                                            <span aria-hidden="true">
+                                                <i class="fa fa-fast-backward"></i>
+                                            </span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a aria-label="First" class="page-link disabled" onclick="disableLink(this)">
+                                            <span aria-hidden="true">
+                                                <i class="fa fa-fast-backward"></i>
+                                            </span>
+                                            <span class="sr-only">First</span>
+                                        </a>
+                                    }
+                                </li>
+                                @for (int i = 0; i < Model.TotalPages; i++)
+                                {
+                                    int n = i + 1;
+                                    if (n == Model.Page)
+                                    {
+                                        <li class="page-item active">
+                                            <a class="page-link" href="/units/search?q=@ViewBag.Query&page=@n&itemsperpage=@Model.ItemsPerPage">@n <span class="sr-only">(current)</span></a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" href="/units/search?q=@ViewBag.Query&page=@n&itemsperpage=@Model.ItemsPerPage">@n</a>
+                                        </li>
+                                    }
+
+                                }
+                                <li class="page-item">
+                                    @if (Model.Page < Model.TotalPages)
+                                    {
+                                        int n = Model.Page + 1;
+
+                                        <a aria-label="Next" class="page-link" href="/units/search?q=@ViewBag.Query&page=@n&itemsperpage=@Model.ItemsPerPage">
+                                            <span aria-hidden="false">
+                                                <i class="fa fa-fast-forward"></i>
+                                            </span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a aria-label="Last" class="page-link disabled" onclick="disableLink(this)">
+                                            <span aria-hidden="true">
+                                                <i class="fa fa-fast-forward"></i>
+                                            </span>
+                                            <span class="sr-only">Last</span>
+                                        </a>
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <br />
+                    <center>
+                        No data found.
+                    </center>
+                    <br />
+                }
+            </footer>
+        </div>
+    </div>
+</div>
+

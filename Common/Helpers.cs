@@ -25,20 +25,6 @@ namespace Common
             {
                 string prop = navigationProperties[i];
 
-                Func<TEntity, bool> func = (entity) =>
-                {
-                    var propValue = entity.GetType().GetProperty(prop).GetValue(entity);
-
-                    bool isDeleted = (bool)propValue.GetType().GetProperty("isDeleted").GetValue(propValue);
-
-                    if (isDeleted)
-                        return false;
-                    else
-                    {
-                        return true;
-                    }
-                };
-
                 source = source.Include(typeof(TEntity).GetProperty(prop).Name);
             }
 

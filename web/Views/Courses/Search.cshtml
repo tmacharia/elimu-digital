@@ -1,24 +1,23 @@
-﻿@using Services
+@using Services
 @using DAL.Models
 @model IList<Course>
 @{
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
-    ViewBag.Title = "Courses";
+    ViewBag.Title = "Search Results(Courses)";
 }
+
 <style>
-  .box{
-    padding:15px 20px !important;
-  }
+    .box {
+        padding: 15px 20px !important;
+    }
 </style>
+
 <div class="padding">
     <h4>
-        Courses <span class="ml-auto h6"><b class="badge danger">@Model.Count</b></span>
+        Search Results : @ViewBag.Query
+
         <span class="pull-right h6">
-            
-            <button class="btn btn-sm success theme-accent btn-block" type="button" data-target="#newCourseModal" data-toggle="modal">
-                <i class="fa fa-fw fa-plus"></i>
-                <span class="hidden-folded d-inline">New Course</span>
-            </button>
+            <b class="badge danger">@Model.Count</b>
         </span>
     </h4>
     <br />
@@ -28,11 +27,11 @@
             {
                 <li class="col-sm-4 col-12 col-md-3">
                     <div class="p-3 box pointer">
-                        <a class="d-block" href="/courses/@item.Id/@item.GenerateSlug()">
+                        <a class="d-block" href="#">
                             @item.Name.Trancate()
 
-                            <span class="pull-right pointer text-default" title="Delete course: @item.Name">
-                                <i class="ion ion-ios-close" onclick="onDeleteCourse(@item.Id)" title="Delete course: @item.Name"></i>
+                            <span class="pull-right pointer text-default">
+                                <i class="ion ion-trash-a" onclick="onDeleteCourse(@item.Id)"></i>
                             </span>
                         </a>
                         <br />
@@ -84,4 +83,4 @@
     </div>
 </div>
 
-@Html.Partial("Courses/_Create")
+

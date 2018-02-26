@@ -6,14 +6,14 @@
     // An array of relative input file paths. Globbing patterns supported
     "inputFiles": [
       "wwwroot/css/site.css"
-    ]
-    //"minify": {
-    //  "gzip": true,
-    //  "enabled": true,
-    //  "outputMode": "multipleLines",
-    //  "renameLocals": true
-    //},
-    //"sourceMap": true
+    ],
+    "minify": {
+      "gzip": true,
+      "enabled": true,
+      "outputMode": "multipleLines",
+      "renameLocals": true
+    },
+    "sourceMap": true
   },
   {
     "outputFileName": "wwwroot/css/site.css",

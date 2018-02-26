@@ -29,7 +29,7 @@ namespace web.API_s
         public IActionResult Index()
         {
             IList<Course> courses = _repos.Courses
-                                          .ListWith("Units")
+                                          .ListWith("Units","School")
                                           .ToList();
 
             var entities = _mapper.Map<List<CourseViewModel>>(courses);
@@ -39,19 +39,19 @@ namespace web.API_s
         
         // Create
         [HttpPost]
-        [Route("{schoolId}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Create(int schoolId, CourseViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || schoolId < 1)
             {
                 return BadRequest(ModelState);
             }
 
             Course course = _mapper.Map<Course>(model);
+            course.Code = Guid.NewGuid();
 
             // get school
-            var school = _repos.Schools.Get(schoolId);
+            var school = _repos.Schools.Get(1);
 
             if(school == null)
             {
@@ -62,7 +62,7 @@ namespace web.API_s
             course = _repos.Courses.Create(course);
             _repos.Commit();
 
-            return Created($"/api/courses/{course.Id}", course);
+            return Ok("Created!");
         }
 
         // Get
@@ -196,8 +196,7 @@ namespace web.API_s
         {
             if (id < 1)
             {
-                ModelState.AddModelError("Invalid course Id", "Provide a valid 'Id' value greater than 0 to delete course.");
-                return BadRequest(ModelState);
+                return BadRequest("Invalid course Id. Provide a valid 'Id' value greater than 0 to delete course.");
             }
 
             Course course = _repos.Courses
@@ -206,12 +205,13 @@ namespace web.API_s
             if (course != null)
             {
                 _repos.Courses.Remove(course);
+                _repos.Commit();
 
                 return Ok("Done!");
             }
             else
             {
-                return NotFound();
+                return NotFound("Course with that Id does not exist!");
             }
         }
 

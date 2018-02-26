@@ -31,6 +31,7 @@ namespace DAL.Contexts
         public virtual DbSet<Unit> Units { get; set; }
         public virtual DbSet<Admin> Administrators { get; set; }
         public virtual DbSet<StudentUnit> StudentUnits { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

@@ -57,14 +57,14 @@ namespace Services
         }
         public static Func<Course, bool> Course(string query)
         {
-            string pattern = $"({query})";
+            string pattern = "(" + query + ")";
 
             bool func(Course item)
             {
                 // search by course name
                 if (!string.IsNullOrWhiteSpace(item.Name))
                 {
-                    if (Regex.IsMatch(item.Name, pattern)) return true;
+                    if (Regex.IsMatch(item.Name, pattern, RegexOptions.IgnoreCase)) return true;
                     else return false;
                 }
 
@@ -75,15 +75,17 @@ namespace Services
         }
         public static Func<Unit, bool> Unit(string query)
         {
-            string pattern = $"({query})";
+            string pattern = "(" + query + ")";
 
             bool func(Unit item)
             {
                 // search by unit name
                 if (!string.IsNullOrWhiteSpace(item.Name))
                 {
-                    if (Regex.IsMatch(item.Name, pattern)) return true;
-                    else return false;
+                    if (Regex.IsMatch(item.Name, pattern))
+                        return true;
+                    else
+                        return false;
                 }
 
                 return false;

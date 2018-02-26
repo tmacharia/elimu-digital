@@ -11,12 +11,21 @@
                 </h5>
             </div>
             <div class="modal-body p-lg">
-                <form role="form" id="profileForm" method="post" action="/courses/create">
+                <form id="courseForm">
                     <div class="form-group">
                         <label>Name</label>
-                        <input class="form-control" required name="name" placeholder="e.g Bsc Computer Science" type="text" />
+                        <input class="form-control" required id="courseName" name="name" placeholder="e.g Bsc Computer Science" type="text" />
                     </div>
-
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select class="form-control" id="courseType">
+                            <option value="0" label="Certificate" />
+                            <option value="1" label="Diploma" />
+                            <option value="2" label="Degree" selected/>
+                            <option value="3" label="Masters" />
+                            <option value="4" label="Phd" />
+                        </select>
+                    </div>
                     <div class="modal-footer">
                         <button class="btn dark-white p-x-md" data-dismiss="modal" type="button">Cancel</button>
                         <button class="btn danger p-x-md" id="btnSubmit" type="submit">Submit</button>
@@ -27,3 +36,4 @@
         </div>
     </div>
 </div>
+

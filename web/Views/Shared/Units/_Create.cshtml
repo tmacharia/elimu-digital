@@ -1,0 +1,29 @@
+﻿@using DAL.Extensions
+
+<div class="modal fade" data-backdrop="true" id="newUnitModal">
+    <div class="modal-dialog animate" id="animate">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <span>
+                        <i class="fa fa-fw fa-umbrella"></i>  Add Unit
+                    </span>
+                </h5>
+            </div>
+            <div class="modal-body p-lg">
+                <form id="unitForm">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input class="form-control" required id="unitName" name="name" placeholder="e.g Communication Skills" type="text" />
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn dark-white p-x-md" data-dismiss="modal" type="button">Cancel</button>
+                        <button class="btn danger p-x-md" id="unitBtnSubmit" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
