@@ -1,0 +1,61 @@
+@using DAL.Models
+@model IList<Student>
+@{
+    ViewBag.Title = "All Students";
+    ViewBag.Action = "Students";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="padding">
+    <h4>
+        @ViewBag.Action
+        <span class="ml-auto h6"><b class="badge danger">@Model.Count</b></span>
+    </h4>
+    <br />
+
+    <div class="box">
+        <div class="box-header">
+            <h3>
+                @ViewBag.Title;
+            </h3>
+        </div>
+
+        <div class="list inset">
+            @foreach (var item in Model)
+            {
+                <div class="list-item" data-id="item-5">
+                    <span class="w-40 avatar circle blue-grey"><img alt="." src="@Url.Content(item.Profile.PhotoUrl)"></span>
+                    <div class="list-body">
+                        <a class="item-title _500" href="#">@item.Profile.FullNames</a>
+                        <div class="item-except text-sm text-muted h-1x">
+                            @{ 
+                                if(item.Course != null)
+                                {
+                                    <span>
+                                        <i class="fa fa-certificate"></i> @item.Course.Name, <b>@item.YearOfStudy</b>
+                                    </span>
+                                    <span>
+                                         Units: @item.StudentUnits.Count
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span>
+                                        <i class="fa fa-times text-danger"></i> not enrolled to any course yet
+                                    </span>
+                                }
+                            }
+                            
+                        </div>
+                    </div>
+                    <div>
+                        <span class="item-date text-xs text-muted">@item.Timestamp.ToString()</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+
+

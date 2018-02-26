@@ -11,6 +11,7 @@
         isUserNew = (bool)ViewBag.IsNew;
     }
 
+    int notifications = (int)ViewBag.Notifications;
 }
 
 <div class="navbar navbar-expand-lg">
@@ -26,7 +27,12 @@
         <li class="nav-item dropdown">
             <a class="nav-link px-3" data-toggle="dropdown">
                 <i class="fa fa-bell text-muted"></i>
-                <span class="badge badge-pill up danger">@ViewBag.Notifications</span>
+                @{ 
+                    if(notifications > 0)
+                    {
+                        <span class="badge badge-pill up danger">@notifications</span>
+                    }
+                }
             </a>
             <div class="dropdown-menu dropdown-menu-right w-md animate fadeIn mt-2 p-0">
                 <div class="scrollable hover" style="max-height: 250px">

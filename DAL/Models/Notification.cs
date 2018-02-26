@@ -9,7 +9,7 @@ namespace DAL.Models
     public class Notification : Base
     {
         [Required]
-        public Guid AccountId { get; set; }
+        public int AccountId { get; set; }
         [DefaultValue(false)]
         public bool? Read { get; set; }
         [DataType(DataType.Html)]

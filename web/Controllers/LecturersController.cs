@@ -10,25 +10,24 @@ using System.Threading.Tasks;
 namespace web.Controllers
 {
     [Authorize]
-    public class StudentsController : Controller
+    public class LecturersController : Controller
     {
         private readonly IRepositoryFactory _repos;
         private readonly IMapper _mapper;
 
-        public StudentsController(IRepositoryFactory factory, IMapper mapper)
+        public LecturersController(IRepositoryFactory factory, IMapper mapper)
         {
             _repos = factory;
             _mapper = mapper;
         }
 
-        [HttpGet]
         public IActionResult Index()
         {
-            var students = _repos.Students
-                                 .ListWith("Profile", "Course", "StudentUnits")
-                                 .ToList();
+            var lecturers = _repos.Lecturers
+                                  .ListWith("Profile", "Units", "Likes")
+                                  .ToList();
 
-            return View(students);
+            return View(lecturers);
         }
 
         [HttpGet]

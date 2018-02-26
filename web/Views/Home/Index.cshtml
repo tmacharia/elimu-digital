@@ -1,5 +1,5 @@
 ﻿@using DAL.Models
-@using DAL.Extensions
+@using Services
 @{ 
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
     ViewBag.Title = "Dashboard";
@@ -18,10 +18,6 @@
                 <div class="box-header">
                     <h3>
                         Lecturers
-                        
-                        <span class="pull-right h6 text-muted" title="add lecturer">
-                            <i class="ion ion-plus pointer" title="add lecturer"></i>
-                        </span>
                     </h3>
                 </div>
                 <div class="list inset">
@@ -49,9 +45,6 @@
                 <div class="box-header">
                     <h3>
                         Students
-                        <span class="pull-right h6 text-muted" title="add student">
-                            <i class="ion ion-plus pointer" title="add student"></i>
-                        </span>
                     </h3>
                 </div>
                 <div class="list inset">
@@ -68,7 +61,7 @@
                             </div>
                             <div>
                                 <div class="item-action dropdown">
-                                    <a class="text-muted" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-ellipsis-v"></i></a>
+                                    <a class="text-muted" data-toggle="dropdown" href="/students/@item.Id/@Extensions.GenerateSlug(item?.Profile.FullNames)"><i class="fa fa-fw fa-ellipsis-v"></i></a>
                                     <div class="dropdown-menu dropdown-menu-right text-color" role="menu">
                                         <a class="dropdown-item"><i class="fa fa-tag"></i> Action</a> <a class="dropdown-item"><i class="fa fa-pencil"></i> Another action</a> <a class="dropdown-item"><i class="fa fa-reply"></i> Something else here</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item"><i class="fa fa-ellipsis-h"></i> Separated link</a>

@@ -139,7 +139,15 @@ namespace Services
         {
             string name = typeof(T).GetProperty("Name").GetValue(entity).ToString();
 
-            string phrase = string.Format("{0}", name);
+            return Slugger(name);
+        }
+        public static string GenerateSlug(string s)
+        {
+            return Slugger(s);
+        }
+        private static string Slugger(string s)
+        {
+            string phrase = string.Format("{0}", s);
 
             string str = RemoveAccent(phrase).ToLower();
 

@@ -1,6 +1,6 @@
 @using DAL.Extensions
 @{ 
-
+    int notifications = (int)ViewBag.Notifications;
 }
 <div class="sidenav hv">
         <div class="navbar lt">
@@ -23,7 +23,12 @@
                     </small>
                     </a>
                     <div>
-                        <span class="badge badge-pill info">@ViewBag.Notifications</span>
+                    @{ 
+                        if(notifications > 0)
+                        {
+                            <span class="badge badge-pill up danger">@notifications</span>
+                        }
+                    }                    
                     </div>
                 </div>
             </div>
@@ -70,9 +75,32 @@
                                 <a href="/units"><span class="nav-icon"><i class="fa fa-umbrella"></i></span> <span class="nav-text">Units</span></a>
                             </li>
                         }
-                        <li>
-                            <a href="/lecturers"><span class="nav-icon"><i class="fa fa-user-secret"></i></span> <span class="nav-text">Lecturers</span></a>
-                        </li>
+
+                        @if(ViewBag.Action == "Lecturers")
+                        {
+                            <li class="active">
+                                <a href="/lecturers"><span class="nav-icon"><i class="fa fa-user-secret"></i></span> <span class="nav-text">Lecturers</span></a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="/lecturers"><span class="nav-icon"><i class="fa fa-user-secret"></i></span> <span class="nav-text">Lecturers</span></a>
+                            </li>
+                        }
+
+                        @if(ViewBag.Action == "Students")
+                        {
+                            <li class="active">
+                                <a href="/students"><span class="nav-icon"><i class="fa fa-users"></i></span> <span class="nav-text">Students</span></a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="/students"><span class="nav-icon"><i class="fa fa-users"></i></span> <span class="nav-text">Students</span></a>
+                            </li>
+                        }
 
                         @if(User.IsInRole("Student"))
                         {

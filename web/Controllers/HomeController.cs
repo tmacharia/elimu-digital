@@ -59,7 +59,7 @@ namespace web.Controllers
             }
             ViewBag.lecturers = _repos.Lecturers.ListWith("Profile").ToList();
             ViewBag.students = _repos.Students.ListWith("Profile").ToList();
-            ViewBag.Notifications = 8;
+            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId);
 
             return View();
         }

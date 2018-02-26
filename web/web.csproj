@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="LinqPaginator" Version="1.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.3" />
@@ -62,19 +63,13 @@
   <ItemGroup>
     <Folder Include="Views\Contents\" />
     <Folder Include="Views\Exams\" />
-    <Folder Include="Views\Students\" />
+    <Folder Include="Views\Lecturers\" />
     <Folder Include="Views\Units\" />
     <Folder Include="Views\Shared\Profiles\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="wwwroot\css\toastr.css" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Paginator">
-      <HintPath>..\Color Pallette\Paginator.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
