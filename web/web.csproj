@@ -73,8 +73,7 @@
 
   <ItemGroup>
     <Reference Include="Paginator">
-      <HintPath>..\packages\Paginator.dll</HintPath>
-      <Private>true</Private>
+      <HintPath>..\Color Pallette\Paginator.dll</HintPath>
     </Reference>
   </ItemGroup>
 
