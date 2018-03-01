@@ -1,8 +1,156 @@
-
+@using DAL.Models
+@using DAL.Extensions
+@using Services
+@model Unit
 @{
-    ViewData["Title"] = "Details";
+    ViewBag.Title = Model.Name;
+    ViewBag.Action = "Units";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
 }
+<style>
+    h2 span {
+        font-size: .65rem !important;
+    }
 
-<h2>Details</h2>
+    .list-item {
+        padding: unset !important;
+    }
+    .class-hours {
+        font-weight: 700;
+        font-size: 1.4rem;
+        opacity: .2;
+        margin-right: -10px;
+    }
+</style>
 
+<div class="padding">
+    <h2>
+        <i class="fa fa-umbrella"></i> @Model.Name
+
+        <span class="badge badge-primary" title="Likes">
+            <i class="fa fa-thumbs-up" title="Likes"></i> @Model.Likes.Count
+        </span>
+
+        <span class="badge badge-info" title="Students Enrolled">
+            <i class="fa fa-users" title="Students Enrolled"></i> @Model.UnitStudents.Count
+        </span>
+
+        @{
+            if (Model.Class == null)
+            {
+                <span class="pull-right h6">
+                    <button class="btn btn-sm info theme-accent btn-block" type="button" data-target="#allocateUnitModal" data-toggle="modal" onclick="onAllocateUnit('@Model.Name', '@Model.Id')">
+                        <i class="fa fa-fw fa-paperclip"></i>
+                        <a class="hidden-folded d-inline">Get classroom</a>
+                    </button>
+                </span>
+            }
+        }
+    </h2>
+    <br />
+    <div class="row">
+        <div class="col-md-3 col-sm-6">
+            <div class="box p-3">
+                @{
+                    if (Model.Lecturer != null)
+                    {
+                        <div class="list-item">
+                            <span class="w-40 avatar circle blue-grey">
+                                <img alt="." src="@Url.Content(Model.Lecturer.Profile.PhotoUrl)">
+                            </span>
+                            <div class="list-body">
+                                <a class="item-title _500" href="#">@Model.Lecturer.Profile.FullNames</a>
+                                <div class="item-except text-sm text-muted h-1x">
+                                    Lecturer
+                                </div>
+                                <div class="item-tag tag">
+                                    <span class="item-date text-xs text-muted">@Model.Timestamp.ToString()</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <br />
+                        <center class="text-muted">
+                            <i class="fa fa-user-secret"></i> No Lecturer assigned yet!
+                        </center>
+                        <br />
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="box p-3">
+                @{
+                    if (Model.Class != null)
+                    {
+                        <span><i>@Model.Class.DayOfWeek.ToString()</i></span>
+                            <br />
+                            <i class="fa fa-clock-o"></i> @Model.Class.StartTime.ToString("h:mm tt") <span> - </span> @Model.Class.EndTime.ToString("h:mm tt")
+                            <br />
+                            <span>
+                                <span><i class="ion ion-location"></i> @Model.Class.Room</span>
+
+                                <span class="pull-right text-muted class-hours">
+                                    @{ 
+                                        if(Model.Class.Duration.Minutes > 0)
+                                        {
+                                            string n = ((Model.Class.Duration.Minutes / (decimal)60) * 100).ToString("N0").TrimEnd('0');
+
+                                            <strong>@string.Format("{0}.{1}", Model.Class.Duration.Hours, n) HRS</strong>
+                                        }else
+	                                    {
+	                                        <strong>@Model.Class.Duration.Hours HRS</strong>
+	                                    }
+                                    }
+                                    
+                                </span>
+                            </span>
+                    }
+                    else
+                    {
+                        <br />
+                        <center class="text-muted">
+                            <i class="fa fa-building-o"></i> No ClassRoom
+                        </center>
+                        <br />
+                    }
+                }
+            </div>
+        </div>
+
+    </div>
+
+    <h6>
+        <i class="fa fa-list"></i> Uploaded Content
+
+        @{
+            if (User.Role() == "Lecturer")
+            {
+                <span class="pull-right h6">
+                    <a class="btn btn-sm success theme-accent btn-block" href="/contents/add/@Model.Id/@Model.GenerateSlug()">
+                        <i class="fa fa-fw fa-upload"></i>
+                        <text class="hidden-folded d-inline">Upload</text>
+                    </a>
+                </span>
+            }
+        }
+    </h6>
+    <br />
+    @{
+        if (Model.Contents != null && Model.Contents.Count > 0)
+        {
+
+        }
+        else
+        {
+            <br />
+            <center>
+                <h6><i class="fa fa-frown-o"></i> No unit contents uploaded yet.</h6>
+            </center>
+        }
+    }
+</div>
+
+@Html.Partial("Classes/_AllocateUnit")

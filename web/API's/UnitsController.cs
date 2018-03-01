@@ -115,29 +115,6 @@ namespace web.API_s
             }
         }
 
-        // Get unit classes
-        [HttpGet]
-        [Route("{id}/classes")]
-        public IActionResult GetClasses(int id)
-        {
-            if (id < 1)
-            {
-                ModelState.AddModelError("Invalid unit Id", "Provide a valid 'Id' value greater than 0 to get unit.");
-                return BadRequest(ModelState);
-            }
-
-            Unit unit = _repos.Units
-                              .GetWith(id, "Classes");
-
-            if (unit != null)
-            {
-                return Ok(unit.Classes);
-            }
-            else
-            {
-                return NotFound();
-            }
-        }
 
         // Get unit students
         [HttpGet]
@@ -335,5 +312,35 @@ namespace web.API_s
             return Ok("Unit registration successful!");
         }
 
+        [HttpPost]
+        [Route("{unitId}/assignLecturer/{lecId}")]
+        public IActionResult AssignLec(int unitId, int lecId)
+        {
+            if(unitId < 1 || lecId < 1)
+            {
+                return BadRequest("Invalid unit or lecturer Id.");
+            }
+
+            var unit = _repos.Units.GetWith(unitId, "Lecturer");
+
+            if(unit == null)
+            {
+                return NotFound("Unit does not exist.");
+            }
+
+            var lec = _repos.Lecturers.Get(lecId);
+
+            if(lec == null)
+            {
+                return NotFound("Lecturer does not exist.");
+            }
+
+            unit.Lecturer = lec;
+
+            unit = _repos.Units.Update(unit);
+            _repos.Commit();
+
+            return Ok("Assigned successfully!");
+        }
     }
 }

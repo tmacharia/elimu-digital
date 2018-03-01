@@ -222,9 +222,9 @@ namespace web.API_s
         [Authorize(Roles = "Student")]
         public IActionResult Enroll(int courseId, int studentId)
         {
-            if (!ModelState.IsValid)
+            if (courseId < 1 || studentId < 1)
             {
-                return BadRequest(ModelState);
+                return BadRequest("Course Id or Student Id during student enrollment to a course cannot be null.");
             }
 
             var course = _repos.Courses.Get(courseId);

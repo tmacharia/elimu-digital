@@ -1,0 +1,70 @@
+﻿@using web.Extensions
+@using DAL.Models
+@model Class
+@{
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    ViewBag.Title = "Add ClassRoom";
+    ViewBag.Action = "Classes";
+
+    string error = (string)ViewBag.error;
+}
+<style>
+    .top-right {
+        font-size: .65rem !important;
+    }
+</style>
+
+<div class="padding">
+    <h2>@ViewBag.Title
+    
+        <span class="pull-right top-right">
+            <b>N.B</b> You can allocate a unit to this room later after adding it.
+        </span>
+    </h2>
+
+    <div class="box p-3">
+        @using (Html.BeginForm("Create","Classes"))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label>Day of Week</label>
+                @Html.DropDownListFor(x => x.DayOfWeek, Methods.DaysOfTheWeeks(), new { @class="form-control"})
+            </div>
+
+            <div class="form-group">
+                <label>Start Time</label>
+                @Html.TextBoxFor(x => x.StartTime, new { @type = "time", @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label>End Time</label>
+                @Html.TextBoxFor(x => x.EndTime, new { @type = "time", @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label>Room <i>(classroom in the university)</i></label>
+                @Html.TextBoxFor(x => x.Room, new { @type = "text", @class = "form-control" })
+            </div>
+
+            <br />
+            <div class="form-group">
+                <a href="/classes" class="btn btn-default">Close</a>
+                <button type="submit" class="btn btn-danger">Submit</button>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(document).ready(function (e) {
+        var err = '@error';
+
+        console.log(err);
+
+        if (err) {
+            error(err);
+        }
+
+    })
+</script>

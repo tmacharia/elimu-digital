@@ -7,9 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace web.Controllers
+namespace web.API_s
 {
     [Authorize]
+    [Route("api/lecturers")]
     public class LecturersController : Controller
     {
         private readonly IRepositoryFactory _repos;
@@ -23,19 +24,12 @@ namespace web.Controllers
 
         public IActionResult Index()
         {
-            var lecturers = _repos.Lecturers
-                                  .ListWith("Profile", "Units", "Likes")
-                                  .OrderByDescending(x => x.Timestamp)
-                                  .ToList();
+            var lecs = _repos.Lecturers
+                             .ListWith("Profile")
+                             .Where(x => x.Profile != null)
+                             .ToList();
 
-            return View(lecturers);
-        }
-
-        [HttpGet]
-        [Route("lecturers/{id}/{names}")]
-        public IActionResult Details(int id, string names)
-        {
-            return View();
+            return Ok(lecs);
         }
     }
 }

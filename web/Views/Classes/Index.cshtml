@@ -1,0 +1,87 @@
+﻿@using Services
+@using Paginator.Models
+@using DAL.Models
+@model Result<Class>
+@{
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    ViewBag.Title = "All Classes";
+    ViewBag.Action = "Classes";
+}
+<style>
+    .class-hours{
+        font-weight:700;
+        font-size:1.4rem;
+        opacity:.2;
+        margin-right:-10px;
+    }
+</style>
+
+
+<div class="padding">
+    <h4>
+        @ViewBag.Title <span class="ml-auto h6"><b class="badge danger">@Model.TotalItems</b></span>
+
+        <span class="pull-right h6">
+            <a class="btn btn-sm success theme-accent btn-block" href="/classes/create">
+                <i class="fa fa-fw fa-plus"></i>
+                <span class="hidden-folded d-inline">Add classroom</span>
+            </a>
+        </span>
+    </h4>
+    <br />
+    <div class="row">
+        @{ 
+            if(Model != null && Model.TotalItems > 0)
+            {
+                foreach (var item in Model.List)
+                {
+                    <div class="col-md-3 col-sm-6">
+                        <div class="box p-3">
+                            <span><i>@item.DayOfWeek.ToString()</i></span>
+
+                            @{
+                                if (item.Units != null)
+                                {
+                                    <span class="pull-right text-muted" title="Allocated Units: @item.Units.Count">
+                                        <i class="fa @(item.Units.Count > 0 ? "fa-check-circle text-success" : "fa-ban text-danger")" title="Allocated Units: @item.Units.Count"></i> @item.Units.Count
+                                    </span>
+                                }
+                            }
+                            <br />
+                            <br />
+                            <i class="fa fa-clock-o"></i> @item.StartTime.ToString("h:mm tt") - @item.EndTime.ToString("h:mm tt")
+                            <br />
+                            <p>
+                                <span><i class="ion ion-location"></i> @item.Room</span>
+
+                                <span class="pull-right text-muted class-hours">
+                                    @{ 
+                                        if(item.Duration.Minutes > 0)
+                                        {
+                                            string n = ((item.Duration.Minutes / (decimal)60) * 100).ToString("N0").TrimEnd('0');
+
+                                            <strong>@string.Format("{0}.{1}", item.Duration.Hours, n) HRS</strong>
+                                        }else
+	                                    {
+	                                        <strong>@item.Duration.Hours HRS</strong>
+	                                    }
+                                    }
+                                    
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <center class="container">
+                    <br />
+                    <span class="h5"><i class="fa fa-frown-o"></i> No classes found in the records.</span>
+                    <br />
+                    <span>Start adding classes where units will be studied within the university.</span>
+                </center>
+            }
+        }
+    </div>
+</div>

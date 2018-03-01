@@ -24,7 +24,9 @@
             @foreach (var item in Model)
             {
                 <div class="list-item" data-id="item-5">
-                    <span class="w-40 avatar circle blue-grey"><img alt="." src="@Url.Content(item.Profile.PhotoUrl)"></span>
+                    <span class="w-40 avatar circle blue-grey">
+                        <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
+                    </span>
                     <div class="list-body">
                         <a class="item-title _500" href="#">@item.Profile.FullNames</a>
                         <div class="item-except text-sm text-muted h-1x">

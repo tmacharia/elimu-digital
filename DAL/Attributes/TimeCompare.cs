@@ -1,6 +1,8 @@
-﻿using System;
+﻿using DAL.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -41,7 +43,13 @@ namespace DAL.Attributes
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var type = (Type)validationContext.ObjectInstance;
+            if(value == null)
+            {
+                return new ValidationResult("First datetime value required.");
+            }
+
+            var type = validationContext.ObjectType;
+
             object propValue = new object();
 
             if (!string.IsNullOrWhiteSpace(_otherProp))
@@ -49,14 +57,84 @@ namespace DAL.Attributes
                 propValue = type.GetProperty(_otherProp).GetValue(validationContext.ObjectInstance);
             }
 
-            DateTime endTime = Convert.ToDateTime(value);
             DateTime startTime = Convert.ToDateTime(propValue);
-            
+            DateTime endTime = Convert.ToDateTime(value);
+
             TimeSpan diff = endTime.Subtract(startTime);
 
-            return CheckDurationSpec(diff);
-        }
+            var res = CheckDurationSpec(diff);
+            if(res != null)
+            {
+                return res;
+            }
 
+            var startValidity = ValidateStart(startTime);
+            if (!startValidity.Item1)
+            {
+                return new ValidationResult(startValidity.Item2.First());
+            }
+
+            
+            var endValidity = ValidateEnd(endTime);
+            if (!endValidity.Item1)
+            {
+                return new ValidationResult(endValidity.Item2.First());
+            }
+
+            return null;
+        }
+        private static Tuple<bool, List<string>> ValidateStart(DateTime start)
+        {
+            TimeSpan span = start.TimeOfDay;
+            List<string> errors = new List<string>();
+
+            // not below 7:00 A.M
+            if (start.Meridiem() == Meridiem.AM)
+            {
+                if (span.Hours < 7)
+                {
+                    errors.Add("University policy requires all classes to begin at or after 7:00 A.M");
+                }
+            }
+
+            // not greater than 7:00 P.M
+            if (start.Meridiem() == Meridiem.PM)
+            {
+                if (span.TotalHours > (7+12))
+                {
+                    errors.Add("A class can only take a minimum of 2 hours and cannot go beyond 9:00 P.M." +
+                        $"Starting at {span.Hours}:{span.Minutes} {start.Meridiem().ToString()} does not follow University class policy rules.");
+                }
+            }
+
+            return new Tuple<bool, List<string>>((errors.Count > 0) ? false : true, errors);
+        }
+        private static Tuple<bool, List<string>> ValidateEnd(DateTime stop)
+        {
+            TimeSpan span = stop.TimeOfDay;
+            List<string> errors = new List<string>();
+
+            // not after 9:00 P.M
+            if (stop.Meridiem() == Meridiem.PM)
+            {
+                if (span.Hours > (8+12))
+                {
+                    errors.Add("University policy requires all classes to end before 9:00 P.M");
+                }
+            }
+
+            // not before 9:00 A.M
+            if (stop.Meridiem() == Meridiem.AM)
+            {
+                if (span.TotalHours < 9)
+                {
+                    errors.Add("A class can only take a minimum of 2 hours and cannot start before 7:00 A.M." +
+                        $"Ending at {span.Hours}:{span.Minutes} {stop.Meridiem().ToString()} does not follow University class policy rules.");
+                }
+            }
+
+            return new Tuple<bool, List<string>>((errors.Count > 0) ? false : true, errors);
+        }
         private ValidationResult CheckDurationSpec(TimeSpan timeSpan)
         {
             switch (_durationSpec)

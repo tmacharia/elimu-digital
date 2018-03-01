@@ -101,6 +101,11 @@ namespace web.API_s
                 return BadRequest(ModelState);
             }
 
+            if(id < 1)
+            {
+                return BadRequest("Invalid content Id.");
+            }
+
             var content = _repos.Contents.Get(id);
 
             if (content == null)

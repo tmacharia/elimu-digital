@@ -12,6 +12,18 @@ $('#unitBtnSubmit').click(function (e) {
     postUnit();
 })
 
+$('#assignLecForm').submit(function (e) {
+    e.preventDefault();
+
+    pushAssignLec();
+})
+
+$('#allocateUnitForm').submit(function (e) {
+    e.preventDefault();
+
+    pushAllocateUnit();
+})
+
 function postUnit() {
     unit.Name = $('#unitName').val();
 
@@ -45,4 +57,106 @@ function postUnit() {
             }
         }
     });
+}
+
+function onAssignLecturer(name,id) {
+    unit.id = id;
+    $('#unit_assign').text(name);
+    $('#lecSelect').empty();
+
+    $.ajax({
+        method: 'GET',
+        url: '/api/lecturers',
+        success: function(response){
+            $('#lecs-loader').hide();
+
+            var o = new Option('-- Select --', '');
+            $('#lecSelect').append(o);
+
+            if (response.length > 0) {
+                for (i = 0; i < response.length; i++) {
+                    AddLecToOptions(response[i]);
+                }
+            }
+        },
+        error: function (response) {
+            console.log(response);
+        }
+    })
+}
+
+function AddLecToOptions(lec) {
+    var o = new Option(lec.profile.fullNames, lec.id);
+    $('#lecSelect').append(o);
+}
+
+function pushAssignLec() {
+    var lec_id = $('#lecSelect').val();
+
+    $.ajax({
+        method: 'POST',
+        url: '/api/units/' + unit.id + '/assignLecturer/' + lec_id,
+        success: function (response) {
+            yay(response);
+
+            setTimeout(function () {
+                location.reload();
+            }, 1000);
+        },
+        error: function (response) {
+            error(response.responseText);
+        }
+    })
+}
+
+function onAllocateUnit(name, id) {
+    unit.id = id;
+    $('#unit_allocate').text(name);
+    $('#roomSelect').empty();
+
+    $.ajax({
+        method: 'GET',
+        url: '/api/classes',
+        success: function (response) {
+            $('#rooms-loader').hide();
+
+            var o = new Option('-- Select --', '');
+            $('#roomSelect').append(o);
+
+            if (response.length > 0) {
+                for (i = 0; i < response.length; i++) {
+                    AddRoomToOptions(response[i]);
+                }
+            }
+        },
+        error: function (response) {
+            console.log(response);
+        }
+    })
+}
+
+function AddRoomToOptions(room) {
+    var o = new Option(room.room + ', '+
+        room.startTime+' - '+room.endTime+', '+
+        room.dayOfWeek,room.id);
+    $('#roomSelect').append(o);
+}
+
+function pushAllocateUnit() {
+    var room_id = $('#roomSelect').val();
+
+    $.ajax({
+        method: 'POST',
+        url: '/api/classes/' + room_id + '/allocateToUnit/' + unit.id,
+        success: function (response) {
+            yay(response);
+
+            setTimeout(function () {
+                location.reload();
+            }, 1000);
+        },
+        error: function (response) {
+            error(response.responseText);
+        }
+    })
 }

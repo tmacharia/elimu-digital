@@ -1,7 +1,13 @@
 @using DAL.Extensions
 @{ 
-    int notifications = (int)ViewBag.Notifications;
+    int notifications = 0;
+
+    if (ViewBag.Notifications != null)
+    {
+        notifications = (int)ViewBag.Notifications;
+    }
 }
+
 <div class="sidenav hv">
         <div class="navbar lt">
             <a class="navbar-brand" href="/">
@@ -12,9 +18,10 @@
             </a>
         </div>
         <div class="nav-fold px-2">
-            <a class="d-flex p-2" href="profile.html">
-            <span class="avatar w-40 rounded grey hide">J</span> 
-            <img alt="user avatar" class="w-40 circle" src="@Url.Content(User.PhotoUrl())"></a>
+            <a class="avatar w-32" >
+                @*<span class="avatar w-40 rounded grey hide">J</span>*@ 
+                <img alt="user avatar" class="w-40 circle" src="@Url.Content(User.PhotoUrl())">
+            </a>
             <div class="hidden-folded flex p-2">
                 <div class="d-flex">
                     <a class="mr-auto text-nowrap" href="profile.html">@User.FullNames()
@@ -99,6 +106,19 @@
                         {
                             <li>
                                 <a href="/students"><span class="nav-icon"><i class="fa fa-users"></i></span> <span class="nav-text">Students</span></a>
+                            </li>
+                        }
+
+                        @if(ViewBag.Action == "Classes")
+                        {
+                            <li class="active">
+                                <a href="/classes"><span class="nav-icon"><i class="fa fa-building"></i></span> <span class="nav-text">Classes</span></a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="/classes"><span class="nav-icon"><i class="fa fa-building"></i></span> <span class="nav-text">Classes</span></a>
                             </li>
                         }
 

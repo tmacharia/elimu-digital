@@ -11,11 +11,23 @@ namespace DAL.Models
     {
         [Required]
         public string Room { get; set; }
+
+
         [Required]
+        public DayOfWeek DayOfWeek { get; set; }
+
+
+        [Required]
+        [DataType(DataType.Time)]
         public DateTime StartTime { get; set; }
+
+
         [Required]
+        [DataType(DataType.Time)]
         [TimeCompare(Comparison.GreaterThan, "StartTime", DurationSpec.Hours, 2)]
         public DateTime EndTime { get; set; }
+
+
         [NotMapped]
         public TimeSpan Duration
         {
@@ -25,8 +37,7 @@ namespace DAL.Models
             }
         }
 
-        [Required]
-        public virtual Unit Unit { get; set; }
+        public virtual ICollection<Unit> Units { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
     }
 }

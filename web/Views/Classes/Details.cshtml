@@ -1,0 +1,21 @@
+﻿@using Services
+@using DAL.Models
+@model Class
+@{
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+
+    if(Model.Unit != null)
+    {
+        ViewBag.Title = $"ClassRoom for {Model.Unit.Name}";
+    }
+    else
+    {
+        ViewBag.Title = "Class UnAllocated";
+    }
+
+    ViewBag.Action = "Classes";
+}
+
+<div class="padding">
+    <h2>@ViewBag.Title</h2>
+</div>

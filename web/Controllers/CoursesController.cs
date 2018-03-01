@@ -27,6 +27,7 @@ namespace web.Controllers
 
             var courses = _repos.Courses
                                 .ListWith("Units","Students","Likes")
+                                .OrderByDescending(x => x.Timestamp)
                                 .ToList();
 
             return View(courses);
@@ -46,7 +47,9 @@ namespace web.Controllers
 
             Course course = _repos.Courses
                                   .GetWith(id, 
-                                           "Units", 
+                                           "Units",
+                                           "Units.Lecturer",
+                                           "Units.Lecturer.Profile",
                                            "Students", 
                                            "Likes");
 
@@ -59,6 +62,7 @@ namespace web.Controllers
 
             return View("~/Views/Courses/Details.cshtml", course);
         }
+
         [HttpGet]
         public IActionResult Search(string q)
         {
@@ -74,6 +78,7 @@ namespace web.Controllers
 
             return View(courses);
         }
+
         [HttpPost]
         public IActionResult Create(string name)
         {

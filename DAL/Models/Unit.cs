@@ -21,11 +21,11 @@ namespace DAL.Models
         [Required]
         public virtual Course Course { get; set; }
         public virtual Lecturer Lecturer { get; set; }
+        public virtual Class Class { get; set; }
 
         public virtual ICollection<Exam> Exams { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
         public virtual ICollection<StudentUnit> UnitStudents { get; set; }
-        public virtual ICollection<Class> Classes { get; set; }
         public virtual ICollection<Content> Contents { get; set; }
     }
 }

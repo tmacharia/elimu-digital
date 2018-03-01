@@ -29,8 +29,8 @@ namespace web.Controllers
         public IActionResult Index(int page = 1, int itemsperpage = 10)
         {
             Result<Unit> rest = _repos.Units
-                                      .ListWith("Lecturer", "UnitStudents", "Course", "Likes")
-                                      .OrderBy(x => x.Name)
+                                      .ListWith("Lecturer","Lecturer.Profile", "UnitStudents", "Course", "Likes")
+                                      .OrderByDescending(x => x.Timestamp)
                                       .ToPaged(page, itemsperpage);
 
             return View(rest);
@@ -49,7 +49,7 @@ namespace web.Controllers
             }
 
             Unit unit = _repos.Units
-                              .GetWith(id, "Lecturer", "Exams", "Likes", "UnitStudents", "Classes", "Contents");
+                              .GetWith(id, "Lecturer","Lecturer.Profile", "Exams", "Likes", "UnitStudents", "Class", "Contents");
 
             if (unit == null)
             {

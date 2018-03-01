@@ -61,6 +61,7 @@ namespace web
 
             // Add application services
             services.AddAutoMapper();
+            services.AddTransient<ISettingsManager>(s => new SettingsManager(Configuration.GetSection("Settings")));
             services.AddTransient<IEmailSender>(e => new AuthMessageSender(MailTitle,AdminEmail,MailPassword));
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddTransient<IUploader>(u => new UploaderService(BlobAccount));
@@ -83,7 +84,7 @@ namespace web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            
             app.UseStaticFiles();
             
             app.UseIdentity();

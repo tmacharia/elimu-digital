@@ -11,7 +11,12 @@
         isUserNew = (bool)ViewBag.IsNew;
     }
 
-    int notifications = (int)ViewBag.Notifications;
+    int notifications = 0;
+
+    if(ViewBag.Notifications != null)
+    {
+        notifications = (int)ViewBag.Notifications;
+    }
 }
 
 <div class="navbar navbar-expand-lg">
@@ -125,9 +130,10 @@
             </div>
         </li>
         <li class="dropdown d-flex align-items-center">
+
             <a class="d-flex align-items-center" data-toggle="dropdown" href="#">
                 <span class="avatar w-32">
-                    <img alt="user avatar" src="@Url.Content(User.PhotoUrl())">
+                    <img alt="user avatar" class="w-40 circle" src="@Url.Content(User.PhotoUrl())">
                 </span>
             </a>
             <div class="dropdown-menu dropdown-menu-right w pt-0 mt-2 animate fadeIn">

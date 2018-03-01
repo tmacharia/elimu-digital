@@ -52,13 +52,22 @@ namespace web.Controllers
                                                     .Count(x => x.Profile == null),
                     Students_Enrolled = _repos.Students.ListWith("Course")
                                                        .Count(x => x.Course != null),
-                    Units_NoClass = _repos.Units.ListWith("Classes")
-                                                .Count(x => x.Classes == null || x.Classes.Count < 1)
+                    Units_NoClass = _repos.Units.ListWith("Class")
+                                                .Count(x => x.Class == null)
                 };
                 ViewBag.summary = summary;
             }
-            ViewBag.lecturers = _repos.Lecturers.ListWith("Profile").ToList();
-            ViewBag.students = _repos.Students.ListWith("Profile").ToList();
+
+            ViewBag.lecturers = _repos.Lecturers.ListWith("Profile")
+                                                .OrderByDescending(x => x.Timestamp)
+                                                .Take(10)
+                                                .ToList();
+
+            ViewBag.students = _repos.Students.ListWith("Profile")
+                                              .OrderByDescending(x => x.Timestamp)
+                                              .Take(10)
+                                              .ToList();
+
             ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId);
 
             return View();

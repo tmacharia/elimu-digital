@@ -108,6 +108,7 @@ namespace web.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult> Profile()
         {
             try
@@ -121,13 +122,11 @@ namespace web.Controllers
                     FullNames = Request.Form["FullNames"],
                     NationalID = int.Parse(Request.Form["ID"])
                 };
-
                 if (Request.Form.Files.Count > 0)
                 {
                     IFile file = new FormFile(Request.Form.Files[0]);
-                    profile.PhotoUrl = await _uploader.Upload(file);
+                    //profile.PhotoUrl = await _uploader.Upload(file);
                 }
-
                 if (type == 1)
                 {
                     //lec
@@ -156,7 +155,8 @@ namespace web.Controllers
 
                     user.AccountId = student.Id;
                     user.AccountType = AccountType.Student;
-                }else if(type == 0)
+                }
+                else if(type == 0)
                 {
                     // admin 
                     Admin admin = new Admin(Guid.Parse(user.Id))
@@ -187,16 +187,21 @@ namespace web.Controllers
                         break;
                 }
 
-
                 // add claims we need in the app (userId, accountType)
 
-                var claims = new List<Claim>
-                    {
+                var claims = new List<Claim>{
                         new Claim("UserId", user.Id),
-                        new Claim("FullNames", profile.FullNames),
-                        new Claim("PhotoUrl", profile.PhotoUrl),
                         new Claim("Role", CheckRole(user))
-                    };
+                };
+
+                if(!string.IsNullOrWhiteSpace(profile.FullNames))
+                {
+                    claims.Add(new Claim("FullNames", profile.FullNames));
+                }
+                else if(!string.IsNullOrWhiteSpace(profile.PhotoUrl))
+                {
+                    claims.Add(new Claim("PhotoUrl", profile.PhotoUrl));
+                }
 
                 await _userManager.AddClaimsAsync(user, claims);
 
@@ -310,6 +315,7 @@ namespace web.Controllers
             else
                 return profile;
         }
+
         private string CheckRole(AppUser user)
         {
             switch (user.AccountType)
@@ -355,9 +361,9 @@ namespace web.Controllers
                     // Send an email with this link
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                        $"<h3 style='color:#53a6fa;'>Welcome to E-Learning,</h3>\n\n" +
-                        $"Please confirm your account by clicking this <a href='{callbackUrl}'>link</a>");
+                    //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
+                    //    $"<h3 style='color:#53a6fa;'>Welcome to E-Learning,</h3>\n\n" +
+                    //    $"Please confirm your account by clicking this <a href='{callbackUrl}'>link</a>");
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);

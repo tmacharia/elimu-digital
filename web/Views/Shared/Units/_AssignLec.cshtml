@@ -1,0 +1,47 @@
+@using DAL.Extensions
+@{ 
+   
+}
+<style>
+    #unit_assign{
+        font-size:16px;
+        font-weight:200;
+    }
+    #lecs-loader{
+        position:absolute;
+        transform:translate(20%, -140%);
+    }
+</style>
+<div class="modal fade" data-backdrop="true" id="assignLecModal">
+    <div class="modal-dialog animate" id="animate">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <span>
+                        <i class="fa fa-fw fa-umbrella"></i>  Assign Lecturer to <i id="unit_assign"></i>
+                    </span>
+                </h5>
+            </div>
+            <div class="modal-body p-lg">
+                <form id="assignLecForm">
+                    <div class="form-group">
+                        <label>Choose lecturer</label>
+                        
+                        <select class="form-control" name="lecturer" id="lecSelect" required>
+                            
+                        </select>
+                        <span id="lecs-loader" class="text-muted">
+                            <i class="fa fa-refresh fa-spin"></i> fetching...
+                        </span>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn dark-white p-x-md" data-dismiss="modal" type="button">Cancel</button>
+                        <button class="btn danger p-x-md" id="unitBtnSubmit" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+

@@ -10,6 +10,8 @@ using Common;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using Services;
+using DAL.Extensions;
+using DAL.Attributes;
 
 namespace ConsoleTest
 {
@@ -28,7 +30,8 @@ namespace ConsoleTest
 
             Console.ForegroundColor = ConsoleColor.Green;
 
-            Entry();
+            //Entry();
+            ConfirmDate();
             //InitializeGet<School>();
             //SeedSchool("Online");
             //Get<School>(1, "Location");
@@ -75,7 +78,47 @@ namespace ConsoleTest
         }
 
         //static void SeedCourses()
+        static void ConfirmDate()
+        {
+            Console.WriteLine("Datetime now: {0}", DateTime.Now.ToString());
+            Console.WriteLine("Time Part: {0}", DateTime.Now.ToString("tt"));
 
+            Console.WriteLine("\n\nTimeSpan: {0}", DateTime.Now.TimeOfDay.ToString());
+
+            ValidateStart(DateTime.Now.Subtract(new TimeSpan(12,0,0)));
+        }
+        private static bool ValidateStart(DateTime start)
+        {
+            TimeSpan span = start.TimeOfDay;
+            List<string> errors = new List<string>();
+
+            // not below 7:00 A.M
+            if (start.Meridiem() == Meridiem.AM)
+            {
+                if(span.Hours < 7)
+                {
+                    errors.Add("University policy requires all classes to begin at or after 7:00 A.M");
+                    return false;
+                }
+            }
+
+            // not greater than 7:00 P.M
+            if (start.Meridiem() == Meridiem.PM)
+            {
+                if(span.Hours > 7)
+                {
+                    errors.Add("A class can only take a minimum of 2 hours and cannot go beyond 9:00 P.M." +
+                        $"Starting at {span.Hours}:{span.Minutes} {start.Meridiem().ToString()} does not follow University class policy rules.");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        private static bool ValidateStop(DateTime stop)
+        {
+            return false;
+        }
         static void InitializeGet<TEntity>() where TEntity : class
         {
             Console.ForegroundColor = ConsoleColor.Green;

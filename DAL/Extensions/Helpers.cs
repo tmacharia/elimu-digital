@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
 using System.Linq;
+using DAL.Models;
+using DAL.Contexts;
+using DAL.Attributes;
 
 namespace DAL.Extensions
 {
@@ -77,6 +80,23 @@ namespace DAL.Extensions
             else
             {
                 return "Unknown";
+            }
+        }
+        public static Meridiem Meridiem(this DateTime dateTime)
+        {
+            string tt = dateTime.ToString("tt").ToUpper();
+
+            if(tt == "AM")
+            {
+                return Attributes.Meridiem.AM;
+            }
+            else if(tt == "PM")
+            {
+                return Attributes.Meridiem.PM;
+            }
+            else
+            {
+                return Attributes.Meridiem.AM;
             }
         }
     }

@@ -1,0 +1,17 @@
+﻿@using DAL.Models
+@{ 
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+
+    ViewBag.Title = "Upload Content";
+    ViewBag.Action = "Contents";
+    var unit = (Unit)ViewBag.unit;
+}
+
+<div class="padding">
+    <h4>Upload New Content
+    
+        <span class="pull-right top-right">
+            <i class="fa fa-umbrella"></i> @unit.Name
+        </span>
+    </h4>
+</div>

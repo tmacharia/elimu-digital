@@ -25,7 +25,7 @@ namespace Common
             {
                 string prop = navigationProperties[i];
 
-                source = source.Include(typeof(TEntity).GetProperty(prop).Name);
+                source = source.Include(prop);
             }
 
             return source;

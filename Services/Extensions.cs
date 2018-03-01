@@ -12,6 +12,7 @@ using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Services.Security;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Services
 {
@@ -164,6 +165,43 @@ namespace Services
             str = Regex.Replace(str, @"\s", "-");
 
             return str;
+        }
+        public static string ToMoment(this DateTime dateTime)
+        {
+            TimeSpan timeSpan = DateTime.Now.Subtract(dateTime);
+
+            if(timeSpan.Days > 0)
+            {
+                return timeSpan.Days + " days ago";
+            }
+            else if(timeSpan.Hours > 0)
+            {
+                return timeSpan.Hours + "hrs ago";
+            }
+            else if(timeSpan.Minutes > 0)
+            {
+                return timeSpan.Minutes + "mins ago";
+            }
+            else if(timeSpan.Seconds > 0)
+            {
+                return timeSpan.Seconds + "secs ago";
+            }
+
+            return "ago";
+        }
+        public static IList<string> Populate(this ModelStateDictionary modelState)
+        {
+            List<string> list = new List<string>();
+
+            foreach (var item in modelState.OrderBy(x => x.Key))
+            {
+                foreach (var it in item.Value.Errors)
+                {
+                    list.Add(item.Key + ": " + it.ErrorMessage);
+                }
+            }
+
+            return list;
         }
     }
 }

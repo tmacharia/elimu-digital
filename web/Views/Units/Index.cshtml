@@ -58,8 +58,16 @@
                             foreach (var item in Model.List)
                             {
                                 <tr>
-                                    <td><b>@item.Code.ToString().Substring(0, 6).ToUpper()</b></td>
-                                    <td>@item.Name</td>
+                                    <td>
+                                        <a href="/units/@item.Id/@item.GenerateSlug()">
+                                            <b>@item.Code.ToString().Substring(0, 6).ToUpper()</b>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="/units/@item.Id/@item.GenerateSlug()">
+                                            @item.Name
+                                        </a>
+                                    </td>
                                     <td>@item.Course.Name</td>
                                     <td>
                                         @if (item.Lecturer != null){

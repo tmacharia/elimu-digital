@@ -26,13 +26,14 @@ namespace web.Controllers
         {
             var students = _repos.Students
                                  .ListWith("Profile", "Course", "StudentUnits")
+                                 .OrderByDescending(x => x.Timestamp)
                                  .ToList();
 
             return View(students);
         }
 
         [HttpGet]
-        [Route("{id}/{names}")]
+        [Route("students/{id}/{names}")]
         public IActionResult Details(int id, string names)
         {
             return View();

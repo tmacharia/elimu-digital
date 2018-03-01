@@ -25,6 +25,9 @@ namespace Services
 
             CreateMap<Comment, CommentViewModel>();
             CreateMap<CommentViewModel, Comment>();
+
+            CreateMap<Class, ClassViewModel>();
+            CreateMap<ClassViewModel, Class>();
         }
     }
 }

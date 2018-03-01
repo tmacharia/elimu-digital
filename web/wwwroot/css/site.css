@@ -45,6 +45,11 @@ html, body {
     background:none;
 }
 
+.badge-danger {
+    background: #ea2e49 !important;
+    border: 1px #ea2e49 solid;
+}
+
 
 /*================================
     Other styles
@@ -67,6 +72,20 @@ html, body {
 
 table tbody tr:hover{
     cursor:pointer;
+}
+
+.avatar {
+    border-radius: 50% !important;
+    overflow: hidden !important;
+}
+
+.avatar img {
+    height: 100% !important;
+    width: auto !important;
+}
+
+.top-right {
+    font-size: .65rem !important;
 }
 @media(min-width: 992px){
     .app-aside{

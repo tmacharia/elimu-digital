@@ -1,4 +1,5 @@
 @using Services
+@using DAL.Models
 @model DAL.Models.Course
 @{
     if (Model != null)
@@ -9,6 +10,7 @@
     {
         ViewBag.Title = "Details";
     }
+
     ViewBag.Action = "Courses";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
     string error = (string)ViewBag.error;
@@ -67,17 +69,24 @@
                                     <div class="list-body">
                                         <a class="item-title _500" href="/units/@item.Id/@item.GenerateSlug()">@item.Name</a>
                                         <div class="item-except text-sm text-muted h-1x">
-                                            @if(item.Lecturer != null) {
-                                                if(item.Lecturer.Profile != null) { 
-                                                    <i>Lecturer: </i> @item.Lecturer.Profile.FullNames
+                                            <span>
+                                                <i>Code: </i> <b>@item.Code.ToString().Substring(0, 5).ToUpper(),</b>
+                                            </span>
+                                            @if (item.Lecturer != null)
+                                            {
+                                                if (item.Lecturer.Profile != null)
+                                                {
+                                                    <i class="fa fa-check-circle text-success"></i><i> Lecturer: </i> @item.Lecturer.Profile.FullNames
                                                 }
-                                                else { 
+                                                else
+                                                {
                                                     <span class="text-warning">
                                                         <i class="fa fa-exclamation-triangle"></i> pending registration...
                                                     </span>
                                                 }
                                             }
-                                            else { 
+                                            else
+                                            {
                                                 <span class="text-danger">
                                                     <i class="fa fa-ban"></i> no lecturer
                                                 </span>
@@ -86,16 +95,28 @@
                                         <div class="item-tag tag hide"></div>
                                     </div>
                                     <div>
-                                        <span class="item-date text-xs text-muted">
-                                            @string.Format("{0:D}", item.Timestamp)
+                                        <span class="item-date text-xs">
+                                            @{
+                                                if (item.Lecturer == null)
+                                                {
+                                                    <span class="item-action dropdown pull-right">
+                                                        <a class="text-muted" data-toggle="dropdown" href="#">
+                                                            <i class="fa fa-fw fa-ellipsis-v"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-right text-color" role="menu">
+                                                            <a class="dropdown-item" data-toggle="modal" data-target="#assignLecModal" onclick="onAssignLecturer('@item.Name','@item.Id')"><i class="fa fa-tag"></i> Assign Lecturer</a>
+                                                        </div>
+                                                    </span>
+                                                }
+                                            }
                                             <br />
                                             <span class="pull-right">
-                                                <i>Code: </i> <b>@item.Code.ToString().Substring(0, 5).ToUpper()</b>
+                                                <i>@Model.Timestamp.ToMoment()</i>
                                             </span>
                                         </span>
                                     </div>
                                 </div>
-                        }
+                            }
 
                         }
                         else
@@ -137,7 +158,7 @@
                                         <span class="item-date text-xs text-muted">@item.Timestamp.ToString()</span>
                                     </div>
                                 </div>
-                        }
+                            }
 
                         }
                         else
@@ -164,4 +185,5 @@
 </div>
 
 @Html.Partial("Units/_Create")
+@Html.Partial("Units/_AssignLec")
 
