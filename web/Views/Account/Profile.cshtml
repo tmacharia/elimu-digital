@@ -1,0 +1,151 @@
+﻿@using DAL.Models
+@using DAL.Extensions
+@using Services
+@model Profile
+@{
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+
+    ViewBag.Title = $"Profile ({User.Identity.Name})";
+    ViewBag.Action = "Account";
+
+    IList<Unit> unitClasses = (List<Unit>)ViewBag.UnitClasses;
+}
+
+<div class="content-main" id="content-main">
+    <div>
+        <div class="item">
+            <div class="item-bg"><img alt="." class="blur opacity-3" src="../assets/images/a0.jpg"></div>
+            <div class="p-4">
+                <div class="row mt-3">
+                    <div class="col-sm-7">
+                        <div class="media">
+                            <a href="#">
+                                <span class="w-96">
+                                    <img alt="." class="w-96 circle" src="@Url.Content(User.PhotoUrl())"> <i class="on"></i>
+                                </span>
+                            </a>
+                            <div class="media-body mx-3 mb-2">
+                                <h4>@User.FullNames()</h4>
+                                <p class="text-muted">
+                                    <span class="m-r">@User.Role()</span> 
+                                    <small><i class="fa fa-map-marker mr-2"></i>
+                                        @{ 
+                                            if(Model.Location != null)
+                                            {
+                                                <span>@Model.Location.Street, @Model.Location.City</span>
+                                            }
+                                            else
+                                            {
+                                                <span>no location</span>
+
+                                            }
+                                        }
+                                    </small>
+                                </p>
+                                <div class="block clearfix mb-3">
+                                    <a class="btn btn-icon btn-social btn-rounded b-a btn-sm" target="_blank" href="https://facebook.com/@Model.Facebook">
+                                        <i class="fa fa-facebook"></i> 
+                                        <i class="fa fa-facebook indigo"></i>
+                                    </a> 
+                                    <a class="btn btn-icon btn-social btn-rounded b-a btn-sm" target="_blank" href="https://twitter.com/@Model.Twitter">
+                                        <i class="fa fa-twitter"></i> 
+                                        <i class="fa fa-twitter light-blue"></i>
+                                    </a> 
+                                    <a class="btn btn-icon btn-social btn-rounded b-a btn-sm" target="_blank" href="https://instagram.com/@Model.Instagram">
+                                        <i class="fa fa-instagram"></i> 
+                                        <i class="fa fa-instagram indigo"></i>
+                                    </a> 
+                                    <a class="btn btn-icon btn-social btn-rounded b-a btn-sm" target="_blank" href="https://linkedin.com/in/devtimmy">
+                                        <i class="fa fa-linkedin"></i> 
+                                        <i class="fa fa-linkedin cyan"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <p class="text-md profile-status">
+                            @{ 
+                                if(User.Role() == "Student")
+                                {
+                                    var student = (Student)ViewBag.student;
+
+                                    <i class="fa fa-certificate"></i> @student.Course.Name
+                                }
+                                else
+                                {
+                                    <span>Hi there!</span>
+                                }
+                            }
+                        </p>
+                        <a class="btn btn-sm rounded btn-outline b-success" href="/account/edit/@Extensions.GenerateSlug(User.FullNames())">Edit profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="white bg b-b px-3">
+            @{ 
+                Html.RenderPartial("Profiles/_ActivityBar");
+            }
+        </div>
+
+
+
+        <div class="padding">
+            <div class="row">
+                <div class="col-sm-8 col-lg-9">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="tab_1">
+                            <div class="row row-sm">
+                                @foreach (var item in unitClasses)
+                                {
+                                    <div class="col-6 col-lg-4">
+                                        <div class="list-item box r mb-2">
+                                            <a href="/units/@item.Id/@item.GenerateSlug()">
+                                                <span class="w-40 avatar amber">
+                                                    <span class="fa fa-umbrella"></span>
+                                                    <i class="busy avatar-bottom"></i>
+                                                 </span>
+                                            </a>
+                                            <div class="list-body">
+                                                <div class="text-ellipsis">
+                                                    <a href="/units/@item.Id/@item.GenerateSlug()">@item.Name</a>
+                                                </div><small class="text-muted text-ellipsis">@item.Course.Name</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab_2">
+                            <div class="streamline">
+                                @foreach (var item in unitClasses.Where(x => x.Class != null))
+                                {
+                                    <div class="sl-item b-success">
+                                        <div class="sl-content">
+                                            <div class="sl-date text-muted">
+                                                @item.Class.DayOfWeek.ToString() @item.Class.StartTime.ToString("hh:mm tt") - @item.Class.EndTime.ToString("hh:mm tt")
+                                            </div>
+                                            <p>@item.Name
+                                                <span class="text-primary">@item.Class.Room</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-lg-3">
+                    <div>
+                        @{ 
+                            Html.RenderPartial("Profiles/_Mates");
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

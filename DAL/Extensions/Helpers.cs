@@ -82,6 +82,27 @@ namespace DAL.Extensions
                 return "Unknown";
             }
         }
+        public static int ProfileId(this ClaimsPrincipal principal)
+        {
+            var claim = ((ClaimsIdentity)principal.Identity).FindFirst("ProfileId");
+
+            if (claim != null)
+            {
+                if (string.IsNullOrWhiteSpace(claim.Value))
+                {
+                    return 0;
+                }
+                else
+                {
+                    return int.Parse(claim.Value);
+                }
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         public static Meridiem Meridiem(this DateTime dateTime)
         {
             string tt = dateTime.ToString("tt").ToUpper();

@@ -23,36 +23,31 @@
     </h2>
 
     <div class="box p-3">
-        @using (Html.BeginForm("Create","Classes"))
-        {
-            @Html.AntiForgeryToken()
-
+        <form role="form" id="newClassForm">
             <div class="form-group">
                 <label>Day of Week</label>
-                @Html.DropDownListFor(x => x.DayOfWeek, Methods.DaysOfTheWeeks(), new { @class="form-control"})
+                @Html.DropDownListFor(x => x.DayOfWeek, Methods.DaysOfTheWeeks(), new { @class = "form-control",@id="DayOfWeek",required=true })
             </div>
-
             <div class="form-group">
                 <label>Start Time</label>
-                @Html.TextBoxFor(x => x.StartTime, new { @type = "time", @class = "form-control" })
+                <div class="bfh-timepicker" data-mode="12h" icon="fa fa-clock" id="StartTime">
+                </div>
             </div>
-
             <div class="form-group">
                 <label>End Time</label>
-                @Html.TextBoxFor(x => x.EndTime, new { @type = "time", @class = "form-control" })
+                <div class="bfh-timepicker" data-mode="12h" icon="fa fa-clock" id="EndTime">
+                </div>
             </div>
-
             <div class="form-group">
                 <label>Room <i>(classroom in the university)</i></label>
-                @Html.TextBoxFor(x => x.Room, new { @type = "text", @class = "form-control" })
+                @Html.TextBoxFor(x => x.Room, new { @type = "text", @class = "form-control",@id="Room",required=true })
             </div>
-
             <br />
             <div class="form-group">
                 <a href="/classes" class="btn btn-default">Close</a>
-                <button type="submit" class="btn btn-danger">Submit</button>
+                <button type="submit" class="btn btn-danger" id="classSubmitBtn">Submit</button>
             </div>
-        }
+        </form>
     </div>
 </div>
 
@@ -65,6 +60,5 @@
         if (err) {
             error(err);
         }
-
     })
 </script>

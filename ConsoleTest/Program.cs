@@ -12,12 +12,15 @@ using System.Diagnostics;
 using Services;
 using DAL.Extensions;
 using DAL.Attributes;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ConsoleTest
 {
     class Program
     {
         private static LePadContext _context = new LePadContextFactory().Create();
+        private static AppDbContext _appDb = new AppDbContextFactory().Create();
         private static IRepositoryFactory _repos = new RepositoryFactory(_context);
         private static Stopwatch _syswatch = new Stopwatch();
         private static Stopwatch _sqlwatch = new Stopwatch();
@@ -31,7 +34,9 @@ namespace ConsoleTest
             Console.ForegroundColor = ConsoleColor.Green;
 
             //Entry();
-            ConfirmDate();
+            //ConfirmDate();
+            //DayHandler();
+            SeedProfileIdClaims();
             //InitializeGet<School>();
             //SeedSchool("Online");
             //Get<School>(1, "Location");
@@ -43,7 +48,61 @@ namespace ConsoleTest
         {
             
         }
+        static void SeedProfileIdClaims()
+        {
+            IList<AppUser> users = new List<AppUser>();
+            List<IdentityUserClaim<string>> identityClaims = new List<IdentityUserClaim<string>>();
 
+            Console.WriteLine("Getting users...");
+            users = _appDb.Users.ToList();
+            Console.WriteLine($"{users.Count} users found.");
+
+            foreach (var user in users)
+            {
+                IdentityUserClaim<string> claim = new IdentityUserClaim<string>
+                {
+                    ClaimType = "ProfileId",
+                    UserId = user.Id
+                };
+
+                Console.WriteLine($"User: {user.Id} is a {user.AccountType.ToString()}");
+
+                if (user.AccountType == AccountType.Student)
+                {
+                    var student = _context.Students
+                                          .Include(x => x.Profile)
+                                          .FirstOrDefault(x => x.Id == user.AccountId);
+
+                    claim.ClaimValue = student?.Profile?.Id.ToString();
+                }
+                else if (user.AccountType == AccountType.Lecturer)
+                {
+                    var lecture = _context.Lecturers
+                                          .Include(x => x.Profile)
+                                          .FirstOrDefault(x => x.Id == user.AccountId);
+
+                    claim.ClaimValue = lecture?.Profile?.Id.ToString();
+                }
+                else if (user.AccountType == AccountType.Administrator)
+                {
+                    var adminis = _context.Administrators
+                                          .Include(x => x.Profile)
+                                          .FirstOrDefault(x => x.Id == user.AccountId);
+
+                    claim.ClaimValue = adminis?.Profile?.Id.ToString();
+                }
+
+                Console.WriteLine("Adding user claim to memory.");
+                identityClaims.Add(claim);
+            }
+            Console.WriteLine("Finished creating claims.");
+
+            _appDb.UserClaims.AddRange(identityClaims);
+
+            Console.WriteLine("Saving to database...");
+            _appDb.SaveChanges();
+            Console.WriteLine("\n\nOperation completed successfully!");
+        }
         static void SeedSchool(string db)
         {
             _syswatch.Start();
@@ -76,7 +135,27 @@ namespace ConsoleTest
 
             Get<School>(school.Id, "Location");
         }
-
+        static void DayHandler()
+        {
+            //days ago
+            DateTime d1 = new DateTime(2018, 2, 15);
+            Console.WriteLine("Date 1:{0}, Total Days:{1}",d1.ToString(),d1.DayHandler());
+            //3 days ago
+            DateTime d2 = new DateTime(2018, 2, 28);
+            Console.WriteLine("Date 2:{0}, Total Days:{1}", d2.ToString(), d2.DayHandler());
+            //1 day ago
+            DateTime d3 = new DateTime(2018, 3, 1);
+            Console.WriteLine("Date 3:{0}, Total Days:{1}", d3.ToString(), d3.DayHandler());
+            //today
+            DateTime d4 = new DateTime(2018, 3, 2);
+            Console.WriteLine("Date 4:{0}, Total Days:{1}", d4.ToString(), d4.DayHandler());
+            //tomorrow
+            DateTime d5 = new DateTime(2018, 3, 4);
+            Console.WriteLine("Date 5:{0}, Total Days:{1}", d5.ToString(), d5.DayHandler());
+            //in couple of days
+            DateTime d6 = new DateTime(2018, 3, 24);
+            Console.WriteLine("Date 6:{0}, Total Days:{1}", d6.ToString(), d6.DayHandler());
+        }
         //static void SeedCourses()
         static void ConfirmDate()
         {
@@ -466,7 +545,5 @@ namespace ConsoleTest
                 }
             }
         }
-
-        
     }
 }

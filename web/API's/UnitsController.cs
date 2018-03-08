@@ -27,7 +27,7 @@ namespace web.API_s
 
         // Index
         [HttpGet]
-        public IActionResult Index(int page=1, int itemsperpage=10)
+        public IActionResult Index(int page = 1, int itemsperpage = 10)
         {
             Result<Unit> rest = _repos.Units
                                       .ListWith("Lecturer", "Students", "Course")
@@ -316,21 +316,21 @@ namespace web.API_s
         [Route("{unitId}/assignLecturer/{lecId}")]
         public IActionResult AssignLec(int unitId, int lecId)
         {
-            if(unitId < 1 || lecId < 1)
+            if (unitId < 1 || lecId < 1)
             {
                 return BadRequest("Invalid unit or lecturer Id.");
             }
 
             var unit = _repos.Units.GetWith(unitId, "Lecturer");
 
-            if(unit == null)
+            if (unit == null)
             {
                 return NotFound("Unit does not exist.");
             }
 
             var lec = _repos.Lecturers.Get(lecId);
 
-            if(lec == null)
+            if (lec == null)
             {
                 return NotFound("Lecturer does not exist.");
             }

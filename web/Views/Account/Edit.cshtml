@@ -1,0 +1,59 @@
+﻿@using DAL.Models
+@using DAL.Extensions
+@using Services
+@model Profile
+@{
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+
+    ViewBag.Title = $"Edit Profile ({User.Identity.Name})";
+    ViewBag.Action = "Account";
+}
+
+<div class="padding">
+    <h4>
+        Edit Profile
+    </h4>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header">
+                    <h2>Basic Info</h2>
+                </div>
+                <div class="box-divider m-0"></div>
+                <div class="box-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Full Names</label>
+                            @Html.TextBoxFor(x => x.FullNames, new { @class = "form-control" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">National ID Number</label>
+                            @Html.TextBoxFor(x => x.NationalID, new { @class = "form-control", @type = "number" })
+                        </div>
+                        <button class="btn primary" type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="box">
+                <div class="box-body">
+                    <h6>Avatar</h6>
+                    <form>
+                        <div class="form-group">
+                            <span class="w-96">
+                                <img id="userImgPrw" class="img-thumbnail w-96" src="@Url.Content(User.PhotoUrl())" />
+                                <i class="on"></i>
+                            </span>
+                            <input type="file" name="file" id="userImg" />
+                        </div>
+                        <button class="btn primary" type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

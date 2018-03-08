@@ -1,3 +1,4 @@
+@using Services
 @using DAL.Extensions
 @{
     bool isUserNew;
@@ -148,7 +149,7 @@
                         <a class="py-2 pt-3 d-block text-center" href="app.inbox.html"><i class="fa text-md fa-envelope text-muted"></i> <small class="d-block">Email</small></a>
                     </div>
                 </div>
-                <a class="dropdown-item" href="profile.html"><span>Profile</span></a>
+                <a class="dropdown-item" href="/account/profile/@Extensions.GenerateSlug(User.FullNames())"><span>Profile</span></a>
                 <a class="dropdown-item" href="setting.html"><span>Settings</span></a>
                 <a class="dropdown-item" href="app.inbox.html">
                     <span class="float-right">

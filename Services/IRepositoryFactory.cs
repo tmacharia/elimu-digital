@@ -22,6 +22,7 @@ namespace Services
         IRepository<Score> Scores { get; }
         IRepository<Unit> Units { get; }
         IRepository<Student> Students { get; }
+        IRepository<StudentUnit> StudentUnits { get; }
         IRepository<Lecturer> Lecturers { get; }
         IRepository<Admin> Administrators { get; }
         IRepository<Notification> Notifications { get; }

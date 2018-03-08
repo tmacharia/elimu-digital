@@ -172,22 +172,22 @@ namespace Services
 
             if(timeSpan.Days > 0)
             {
-                return timeSpan.Days + " days ago";
+                return timeSpan.Days + " day(s) ago";
             }
             else if(timeSpan.Hours > 0)
             {
-                return timeSpan.Hours + "hrs ago";
+                return timeSpan.Hours + " hr(s) ago";
             }
             else if(timeSpan.Minutes > 0)
             {
-                return timeSpan.Minutes + "mins ago";
+                return timeSpan.Minutes + " min(s) ago";
             }
             else if(timeSpan.Seconds > 0)
             {
-                return timeSpan.Seconds + "secs ago";
+                return timeSpan.Seconds + " secs ago";
             }
 
-            return "ago";
+            return " ago";
         }
         public static IList<string> Populate(this ModelStateDictionary modelState)
         {

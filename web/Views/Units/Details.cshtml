@@ -21,6 +21,9 @@
         opacity: .2;
         margin-right: -10px;
     }
+    .content-box{
+        padding-bottom:30px !important;
+    }
 </style>
 
 <div class="padding">
@@ -36,15 +39,42 @@
         </span>
 
         @{
-            if (Model.Class == null)
+            if (User.Role() == "Lecturer" && User.ProfileId() == Model?.Lecturer?.Profile.Id)
             {
-                <span class="pull-right h6">
-                    <button class="btn btn-sm info theme-accent btn-block" type="button" data-target="#allocateUnitModal" data-toggle="modal" onclick="onAllocateUnit('@Model.Name', '@Model.Id')">
-                        <i class="fa fa-fw fa-paperclip"></i>
-                        <a class="hidden-folded d-inline">Get classroom</a>
-                    </button>
-                </span>
+                if (Model.Class == null)
+                {
+                    <span class="pull-right h6">
+                        <button class="btn btn-sm info theme-accent btn-block" type="button" data-target="#allocateUnitModal" data-toggle="modal" onclick="onAllocateUnit('@Model.Name', '@Model.Id')">
+                            <i class="fa fa-fw fa-paperclip"></i>
+                            <a class="hidden-folded d-inline">Get classroom</a>
+                        </button>
+                    </span>
+
+                }
             }
+            <span class="unit-course">
+                @switch (Model.Course.Type)
+                {
+                    case CourseType.Certificate:
+                        <i class="fa fa-certificate"></i>
+                        break;
+                    case CourseType.Diploma:
+                        <i class="fa fa-certificate text-warning"></i>
+                        break;
+                    case CourseType.Degree:
+                        <i class="fa fa-certificate text-success"></i>
+                        break;
+                    case CourseType.Masters:
+                        <i class="fa fa-certificate text-info"></i>
+                        break;
+                    case CourseType.Phd:
+                        <i class="fa fa-certificate text-danger"></i>
+                        break;
+                    default:
+                        break;
+                }
+                @Model.Course.Name
+            </span>
         }
     </h2>
     <br />
@@ -86,27 +116,28 @@
                     if (Model.Class != null)
                     {
                         <span><i>@Model.Class.DayOfWeek.ToString()</i></span>
-                            <br />
-                            <i class="fa fa-clock-o"></i> @Model.Class.StartTime.ToString("h:mm tt") <span> - </span> @Model.Class.EndTime.ToString("h:mm tt")
-                            <br />
-                            <span>
-                                <span><i class="ion ion-location"></i> @Model.Class.Room</span>
+                        <br />
+                        <i class="fa fa-clock-o"></i> @Model.Class.StartTime.ToString("h:mm tt") <span> - </span> @Model.Class.EndTime.ToString("h:mm tt")
+                        <br />
+                        <span>
+                            <span><i class="ion ion-location"></i> @Model.Class.Room</span>
 
-                                <span class="pull-right text-muted class-hours">
-                                    @{ 
-                                        if(Model.Class.Duration.Minutes > 0)
-                                        {
-                                            string n = ((Model.Class.Duration.Minutes / (decimal)60) * 100).ToString("N0").TrimEnd('0');
+                            <span class="pull-right text-muted class-hours">
+                                @{
+                                    if (Model.Class.Duration.Minutes > 0)
+                                    {
+                                        string n = ((Model.Class.Duration.Minutes / (decimal)60) * 100).ToString("N0").TrimEnd('0');
 
-                                            <strong>@string.Format("{0}.{1}", Model.Class.Duration.Hours, n) HRS</strong>
-                                        }else
-	                                    {
-	                                        <strong>@Model.Class.Duration.Hours HRS</strong>
-	                                    }
+                                        <strong>@string.Format("{0}.{1}", Model.Class.Duration.Hours, n) HRS</strong>
                                     }
-                                    
-                                </span>
+                                    else
+                                    {
+                                        <strong>@Model.Class.Duration.Hours HRS</strong>
+                                    }
+                                }
+
                             </span>
+                        </span>
                     }
                     else
                     {
@@ -126,7 +157,7 @@
         <i class="fa fa-list"></i> Uploaded Content
 
         @{
-            if (User.Role() == "Lecturer")
+            if (User.Role() == "Lecturer" && User.ProfileId() == Model?.Lecturer?.Profile.Id)
             {
                 <span class="pull-right h6">
                     <a class="btn btn-sm success theme-accent btn-block" href="/contents/add/@Model.Id/@Model.GenerateSlug()">
@@ -141,13 +172,46 @@
     @{
         if (Model.Contents != null && Model.Contents.Count > 0)
         {
-
+            <div class="row">
+                @foreach (var item in Model.Contents)
+                {
+                    <div class="col-md-3 col-sm-6">
+                        <div class="box p-3 content-box">
+                            @switch (item.Type)
+                            {
+                                case FormatType.Audio:
+                                    <i class="fa fa-file-audio-o"></i>
+                                    break;
+                                case FormatType.Video:
+                                    <i class="fa fa-play-circle text-danger"></i>
+                                    break;
+                                case FormatType.Image:
+                                    <i class="fa fa-file-image-o"></i>
+                                    break;
+                                case FormatType.Document:
+                                    <i class="fa fa-file-text"></i>
+                                    break;
+                                case FormatType.Unknown:
+                                    <i class="fa fa-file"></i>
+                                    break;
+                                default:
+                                    break;
+                            }
+                            <a href="/contents/@item.Id/@Extensions.GenerateSlug(item.Title)"> @item.Title</a>
+                            <br />
+                            <span class="pull-right">
+                                <i class="fa fa-thumbs-o-up"></i> @item.Likes.Count
+                            </span>
+                        </div>
+                    </div>
+                }
+            </div>
         }
         else
         {
             <br />
             <center>
-                <h6><i class="fa fa-frown-o"></i> No unit contents uploaded yet.</h6>
+                <span><i class="fa fa-frown-o"></i> No materials uploaded yet for this unit.</span>
             </center>
         }
     }

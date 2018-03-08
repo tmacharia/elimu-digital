@@ -41,7 +41,7 @@ namespace Common.Models
             // Initialize supported mime types
             _videoTypes = new string[] { "video/x-flv", "video/mp4", "video/3gpp", "application/x-mpegURL", "video/MP2T", "video/quicktime", "video/x-msvideo", "video/x-ms-wmv" };
             _audioTypes = new string[] { "audio/basic", "auido/L24", "audio/mid", "audio/mpeg", "audio/mp4", "audio/x-aiff", "audio/x-mpegurl", "audio/vnd.rn-realaudio", "audio/vnd.rn-realaudio", "audio/ogg", "audio/vorbis", "audio/vnd.wav" };
-            _docTypes = new string[] { "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/vnd.ms-access" };
+            _docTypes = new string[] { "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/vnd.ms-access","application/pdf" };
             _imageTypes = new string[] { "image/gif", "image/jpeg", "image/png" };
 
             // Get file format

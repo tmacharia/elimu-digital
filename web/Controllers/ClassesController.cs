@@ -22,7 +22,7 @@ namespace web.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Lecturer, Admin")]
-        public IActionResult Index(int page=1, int itemsperpage=10)
+        public IActionResult Index(int page = 1, int itemsperpage = 10)
         {
             var classes = _repos.Classes
                                 .ListWith("Units", "Likes")
@@ -36,7 +36,7 @@ namespace web.Controllers
         [Route("{id}")]
         public IActionResult Details(int id)
         {
-            if(id < 1)
+            if (id < 1)
             {
                 return BadRequest("Invalid class Id");
             }
@@ -48,7 +48,7 @@ namespace web.Controllers
                                         "Unit.Course",
                                         "Likes");
 
-            if(_class == null)
+            if (_class == null)
             {
                 return NotFound("Class record with that id does not exist.");
             }
@@ -71,20 +71,19 @@ namespace web.Controllers
         [HttpPost]
         [Route("create")]
         [Authorize(Roles = "Lecturer, Admin")]
-        [ValidateAntiForgeryToken]
         public IActionResult Create(Class model)
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.error = ModelState.Populate().First();
+                string error = ModelState.Populate().First();
 
-                return View(model);
+                return BadRequest(error);
             }
 
             model = _repos.Classes.Create(model);
             _repos.Commit();
 
-            return RedirectPermanent("/classes");
+            return Ok("Classroom added successfully!");
         }
     }
 }

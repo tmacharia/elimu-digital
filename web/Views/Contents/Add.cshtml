@@ -6,12 +6,119 @@
     ViewBag.Action = "Contents";
     var unit = (Unit)ViewBag.unit;
 }
+<style>
+    #ContentFile{
+        opacity:0.1;
+        height:.1px;
+        position:absolute;
+    }
+    .ContentFileLabel{
+        min-height:48px;
+    }
+</style>
+<form class="padding" 
+      role="form" 
+      id="UploadForm" 
+      method="post" 
+      action="/contents/add/unit/@unit.Id"
+      enctype="multipart/form-data">
+    <h4>
+        Upload New Content
 
-<div class="padding">
-    <h4>Upload New Content
-    
         <span class="pull-right top-right">
             <i class="fa fa-umbrella"></i> @unit.Name
         </span>
     </h4>
-</div>
+
+    <div class="box p-3">
+        <div class="row">
+            <span class="col-md-8">
+                Add <b>documents, videos or audio</b> recording to this unit with additional <b>metadata</b>
+                to help students of this unit be able to search and find it and provide
+                further instructions on how to consume the content.
+            </span>
+        </div>
+        <br />
+        <div class="form-group">
+            <strong>
+                Select a file<span class="text-danger">*</span>
+            </strong>
+            <label class="form-control col-md-6 ContentFileLabel" for="ContentFile">
+                <i class="FileName"></i>
+                <span for="ContentFile" class="btn btn-primary col-md-3 pull-right">BROWSE</span>
+            </label>
+            <input required type="file" name="File" id="ContentFile" class="form-control col-md-6"  />
+        </div>
+
+        <div id="metadata">
+            <div class="form-group">
+                <strong>Title<span class="text-danger">*</span></strong>
+                <input type="text" name="Title" id="Title" required placeholder="e.g Stock Market Logic" class="form-control col-md-7" />
+            </div>
+
+            <div class="form-group">
+                <strong>Description<span class="text-danger">*</span></strong>
+                <p class="col-md-7">
+                    (<i>
+                        Additional instructions for readers either describing the content or
+                        how to consume the content.
+                    </i>)
+                </p>
+                <textarea id="Description" name="Desc" title="Description" required class="form-control col-md-7" rows="4"></textarea>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="form-group">
+        <span class="pull-right">
+            <button class="btn btn-default">Cancel</button>
+            <button class="btn btn-danger"><i class="fa fa-upload"></i> Upload</button>
+        </span>
+    </div>
+</form>
+
+<script>
+    var selectedFile = null;
+
+    $('#ContentFile').change(function (e) {
+        selectedFile = e.target.files[0];
+
+        console.log(selectedFile);
+        $('.FileName').text(selectedFile.name+', '+ fileSize(selectedFile.size));
+    });
+    //$('#UploadForm').submit(function (e) {
+    //    e.preventDefault();
+
+    //    var formdata = new FormData();
+    //    formdata.append('Title', $('#Title').val());
+    //    formdata.append('Desc', $('#Description').val());
+    //    formdata.append('File', selectedFile);
+
+    //    console.log(formdata);
+
+    //    $.ajax({
+    //        method: 'POST',
+    //        url: '/contents/add/' + -1,
+    //        data: formdata,
+    //        success: function (response) {
+    //            yay(response);
+    //            console.log(response);
+    //        },
+    //        error: function (response) {
+    //            if (response.responseText) {
+    //                error(response.responseText);
+    //            } else {
+    //                error(response.statusText);
+    //            }
+    //            console.log(response);
+    //        }
+    //    })
+    //})
+    function fileSize(bytes) {
+        var exp = Math.log(bytes) / Math.log(1024) | 0;
+        var result = (bytes / Math.pow(1024, exp)).toFixed(2);
+
+        return result + ' ' + (exp == 0 ? 'bytes': 'KMGTPEZY'[exp - 1] + 'B');
+    }
+</script>

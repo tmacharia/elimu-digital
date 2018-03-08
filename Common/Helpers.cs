@@ -55,5 +55,33 @@ namespace Common
                 return !IsDebug;
             }
         }
+        public static string DayHandler(this DateTime dateTime)
+        {
+            // check greater than or less than
+            var span = dateTime.Subtract(DateTime.Now);
+
+            int num = int.Parse(span.TotalDays.ToString().Split('.').First());
+
+            if(num < -1)
+            {
+                return $"{span.Days*-1} days ago";
+            }
+            else if(num == -1)
+            {
+                return "yesterday";
+            }
+            else if(num == 0)
+            {
+                return "today";
+            }
+            else if(num == 1)
+            {
+                return "tomorrow";
+            }
+            else
+            {
+                return $"in {num} days";
+            }
+        }
     }
 }

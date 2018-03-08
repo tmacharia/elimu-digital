@@ -104,14 +104,18 @@
                                                             <i class="fa fa-fw fa-ellipsis-v"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right text-color" role="menu">
-                                                            <a class="dropdown-item" data-toggle="modal" data-target="#assignLecModal" onclick="onAssignLecturer('@item.Name','@item.Id')"><i class="fa fa-tag"></i> Assign Lecturer</a>
+                                                            <a class="dropdown-item" 
+                                                               data-toggle="modal" 
+                                                               data-target="#assignLecModal" 
+                                                               onclick="onAssignLecturer('@item.Name','@item.Id')">
+                                                            <i class="fa fa-tag"></i> Assign to Lecturer</a>
                                                         </div>
                                                     </span>
                                                 }
                                             }
                                             <br />
                                             <span class="pull-right">
-                                                <i>@Model.Timestamp.ToMoment()</i>
+                                                <i>@item.Timestamp.ToMoment()</i>
                                             </span>
                                         </span>
                                     </div>

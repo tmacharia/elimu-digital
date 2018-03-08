@@ -1,0 +1,120 @@
+﻿@using DAL.Models
+@using Services
+
+@model Content
+
+<style>
+    .reactions {
+        font-size: .7em;
+        margin-top: 8px;
+    }
+
+        .reactions li {
+            display: inline-block;
+            margin: 0px 5px;
+        }
+
+    .publisher {
+        padding: unset;
+    }
+
+    .bold {
+        font-weight: 500;
+    }
+
+    .description {
+        margin-left: 60px;
+    }
+</style>
+
+<div class="box p-3">
+    <h5>
+        @Model.Title
+
+        <ul class="list-inline pull-right reactions">
+            <li>
+                <span class="pointer" title="Like Content">
+                    <span class="likes-count"> @Model.Likes.Count </span>
+                    <i class="fa fa-thumbs-o-up" title="Like Content"></i>
+                    Like
+                </span>
+            </li>
+            <li>
+                <a class="pointer" title="Download" href="@Model.Url">
+                    <i class="ion ion-ios-cloud-download" title="Download"></i>
+                    Download
+                </a>
+            </li>
+        </ul>
+    </h5>
+    <hr />
+    <div class="list-item publisher">
+        <a href="#">
+            <span class="w-40 avatar">
+                <img alt="..." src="@Model.UploadedBy.Profile.PhotoUrl">
+                <i class="on bottom"></i>
+            </span>
+        </a>
+        <div class="list-body">
+            <div>
+                <a href="#" class="bold">@Model.UploadedBy.Profile.FullNames</a>
+            </div><small class="text-muted text-ellipsis">Lecturer</small>
+        </div>
+
+        <span class="pull-right">
+            Uploaded @Model.Timestamp.ToMoment()
+        </span>
+    </div>
+    <br />
+    <div class="description">
+        <p>
+            @Model.Description
+        </p>
+    </div>
+    <span>
+        @Model.Comments.Count <i class="fa fa-comment"></i> Comments
+    </span>
+    <br />
+    <br />
+    <div class="box collapse show m-0" id="reply-1">
+        <form>
+            <textarea class="form-control no-border" placeholder="Type something..." rows="3"></textarea>
+            <div class="box-footer clearfix">
+                <button class="btn info float-right btn-sm">Post</button>
+            </div>
+        </form>
+    </div>
+    <br />
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="tab_1">
+            <div class="streamline mb-2">
+                @{
+                    if (Model.Comments.Count > 0)
+                    {
+                        foreach (var item in Model.Comments)
+                        {
+                            <div class="sl-item">
+                                <div class="sl-left">
+                                    <img alt="." class="circle" src="@item.By.PhotoUrl">
+                                </div>
+                                <div class="sl-content">
+                                    <div class="sl-date text-muted">
+                                        @item.Timestamp.ToMoment()
+                                    </div>
+                                    <div class="sl-author">
+                                        <a href="#">@item.By.FullNames</a>
+                                    </div>
+                                    <div class="mb-3">
+                                        <p>@item.Message</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

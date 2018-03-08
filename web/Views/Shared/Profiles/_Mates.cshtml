@@ -1,0 +1,69 @@
+﻿@using DAL.Models
+@using DAL.Extensions
+@{
+
+}
+
+@{
+    if (User.Role() == "Lecturer")
+    {
+        var colleagues = (List<Lecturer>)ViewBag.colleagues;
+
+        <div class="box">
+            <div class="box-header">
+                <h3>Colleagues</h3>
+            </div>
+            <div class="box-divider"></div>
+            <ul class="list no-border">
+                @foreach (var item in colleagues)
+                {
+                    <li class="list-item">
+                        <a href="#">
+                            <span class="w-40 avatar">
+                                <img alt="..." src="@Url.Content(item.Profile.PhotoUrl)">
+                                <i class="on bottom"></i>
+                            </span>
+                        </a>
+                        <div class="list-body">
+                            <div>
+                                <a href="#">@item.Profile.FullNames</a>
+                            </div><small class="text-muted text-ellipsis">Lecturer</small>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+
+            }
+            else if (User.Role() == "Student")
+            {
+                var mates = (List<Student>)ViewBag.mates;
+
+                <div class="box">
+                    <div class="box-header">
+                        <h3>Course Mates</h3>
+                    </div>
+                    <div class="box-divider"></div>
+                    <ul class="list no-border">
+                        @foreach (var item in mates)
+                        {
+                            <li class="list-item">
+                                <a href="#">
+                                <span class="w-40 avatar">
+                                    <img alt="..." src="@Url.Content(item.Profile.PhotoUrl)"> 
+                                    <i class="on bottom"></i>
+                                    </span>
+                                </a>
+                                <div class="list-body">
+                                    <div>
+                                        <a href="#">@item.Profile.FullNames</a>
+                                    </div><small class="text-muted text-ellipsis">@item.Course.Name</small>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+
+    }
+}

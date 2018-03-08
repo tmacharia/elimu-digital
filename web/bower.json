@@ -9,6 +9,10 @@
     "Ionicons": "ionicons#v2.0.1",
     "moment": "2.20.1",
     "font-awesome": "Font-Awesome#v4.7.0",
-    "jquery-confirm2": "v3.3.2"
+    "jquery-confirm2": "v3.3.2",
+    "bootstrap-formhelpers": "2.3.0"
+  },
+  "resolutions": {
+    "bootstrap": "3.3.7"
   }
 }

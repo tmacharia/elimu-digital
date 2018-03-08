@@ -25,6 +25,7 @@ namespace Services
         private readonly IRepository<Score> _scores;
         private readonly IRepository<Unit> _units;
         private readonly IRepository<Student> _students;
+        private readonly IRepository<StudentUnit> _studentUnits;
         private readonly IRepository<Lecturer> _lecturers;
         private readonly IRepository<Admin> _admins;
         private readonly IRepository<Class> _classes;
@@ -48,6 +49,7 @@ namespace Services
             _scores = new Repository<Score>(_context);
             _units = new Repository<Unit>(_context);
             _students = new Repository<Student>(_context);
+            _studentUnits = new Repository<StudentUnit>(_context);
             _lecturers = new Repository<Lecturer>(_context);
             _admins = new Repository<Admin>(_context);
             _classes = new Repository<Class>(_context);
@@ -87,6 +89,8 @@ namespace Services
         public IRepository<Class> Classes => _classes;
 
         public IRepository<Notification> Notifications => _notifications;
+
+        public IRepository<StudentUnit> StudentUnits => _studentUnits;
 
         public void Commit()
         {

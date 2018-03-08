@@ -24,6 +24,7 @@ namespace web.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IRepositoryFactory _repos;
         private readonly AppDbContext _appDbContext;
         private readonly LePadContext _lepadContext;
         private readonly IEmailSender _emailSender;
@@ -35,6 +36,7 @@ namespace web.Controllers
         public AccountController(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
+            IRepositoryFactory factory,
             AppDbContext appDbContext,
             LePadContext lePadContext,
             IOptions<IdentityCookieOptions> identityCookieOptions,
@@ -45,6 +47,7 @@ namespace web.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _repos = factory;
             _appDbContext = appDbContext;
             _lepadContext = lePadContext;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
@@ -105,6 +108,65 @@ namespace web.Controllers
 
             ViewData["ReturnUrl"] = returnUrl;
             return View();
+        }
+
+        [HttpGet]
+        [Route("account/profile/{names}")]
+        public async Task<IActionResult> Profile(string names)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var profile = GetProfile(user);
+
+            ViewBag.likes = _repos.Likes.ListWith("By").Where(x => x.By.Id == profile.Id).ToList();
+            ViewBag.comments = _repos.Comments.ListWith("By").Where(x => x.Id == profile.Id).ToList();
+
+            if (user.AccountType == AccountType.Student)
+            {
+                var student = _repos.Students
+                                        .ListWith("StudentUnits","StudentUnits.Unit.Class","StudentUnits.Unit.Course", "Course", "Scores", "Profile")
+                                        .Where(x => x.Profile.Id == profile.Id)
+                                        .FirstOrDefault();
+
+                ViewBag.student = student;
+
+                ViewBag.UnitClasses = student.StudentUnits
+                                         .Select(x => x.Unit)
+                                         .ToList();
+
+                ViewBag.mates = _repos.Students
+                                      .ListWith("Profile","Course")
+                                      .Where(x => x.Course.Id == student.Course.Id)
+                                      .Take(10)
+                                      .ToList();
+            }
+            else if(user.AccountType == AccountType.Lecturer)
+            {
+                var lecturer = _repos.Lecturers
+                                         .ListWith("Units", "Units.Class", "Units.Course", "UploadedContent", "Likes", "Profile")
+                                         .Where(x => x.Profile.Id == profile.Id)
+                                         .FirstOrDefault();
+
+                ViewBag.lecturer = lecturer;
+                ViewBag.UnitClasses = lecturer.Units
+                                          .ToList();
+
+                ViewBag.colleagues = _repos.Lecturers
+                                           .ListWith("Profile")
+                                           .Take(10)
+                                           .ToList();
+            }
+
+            return View(profile);
+        }
+
+        [HttpGet]
+        [Route("account/edit/{names}")]
+        public async Task<IActionResult> Edit(string names)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var profile = GetProfile(user);
+
+            return View(profile);
         }
 
         [HttpPost]
@@ -190,10 +252,10 @@ namespace web.Controllers
                 // add claims we need in the app (userId, accountType)
 
                 var claims = new List<Claim>{
-                        new Claim("UserId", user.Id),
-                        new Claim("Role", CheckRole(user))
+                    new Claim("UserId", user.Id),
+                    new Claim("Role", CheckRole(user)),
+                    new Claim("ProfileId", profile.Id.ToString())
                 };
-
                 if(!string.IsNullOrWhiteSpace(profile.FullNames))
                 {
                     claims.Add(new Claim("FullNames", profile.FullNames));

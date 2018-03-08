@@ -1,4 +1,5 @@
 @using DAL.Extensions
+@using Services
 @{ 
     int notifications = 0;
 
@@ -18,13 +19,13 @@
             </a>
         </div>
         <div class="nav-fold px-2">
-            <a class="avatar w-32" >
+            <a class="avatar w-32" href="/account/profile/@Extensions.GenerateSlug(User.FullNames())">
                 @*<span class="avatar w-40 rounded grey hide">J</span>*@ 
                 <img alt="user avatar" class="w-40 circle" src="@Url.Content(User.PhotoUrl())">
             </a>
             <div class="hidden-folded flex p-2">
                 <div class="d-flex">
-                    <a class="mr-auto text-nowrap" href="profile.html">@User.FullNames()
+                    <a class="mr-auto text-nowrap" href="/account/profile/@Extensions.GenerateSlug(User.FullNames())">@User.FullNames()
                     <small class="d-block text-muted">
                         @User.Role()
                     </small>

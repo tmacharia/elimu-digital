@@ -8,7 +8,7 @@ namespace DAL.Models
 {
     public class Like : Base
     {
-        [DefaultValue(Models.Reaction.Like)]
+        [DefaultValue(Reaction.Like)]
         public Reaction Reaction { get; set; }
 
         [Required]

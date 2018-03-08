@@ -1,0 +1,82 @@
+﻿@using DAL.Models
+@using DAL.Extensions
+@{ 
+    var likes = (List<Like>)ViewBag.likes;
+    var comments = (List<Comment>)ViewBag.comments;
+}
+
+<div class="row">
+    <div class="col-sm-6 order-sm-2">
+        <div class="py-3 text-center text-sm-right">
+
+            @{ 
+                if(User.Role() == "Lecturer")
+                {
+                    var lec = (Lecturer)ViewBag.lecturer;
+
+                    <a class="d-inline-block px-3 text-center" href="#">
+                        <span class="text-md d-block">
+                            @{ 
+                                if(lec.Likes != null)
+                                {
+                                    <span>@lec.Likes.Count</span>
+                                }else
+	                            {
+	                                <span>0</span>
+	                            }
+                            }
+                        </span>
+                        <small class="text-xs text-muted">Likes</small>
+                    </a>
+
+                    <a class="d-inline-block px-3 text-center" href="#">
+                        <span class="text-md d-block">
+                            @{
+                                if (lec.Units != null)
+                                {
+                                    <span>@lec.Units.Count</span>
+                                }
+                                else
+                                {
+                                    <span>0</span>
+                                }
+                            }
+                        </span>
+                        <small class="text-xs text-muted">Units</small>
+                    </a>
+                }
+                else if(User.Role() == "Student")
+                {
+                    var student = (Student)ViewBag.student;
+
+                    <a class="d-inline-block px-3 text-center" href="#">
+                        <span class="text-md d-block">@likes.Count</span>
+                        <small class="text-xs text-muted">Likes</small>
+                    </a>
+
+                    <a class="d-inline-block px-3 text-center" href="#">
+                        <span class="text-md d-block">@student.StudentUnits.Count</span>
+                        <small class="text-xs text-muted">Units</small>
+                    </a>
+                }
+            }
+
+            <a class="d-inline-block px-3 b-l b-r text-center" href="#">
+                <span class="text-md d-block">@comments.Count</span>
+                <small class="text-xs text-muted">Comments</small>
+            </a>
+        </div>
+    </div>
+    <div class="col-sm-6 order-sm-1">
+        <div class="py-4 clearfix nav-active-theme">
+            <ul class="nav nav-pills nav-sm">
+                <li class="nav-item">
+                    <a class="nav-link active" data-target="#tab_1" data-toggle="tab" href="#">My Units</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-target="#tab_2" data-toggle="tab" href="#">My Classes</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

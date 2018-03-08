@@ -22,5 +22,7 @@ namespace DAL.Models
         public string Facebook { get; set; }
         public string Twitter { get; set; }
         public string Instagram { get; set; }
+
+        public virtual Location Location { get; set; }
     }
 }

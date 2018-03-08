@@ -67,11 +67,16 @@ namespace web.Controllers
         }
 
         [HttpPost]
-        [Route("add/unit/unitId")]
+        [Route("add/unit/{unitId}")]
         [Authorize(Roles = "Lecturer")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(int unitId, ContentViewModel model)
+        public async Task<IActionResult> Add(int unitId)
         {
+            ContentViewModel model = new ContentViewModel
+            {
+                Title = Request.Form["Title"],
+                Description = Request.Form["Desc"]
+            };
+
             if (unitId < 1)
             {
                 return BadRequest("Invalid unit id.");
@@ -170,7 +175,12 @@ namespace web.Controllers
             }
 
             var content = _repos.Contents
-                                .GetWith(id, "Lecturer", "Unit", "Likes", "Comments");
+                                .GetWith(id, 
+                                "UploadedBy", 
+                                "UploadedBy.Profile",
+                                "Unit", 
+                                "Likes", 
+                                "Comments");
 
             if(content == null)
             {
