@@ -248,7 +248,7 @@ namespace web.API_s
         // Like content
         [HttpPost]
         [Route("{id}/like")]
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = "Student, Lecturer")]
         public async Task<IActionResult> LikeContent(int id, Reaction reaction)
         {
             if (id < 1)
@@ -257,6 +257,7 @@ namespace web.API_s
                 return BadRequest(ModelState);
             }
 
+            var user = await _userManager.GetUserAsync(User);
             var content = _repos.Contents
                                 .GetWith(id, "Likes");
 
@@ -264,20 +265,19 @@ namespace web.API_s
             {
                 return this.Error(HttpStatusCode.PreconditionFailed, "Cannot like content that does not exist.");
             }
-
             var like = new Like()
             {
                 Reaction = reaction,
             };
-
-            var user = await _userManager.GetUserAsync(User);
+            
             like.By = GetProfile(user.AccountId, user.AccountType);
 
+            //like = _repos.Likes.Create(like);
             content.Likes.Add(like);
             _repos.Contents.Update(content);
             _repos.Commit();
 
-            return Created($"api/contents/{id}/likes", like);
+            return Ok("Liked!");
         }
         
         
@@ -286,16 +286,18 @@ namespace web.API_s
         [Route("{id}/comment")]
         public async Task<IActionResult> ContentComment(int id, CommentViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            else if (id < 1)
+            if (id < 1)
             {
                 ModelState.AddModelError("Content Id", "Provide a valid content id.");
                 return BadRequest(ModelState);
             }
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
             var content = _repos.Contents
                                 .GetWith(id, "Comments");
 
@@ -303,16 +305,23 @@ namespace web.API_s
             {
                 return this.Error(HttpStatusCode.PreconditionFailed, "Cannot comment on content that does not exist.");
             }
-
             Comment comment = _mapper.Map<Comment>(model);
-            var user = await _userManager.GetUserAsync(User);
+            
             comment.By = GetProfile(user.AccountId, user.AccountType);
 
-            content.Comments.Add(comment);
-            _repos.Contents.Update(content);
-            _repos.Commit();
+            try
+            {
+                //comment = _repos.Comments.Create(comment);
+                content.Comments.Add(comment);
+                _repos.Contents.Update(content);
+                _repos.Commit();
+            }
+            catch (Exception)
+            {
+                return this.Error(HttpStatusCode.InternalServerError, "An error occured.");
+            }
 
-            return Created($"api/contents/{id}/comments", comment);
+            return Ok("Commented!");
         }
 
 

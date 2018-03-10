@@ -180,7 +180,8 @@ namespace web.Controllers
                                 "UploadedBy.Profile",
                                 "Unit", 
                                 "Likes", 
-                                "Comments");
+                                "Comments",
+                                "Comments.By");
 
             if(content == null)
             {

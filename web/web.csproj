@@ -4,6 +4,20 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
     <ApplicationIcon>Graduation_Hat-512.ico</ApplicationIcon>
+    <UserSecretsId>26ed89a1-72a1-454b-8efc-d420256fc1bc</UserSecretsId>
+    <AssemblyName>elearningpad</AssemblyName>
+    <StartupObject>web.Program</StartupObject>
+    <PackageId>E-Learning Pad</PackageId>
+    <Authors>Timothy Maina</Authors>
+    <Company>Neon Clouds</Company>
+    <Product>E-Learning Pad</Product>
+    <Description>e-learning application to support students &amp; lecturers in campuses collaborate virtually on learning materials, unit registrations, exam scheduling &amp; progress tracking.</Description>
+    <PackageLicenseUrl>https://github.com/devTimmy/E-Learning-Pad/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/devTimmy/E-Learning-Pad</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/devTimmy/E-Learning-Pad/master/web/wwwroot/images/Graduation_Hat-512.ico</PackageIconUrl>
+    <RepositoryUrl>https://github.com/devTimmy/E-Learning-Pad</RepositoryUrl>
+    <PackageTags>elearning, asp-net-core, elearn, school-management</PackageTags>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -53,9 +67,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\favicon.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\images\logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

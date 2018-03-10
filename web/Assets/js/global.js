@@ -29,3 +29,15 @@ function disableLink(e) {
 
     $(this).prop('disabled', true);
 }
+
+function parseError(responseText) {
+    var obj = JSON.parse(responseText);
+    
+    if (obj instanceof String) {
+        error(responseText);
+    } else {
+        var msg = obj[Object.keys(obj)[0]];
+
+        error(msg);
+    }
+}

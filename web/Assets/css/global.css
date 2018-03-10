@@ -11,6 +11,9 @@ html, body {
     padding: 0px;
     direction:initial;
 }
+.conceal{
+    display:none ;
+}
 
 /*================================
      Text styles & overrides

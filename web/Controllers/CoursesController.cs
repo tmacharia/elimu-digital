@@ -28,6 +28,7 @@ namespace web.Controllers
             var courses = _repos.Courses
                                 .ListWith("Units","Students","Likes")
                                 .OrderByDescending(x => x.Timestamp)
+                                .Distinct()
                                 .ToList();
 
             return View(courses);

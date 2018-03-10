@@ -25,6 +25,19 @@
     .description {
         margin-left: 60px;
     }
+    .likes-count{
+        padding-right:5px;
+    }
+    .box-footer{
+        margin-top:-53px;
+        float:right;
+    }
+    .streamline{
+        padding-left:15px;
+    }
+    #CommentBox{
+        min-height: 69px;
+    }
 </style>
 
 <div class="box p-3">
@@ -33,11 +46,11 @@
 
         <ul class="list-inline pull-right reactions">
             <li>
-                <span class="pointer" title="Like Content">
+                <button class="pointer no-btn" id="like-btn" title="Like Content" onclick="onLikeContent('@Model.Id','@Model.Title',this)">
                     <span class="likes-count"> @Model.Likes.Count </span>
                     <i class="fa fa-thumbs-o-up" title="Like Content"></i>
                     Like
-                </span>
+                </button>
             </li>
             <li>
                 <a class="pointer" title="Download" href="@Model.Url">
@@ -72,15 +85,16 @@
         </p>
     </div>
     <span>
-        @Model.Comments.Count <i class="fa fa-comment"></i> Comments
+        <i class="fa fa-comment"></i> Comments
+        <span class="badge badge-danger">@Model.Comments.Count</span>
     </span>
     <br />
     <br />
     <div class="box collapse show m-0" id="reply-1">
-        <form>
-            <textarea class="form-control no-border" placeholder="Type something..." rows="3"></textarea>
+        <form role="form" id="commentForm">
+            <div contenteditable="true" class="form-control no-border" required id="CommentBox" placeholder="Type something..."></div>
             <div class="box-footer clearfix">
-                <button class="btn info float-right btn-sm">Post</button>
+                <button type="submit" id="postCommentBtn" class="btn info float-right btn-sm">Post</button>
             </div>
         </form>
     </div>
@@ -95,17 +109,29 @@
                         {
                             <div class="sl-item">
                                 <div class="sl-left">
-                                    <img alt="." class="circle" src="@item.By.PhotoUrl">
+                                    @{ 
+                                        if (!string.IsNullOrWhiteSpace(item.By.PhotoUrl))
+                                        {
+                                            <img alt="." class="circle" src="@item.By.PhotoUrl">
+                                        }
+                                        else
+                                        {
+                                            <img alt="." class="circle" src="~/images/avatar-1577909_960_720.png" />
+                                        }
+                                    }
+                                    
                                 </div>
                                 <div class="sl-content">
                                     <div class="sl-date text-muted">
                                         @item.Timestamp.ToMoment()
                                     </div>
                                     <div class="sl-author">
-                                        <a href="#">@item.By.FullNames</a>
+                                        <a href="#" class="bold">@item.By.FullNames</a>
                                     </div>
                                     <div class="mb-3">
-                                        <p>@item.Message</p>
+                                        <p>
+                                            @Html.Raw(item.Message)
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -118,3 +144,12 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#commentForm').submit(function (e) {
+            e.preventDefault();
+
+            onComment();
+        });
+    })
+</script>
