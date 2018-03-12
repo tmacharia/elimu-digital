@@ -1,14 +1,27 @@
 @using DAL.Models
+@using DAL.Extensions
 @model IList<Student>
 @{
-    ViewBag.Title = "All Students";
+    if(User.Role() == "Lecturer")
+    {
+        ViewBag.Title = "My Students";
+    }
+    else if(User.Role() == "Student")
+    {
+        ViewBag.Title = "My Classmates";
+    }
+    else
+    {
+        ViewBag.Title = "All Students";
+    }
+
     ViewBag.Action = "Students";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
 }
 
 <div class="padding">
     <h4>
-        @ViewBag.Action
+        @ViewBag.Title
         <span class="ml-auto h6"><b class="badge danger">@Model.Count</b></span>
     </h4>
     <br />
@@ -16,7 +29,7 @@
     <div class="box">
         <div class="box-header">
             <h3>
-                @ViewBag.Title;
+                @ViewBag.Action;
             </h3>
         </div>
 
@@ -34,7 +47,27 @@
                                 if(item.Course != null)
                                 {
                                     <span>
-                                        <i class="fa fa-certificate"></i> @item.Course.Name, <b>@item.YearOfStudy</b>
+                                        @switch (item.Course.Type)
+                                        {
+                                            case CourseType.Certificate:
+                                                <i class="fa fa-certificate"></i>
+                                                break;
+                                            case CourseType.Diploma:
+                                                <i class="fa fa-certificate text-warning"></i>
+                                                break;
+                                            case CourseType.Degree:
+                                                <i class="fa fa-certificate text-success"></i>
+                                                break;
+                                            case CourseType.Masters:
+                                                <i class="fa fa-certificate text-info"></i>
+                                                break;
+                                            case CourseType.Phd:
+                                                <i class="fa fa-certificate text-danger"></i>
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                        @item.Course.Name, Year of study<b>@item.YearOfStudy</b>
                                     </span>
                                     <span>
                                          Units: @item.StudentUnits.Count

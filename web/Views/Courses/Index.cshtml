@@ -1,5 +1,6 @@
 ﻿@using Services
 @using DAL.Models
+@using DAL.Extensions
 @model IList<Course>
 @{
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
@@ -15,12 +16,18 @@
     <h4>
         Courses <span class="ml-auto h6"><b class="badge danger">@Model.Count</b></span>
 
-        <span class="pull-right h6">
-            <button class="btn btn-sm success theme-accent btn-block" type="button" data-target="#newCourseModal" data-toggle="modal">
-                <i class="fa fa-fw fa-plus"></i>
-                <span class="hidden-folded d-inline">New Course</span>
-            </button>
-        </span>
+        @{ 
+            if(User.Role() == "Administrator")
+            {
+                <span class="pull-right h6">
+                    <button class="btn btn-sm success theme-accent btn-block" type="button" data-target="#newCourseModal" data-toggle="modal">
+                        <i class="fa fa-fw fa-plus"></i>
+                        <span class="hidden-folded d-inline">New Course</span>
+                    </button>
+                </span>
+
+            }
+        }
     </h4>
     <br />
     <div class="">
@@ -72,7 +79,7 @@
                 </li>
             }
         </ul>
-        @if (Model.Count < 1)
+        @if (Model.Count < 1 && User.Role() == "Administrator")
         {
             <br />
             <div>

@@ -6,4 +6,4 @@ services:
     volumes:
       - .:/src
     working_dir: /src
-    command: /bin/bash -c "dotnet restore ./Learning Pad.sln && dotnet publish ./Learning Pad.sln -c Release -o ./obj/Docker/publish"
+    command: /bin/bash -c "dotnet restore ./Learning Pad.sln && dotnet publish . -c Release -o ./obj/Docker/publish"

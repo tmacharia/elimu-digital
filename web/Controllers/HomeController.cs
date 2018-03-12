@@ -9,64 +9,56 @@ using DAL.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace web.Controllers
 {
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly AppDbContext _appContext;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IDataManager _dashManager;
         private readonly IRepositoryFactory _repos;
 
-        public HomeController(AppDbContext appDbContext, IRepositoryFactory factory)
+        public HomeController(UserManager<AppUser> userManager, 
+            IDataManager dashboardManager,
+            IRepositoryFactory factory)
         {
-            _appContext = appDbContext;
+            _userManager = userManager;
+            _dashManager = dashboardManager;
             _repos = factory;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewBag.Action = "Dashboard";
 
-            AppUser user = _appContext.Users.FirstOrDefault(x => x.Email == User.Identity.Name);
+            AppUser user = await _userManager.GetUserAsync(User);
 
             if(user.AccountId < 1 || user.AccountType == AccountType.None)
-            {
                 ViewBag.IsNew = true;
-            }
             else
-            {
                 ViewBag.IsNew = false;
-            }
 
             if (User.Role() == "Administrator")
             {
-                // create summary view model
-                var summary = new SummaryViewModel
-                {
-                    Total_Classes = _repos.Classes.List.Count(),
-                    Students_Total = _repos.Students.List.Count(),
-                    Lec_Total = _repos.Lecturers.List.Count(),
-                    Courses_Total = _repos.Courses.List.Count(),
-                    Lec_NoProfile = _repos.Lecturers.ListWith("Profile")
-                                                    .Count(x => x.Profile == null),
-                    Students_Enrolled = _repos.Students.ListWith("Course")
-                                                       .Count(x => x.Course != null),
-                    Units_NoClass = _repos.Units.ListWith("Class")
-                                                .Count(x => x.Class == null)
-                };
-                ViewBag.summary = summary;
+                ViewBag.summary = _dashManager.GetSummary();
+                ViewBag.lecturers = _repos.Lecturers.ListWith("Profile").ToList();
+                ViewBag.students = _repos.Students.ListWith("Profile").ToList();
             }
-
-            ViewBag.lecturers = _repos.Lecturers.ListWith("Profile")
-                                                .OrderByDescending(x => x.Timestamp)
-                                                .Take(10)
-                                                .ToList();
-
-            ViewBag.students = _repos.Students.ListWith("Profile")
-                                              .OrderByDescending(x => x.Timestamp)
-                                              .Take(10)
-                                              .ToList();
+            else if(User.Role() == "Lecturer")
+            {
+                ViewBag.students = _dashManager.MyStudents(user.AccountId,10);
+                ViewBag.units = _dashManager.MyUnits<Lecturer>(user.AccountId, 10).ToList();
+                ViewBag.classes = _dashManager.MyClasses<Lecturer>(user.AccountId, 10).ToList();
+                ViewBag.lecturers = _repos.Lecturers.ListWith("Profile").ToList();
+            }
+            else if(User.Role() == "Student")
+            {
+                ViewBag.lecturers = _dashManager.MyLecturers(user.AccountId, 10).ToList();
+                ViewBag.units = _dashManager.MyUnits<Student>(user.AccountId, 10).ToList();
+                ViewBag.classes = _dashManager.MyClasses<Student>(user.AccountId, 10).ToList();
+            }
 
             ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId);
 
@@ -86,7 +78,7 @@ namespace web.Controllers
 
             return View();
         }
-
+        [AllowAnonymous]
         public IActionResult Error()
         {
             return View();

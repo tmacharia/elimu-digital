@@ -14,7 +14,7 @@ namespace DAL.Extensions
         private const string online = "https://devtimmystorage.blob.core.windows.net/images/avatar-1577909_960_720.png";
         private const string local = "~/images/avatar-1577909_960_720.png";
 
-        private static string avatar
+        public static string avatar
         {
             get
             {

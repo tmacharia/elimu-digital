@@ -54,6 +54,54 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="box">
+                <div class="box-body">
+                    <h6>Location</h6>
 
+                    @{ 
+                        if(Model.Location != null)
+                        {
+                            <form>
+                                <div class="form-group">
+                                    <label>Street</label>
+                                    @Html.TextBoxFor(x => x.Location.Street, new { @class="form-control"})
+                                </div>
+
+                                <div class="form-group">
+                                    <label>City</label>
+                                    @Html.TextBoxFor(x => x.Location.City, new { @class="form-control" })
+                                </div>
+                            </form>
+                        }
+                        else
+                        {
+                            <p id="locationData"></p>
+                            <button id="locationBtn" class="btn btn-primary">Get current location</button>
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function (e) {
+        $('#locationBtn').click(function (e) {
+            onGetLocation();
+        })
+    })
+
+    function onGetLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(showPosition);
+        } else {
+            $('#locationData').text('Geo-location is not supported by this browser.');
+        }
+    }
+    function showPosition(position) {
+        console.log(position);
+    }
+</script>

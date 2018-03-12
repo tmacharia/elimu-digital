@@ -66,6 +66,7 @@ namespace web
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddTransient<IUploader>(u => new UploaderService(BlobAccount));
             services.AddTransient<IRepositoryFactory, RepositoryFactory>();
+            services.AddTransient<IDataManager, DataManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,7 +92,7 @@ namespace web
 
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
-            app.UseSecurity();
+            //app.UseSecurity();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -134,6 +135,13 @@ namespace web
                 return Configuration.GetSection("SMTP")["MailTitle"];
             }
         }
+        private string GoogleMapsApiKey
+        {
+            get
+            {
+                return Configuration.GetSection("AppSecrets")["GoogleMaps"];
+            }
+        }
         private string MailPassword
         {
             get
@@ -141,7 +149,6 @@ namespace web
                 return Configuration.GetSection("SMTP")["Password"];
             }
         }
-
         private string AdminEmail
         {
             get

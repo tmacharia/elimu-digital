@@ -1,0 +1,79 @@
+﻿@using DAL.Models
+@using Services
+@model Course
+@{ 
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    ViewBag.Action = "Courses";
+    ViewBag.Title = $"Enrollments ({Model.Name})";
+}
+
+<div class="padding">
+    <h4>
+        @Model.Name
+
+        <span class="pull-right">
+            
+        </span>
+    </h4>
+    <br />
+    <div class="row">
+        
+          <div class="col-sm-6">
+                <div class="box">
+                    <div class="box-header">
+                        <h3>
+                            Units 
+                            <span class="badge badge-warning">
+                                @Model.Units.Count
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="list inset">
+                        @if (Model.Units != null && Model.Units.Count > 0)
+                        {
+                            foreach (var item in Model.Units)
+                            {
+                                <div class="list-item" data-id="item-5">
+                                    <span class="">
+                                        <i class="fa fa-umbrella fa-2x"></i>
+                                    </span>
+                                    <div class="list-body">
+                                        <a class="item-title _500" href="#">@item.Name</a>
+                                        <div class="item-except text-sm text-muted h-1x">
+                                            <span>
+                                                <i>Code: </i> <b>@item.Code.ToString().Substring(0, 5).ToUpper(),</b>
+                                            </span>
+                                            
+                                        </div>
+                                        <div class="item-tag tag hide"></div>
+                                    </div>
+                                    <div>
+                                        <span class="item-date text-xs">
+                                           
+                                            <br />
+                                            <span class="pull-right">
+                                                <i>@item.Timestamp.ToMoment()</i>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+
+                        }
+                        else
+                        {
+                            <br />
+                            <center>
+                                No units exist for this course. <b class="text-muted">Start adding units today.</b>
+                            </center>
+                            <br />
+                            <br />
+                        }
+                    </div>
+                </div>
+            </div>
+        <div class="col-md-2">
+            <a href="accept" class="btn btn-lg btn-warning">Enroll now</a>
+        </div>
+    </div>
+</div>

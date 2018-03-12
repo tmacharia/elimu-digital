@@ -1,7 +1,10 @@
-﻿using DAL.Models;
+﻿using DAL.Extensions;
+using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Paginator;
+using Paginator.Models;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -14,22 +17,39 @@ namespace web.Controllers
     [Route("classes")]
     public class ClassesController : Controller
     {
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IDataManager _dataManager;
         private readonly IRepositoryFactory _repos;
-        public ClassesController(IRepositoryFactory factory)
+        public ClassesController(UserManager<AppUser> userManager, IDataManager dataManager,IRepositoryFactory factory)
         {
+            _userManager = userManager;
+            _dataManager = dataManager;
             _repos = factory;
         }
 
         [HttpGet]
-        [Authorize(Roles = "Lecturer, Admin")]
-        public IActionResult Index(int page = 1, int itemsperpage = 10)
+        public async Task<IActionResult> Index(int page = 1, int itemsperpage = 10)
         {
-            var classes = _repos.Classes
-                                .ListWith("Units", "Likes")
-                                .OrderByDescending(x => x.Timestamp)
-                                .ToPaged(page, itemsperpage);
+            AppUser user = await _userManager.GetUserAsync(User);
+            IEnumerable<Class> classes = new List<Class>();
 
-            return View(classes);
+            if(User.Role() == "Administrator")
+            {
+                classes = _repos.Classes
+                                .ListWith("Units", "Likes");
+            }
+            else if(User.Role() == "Lecturer")
+            {
+                classes = _dataManager.MyClasses<Lecturer>(user.AccountId);
+            }
+            else if(User.Role() == "Student")
+            {
+                classes = _dataManager.MyClasses<Student>(user.AccountId);
+            }
+
+            Result<Class> model = classes.ToPaged(page, itemsperpage);
+
+            return View(model);
         }
 
         [HttpGet]

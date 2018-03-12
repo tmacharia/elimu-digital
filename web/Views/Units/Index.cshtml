@@ -1,10 +1,19 @@
 @using Services
 @using DAL.Models
+@using DAL.Extensions
 @using Paginator
 @using Paginator.Models
 @model Result<Unit>
 @{
-    ViewBag.Title = "Units";
+    if(User.Role() == "Administrator")
+    {
+        ViewBag.Title = "Units";
+    }
+    else
+    {
+        ViewBag.Title = "My Units";
+    }
+
     ViewBag.Action = "Units";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
 }
@@ -16,14 +25,17 @@
 
 <div class="padding">
     <h2>
-        All Units
+        @ViewBag.Title
         <span class="ml-auto h6"><b class="badge danger">@Model.TotalItems</b></span>
 
         <span class="h6 pull-right top-right">
-            <i>
-                Includes units across all courses offered at
-            </i>
-            <br />
+            @if(User.Role() == "Administrator")
+            { 
+                <i>
+                    Includes units across all courses offered at
+                </i>
+                <br />
+            }
             <b class="pull-right">
                 @Extensions.Uni
             </b>

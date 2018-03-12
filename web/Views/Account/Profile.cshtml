@@ -8,7 +8,7 @@
     ViewBag.Title = $"Profile ({User.Identity.Name})";
     ViewBag.Action = "Account";
 
-    IList<Unit> unitClasses = (List<Unit>)ViewBag.UnitClasses;
+    IList<Unit> _units = (List<Unit>)ViewBag.units;
 }
 
 <div class="content-main" id="content-main">
@@ -70,7 +70,16 @@
                                 {
                                     var student = (Student)ViewBag.student;
 
-                                    <i class="fa fa-certificate"></i> @student.Course.Name
+                                    if(student.Course != null)
+                                    {
+                                        <i class="fa fa-certificate"></i> @student.Course.Name
+                                    }
+                                    else
+                                    {
+                                        <span>Not enrolled to any course yet.</span>
+                                        <br />
+                                        <a class="btn btn-danger" href="/courses/enrollment">Enroll today</a>
+                                    }
                                 }
                                 else
                                 {
@@ -95,10 +104,18 @@
         <div class="padding">
             <div class="row">
                 <div class="col-sm-8 col-lg-9">
-                    <div class="tab-content">
+                    @{ 
+                        if(User.Role() == "Administrator")
+                        {
+
+
+                        }
+                        else
+                        {
+                            <div class="tab-content">
                         <div class="tab-pane fade active show" id="tab_1">
                             <div class="row row-sm">
-                                @foreach (var item in unitClasses)
+                                @foreach (var item in _units)
                                 {
                                     <div class="col-6 col-lg-4">
                                         <div class="list-item box r mb-2">
@@ -121,7 +138,7 @@
                         </div>
                         <div class="tab-pane fade" id="tab_2">
                             <div class="streamline">
-                                @foreach (var item in unitClasses.Where(x => x.Class != null))
+                                @foreach (var item in _units.Where(x => x.Class != null))
                                 {
                                     <div class="sl-item b-success">
                                         <div class="sl-content">
@@ -136,7 +153,9 @@
                                 }
                             </div>
                         </div>
-                    </div>
+                            </div>
+                        }
+                    }
                 </div>
                 <div class="col-sm-4 col-lg-3">
                     <div>

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using DAL.Extensions;
 using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Paginator;
 using Paginator.Models;
@@ -16,24 +18,45 @@ namespace web.Controllers
     [Authorize]
     public class UnitsController : Controller
     {
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IDataManager _dataManager;
         private readonly IRepositoryFactory _repos;
         private readonly IMapper _mapper;
 
-        public UnitsController(IRepositoryFactory factory, IMapper mapper)
+        public UnitsController(UserManager<AppUser> userManager,IDataManager dataManager, IRepositoryFactory factory, IMapper mapper)
         {
+            _userManager = userManager;
+            _dataManager = dataManager;
             _repos = factory;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult Index(int page = 1, int itemsperpage = 10)
+        public async Task<IActionResult> Index(int page = 1, int itemsperpage = 10)
         {
-            Result<Unit> rest = _repos.Units
-                                      .ListWith("Lecturer", "Lecturer.Profile", "UnitStudents", "Course", "Likes")
-                                      .OrderByDescending(x => x.Timestamp)
-                                      .ToPaged(page, itemsperpage);
+            AppUser user = await _userManager.GetUserAsync(User);
+            IEnumerable<Unit> units = new List<Unit>();
 
-            return View(rest);
+            if(User.Role() == "Administrator")
+            {
+                units = _repos.Units
+                              .ListWith("Lecturer", "Lecturer.Profile", "UnitStudents", "Course", "Likes");
+            }
+            else if(User.Role() == "Lecturer")
+            {
+                units = _dataManager.MyUnits<Lecturer>(user.AccountId);
+            }
+            else if(User.Role() == "Student")
+            {
+                units = _dataManager.MyUnits<Student>(user.AccountId);
+            }
+
+            Result<Unit> result = new Result<Unit>();
+
+            result = units.OrderByDescending(x => x.Timestamp)
+                          .ToPaged(page, itemsperpage);
+
+            return View(result);
         }
 
         [HttpGet]
@@ -72,17 +95,32 @@ namespace web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Search(string q, int page = 1, int itemsperpage = 10)
+        public async Task<IActionResult> Search(string q, int page = 1, int itemsperpage = 10)
         {
             ViewBag.Action = "Units";
+
+            IEnumerable<Unit> units = new List<Unit>();
+            AppUser user = await _userManager.GetUserAsync(User);
+
+            if(User.Role() == "Student")
+            {
+                units = _dataManager.MyUnits<Student>(user.AccountId);
+            }
+            else if(User.Role() == "Lecturer")
+            {
+                units = _dataManager.MyUnits<Lecturer>(user.AccountId);
+            }
+            else
+            {
+                units = _repos.Units
+                              .ListWith("Course", "Lecturer", "UnitStudents", "Likes");
+            }
 
             ViewBag.Query = q;
 
             string pattern = "(" + q + ")";
 
-            Result<Unit> rest = _repos.Units
-                                      .ListWith("Lecturer", "UnitStudents", "Course", "Likes")
-                                      .Where(x => x.Name != null && Regex.IsMatch(x.Name, pattern, RegexOptions.IgnoreCase))
+            Result<Unit> rest = units.Where(x => x.Name != null && Regex.IsMatch(x.Name, pattern, RegexOptions.IgnoreCase))
                                       .ToPaged(page, itemsperpage);
 
             return View(rest);

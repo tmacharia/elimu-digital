@@ -25,6 +25,7 @@ namespace web.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IRepositoryFactory _repos;
+        private readonly IDataManager _dataManager;
         private readonly AppDbContext _appDbContext;
         private readonly LePadContext _lepadContext;
         private readonly IEmailSender _emailSender;
@@ -37,6 +38,7 @@ namespace web.Controllers
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             IRepositoryFactory factory,
+            IDataManager dataManager,
             AppDbContext appDbContext,
             LePadContext lePadContext,
             IOptions<IdentityCookieOptions> identityCookieOptions,
@@ -48,6 +50,7 @@ namespace web.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _repos = factory;
+            _dataManager = dataManager;
             _appDbContext = appDbContext;
             _lepadContext = lePadContext;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
@@ -129,15 +132,9 @@ namespace web.Controllers
 
                 ViewBag.student = student;
 
-                ViewBag.UnitClasses = student.StudentUnits
-                                         .Select(x => x.Unit)
-                                         .ToList();
+                ViewBag.units = _dataManager.MyUnits<Student>(user.AccountId).ToList();
 
-                ViewBag.mates = _repos.Students
-                                      .ListWith("Profile","Course")
-                                      .Where(x => x.Course.Id == student.Course.Id)
-                                      .Take(10)
-                                      .ToList();
+                ViewBag.mates = _dataManager.MyClassMates(user.AccountId).ToList();
             }
             else if(user.AccountType == AccountType.Lecturer)
             {
@@ -147,8 +144,7 @@ namespace web.Controllers
                                          .FirstOrDefault();
 
                 ViewBag.lecturer = lecturer;
-                ViewBag.UnitClasses = lecturer.Units
-                                          .ToList();
+                ViewBag.units = _dataManager.MyUnits<Lecturer>(user.AccountId).ToList();
 
                 ViewBag.colleagues = _repos.Lecturers
                                            .ListWith("Profile")
@@ -187,7 +183,7 @@ namespace web.Controllers
                 if (Request.Form.Files.Count > 0)
                 {
                     IFile file = new FormFile(Request.Form.Files[0]);
-                    //profile.PhotoUrl = await _uploader.Upload(file);
+                    profile.PhotoUrl = await _uploader.Upload(file);
                 }
                 if (type == 1)
                 {

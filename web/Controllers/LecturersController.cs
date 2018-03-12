@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using DAL.Extensions;
+using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using System;
@@ -12,23 +15,47 @@ namespace web.Controllers
     [Authorize]
     public class LecturersController : Controller
     {
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IDataManager _dataManager;
         private readonly IRepositoryFactory _repos;
         private readonly IMapper _mapper;
 
-        public LecturersController(IRepositoryFactory factory, IMapper mapper)
+        public LecturersController(UserManager<AppUser> userManager,IDataManager dataManager,IRepositoryFactory factory, IMapper mapper)
         {
+            _userManager = userManager;
+            _dataManager = dataManager;
             _repos = factory;
             _mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var lecturers = _repos.Lecturers
-                                  .ListWith("Profile", "Units", "Likes")
-                                  .OrderByDescending(x => x.Timestamp)
-                                  .ToList();
+            IEnumerable<Lecturer> lecturers = new List<Lecturer>();
+            AppUser user = await _userManager.GetUserAsync(User);
 
-            return View(lecturers);
+            if(User.Role() == "Administrator")
+            {
+                lecturers = _repos.Lecturers
+                                  .ListWith("Profile", "Units", "Likes");
+            }
+            else if(User.Role() == "Lecturer")
+            {
+                lecturers = _repos.Lecturers
+                                  .ListWith("Profile","Units","Likes");
+            }
+            else if(User.Role() == "Student")
+            {
+                lecturers = _dataManager.MyLecturers(user.AccountId);
+            }
+
+            if(lecturers == null)
+            {
+                lecturers = new List<Lecturer>();
+            }
+
+            var model = lecturers.SkipWhile(x => x == null).ToList();
+
+            return View(model);
         }
 
         [HttpGet]

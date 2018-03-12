@@ -15,6 +15,9 @@ namespace DAL.Models
 
         [Required]
         public string Name { get; set; }
+        public string IconUrl { get; set; }
+        public string BackdropUrl { get; set; }
+        public string DefaultColor { get; set; }
         public Guid Code { get; set; }
 
         [DefaultValue(2)]

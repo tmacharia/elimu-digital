@@ -69,14 +69,24 @@
     </div>
     <div class="col-sm-6 order-sm-1">
         <div class="py-4 clearfix nav-active-theme">
-            <ul class="nav nav-pills nav-sm">
-                <li class="nav-item">
-                    <a class="nav-link active" data-target="#tab_1" data-toggle="tab" href="#">My Units</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-target="#tab_2" data-toggle="tab" href="#">My Classes</a>
-                </li>
-            </ul>
+            @{ 
+                if(User.Role() == "Administrator")
+                {
+
+
+                }
+                else
+                {
+                    <ul class="nav nav-pills nav-sm">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-target="#tab_1" data-toggle="tab" href="#">My Units</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-target="#tab_2" data-toggle="tab" href="#">My Classes</a>
+                        </li>
+                    </ul>
+                }
+            }
         </div>
     </div>
 </div>

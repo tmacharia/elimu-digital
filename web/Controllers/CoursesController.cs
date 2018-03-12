@@ -1,8 +1,11 @@
-﻿using DAL.Models;
+﻿using DAL.Extensions;
+using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,25 +16,139 @@ namespace web.Controllers
     [Authorize]
     public class CoursesController : Controller
     {
+        private readonly UserManager<AppUser> _userManager;
         private readonly IRepositoryFactory _repos;
 
-        public CoursesController(IRepositoryFactory factory)
+        public CoursesController(UserManager<AppUser> userManager,IRepositoryFactory factory)
         {
+            _userManager = userManager;
             _repos = factory;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewBag.Action = "Courses";
 
-            var courses = _repos.Courses
-                                .ListWith("Units","Students","Likes")
-                                .OrderByDescending(x => x.Timestamp)
-                                .Distinct()
-                                .ToList();
+            IList<Course> courses = new List<Course>();
+            AppUser user = await _userManager.GetUserAsync(User);
+
+            if(User.Role() == "Administrator")
+            {
+                courses = _repos.Courses
+                                .ListWith("Units", "Students", "Likes")
+                                .ToArray();
+            }
+            else if(User.Role() == "Lecturer")
+            {
+                courses = _repos.Lecturers
+                                .GetWith(user.AccountId,
+                                        "Units",
+                                        "Units.Course",
+                                        "Units.Course.Units",
+                                        "Units.Course.Students",
+                                        "Units.Course.Likes")
+                                .Units
+                                .Select(x => x.Course)
+                                .ToArray();
+            }
+            else if(User.Role() == "Student")
+            {
+                var course = _repos.Students
+                                   .GetWith(user.AccountId, 
+                                            "Course",
+                                            "Course.Units",
+                                            "Course.Students",
+                                            "Course.Likes")
+                                   .Course;
+
+                if(course != null)
+                {
+                    courses.Add(course);
+                }
+            }
+
+            var model = courses.Distinct()
+                               .OrderByDescending(x => x.Timestamp)
+                               .ToList();
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [Route("courses/enrollment")]
+        [Authorize(Roles = "Student, Administrator")]
+        public IActionResult Enrollment()
+        {
+            IEnumerable<Course> courses = new List<Course>();
+
+            courses = _repos.Courses
+                            .ListWith("Units", "Students", "Likes");
 
             return View(courses);
+        }
+
+        [HttpGet]
+        [Route("courses/enrollment/{id}/{name}")]
+        [Authorize(Roles = "Student, Administrator")]
+        public IActionResult EnrollmentDetails(int id,string name)
+        {
+            if(id < 1)
+            {
+                ViewBag.error = "Invalid course id chosen.";
+                return View();
+            }
+
+            Course course = _repos.Courses
+                                  .GetWith(id, "Units", "Likes");
+
+            if(course == null)
+            {
+                ViewBag.error = "Details for course chosen were not found in records.";
+                return View();
+            }
+
+            return View(course);
+        }
+
+        [HttpGet]
+        [Route("courses/enrollment/{id}/accept")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> Enroll(int id)
+        {
+            AppUser user = await _userManager.GetUserAsync(User);
+            Course course = _repos.Courses
+                                  .GetWith(id,"Units");
+
+            Student student = _repos.Students
+                                    .GetWith(user.AccountId, "Course");
+
+            student.Course = course;
+            student = _repos.Students.Update(student);
+
+            foreach (var item in course.Units)
+            {
+                StudentUnit studentUnit = new StudentUnit()
+                {
+                    Student = student,
+                    StudentId = student.Id,
+                    Unit = item,
+                    UnitId = item.Id
+                };
+
+                _repos.StudentUnits.Create(studentUnit);
+            }
+
+            _repos.Commit();
+
+            return RedirectToActionPermanent("EnrollmentSuccess", course);
+        }
+
+        [HttpGet]
+        [Route("courses/enrollmentsuccess")]
+        public IActionResult EnrollmentSuccess(Course course)
+        {
+            return View(course);
         }
 
         [HttpGet]
@@ -51,7 +168,8 @@ namespace web.Controllers
                                            "Units",
                                            "Units.Lecturer",
                                            "Units.Lecturer.Profile",
-                                           "Students", 
+                                           "Students",
+                                           "Students.Profile", 
                                            "Likes");
 
             if(course == null)

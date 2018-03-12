@@ -1,0 +1,17 @@
+﻿@using DAL.Models
+@model Course
+@{
+    ViewBag.Title = "Course Enrollment Successful";
+    ViewBag.Action = "Courses";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="padding">
+    <div class="jumbotron">
+        <h4><i class="fa fa-check-circle text-success"></i> @ViewBag.Title</h4>
+        <br />
+        <p>
+            @Model.Name
+        </p>
+    </div>
+</div>

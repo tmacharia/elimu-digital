@@ -70,7 +70,7 @@
         </script>
     </environment>
 </head>
-<body class="pace-done dark">
+<body class="pace-done ">
 
     <noscript>
         Javascript has to be enabled in browser settings for this application
@@ -78,9 +78,15 @@
     </noscript>
 
     <div class="app" id="app">
-        <div aria-hidden="true" class="app-aside fade box-shadow-x nav-expand white" id="aside">
-            @Html.Partial("_Sidebar")
-        </div>
+        
+            @{ 
+                if(ViewBag.Title != "Enrollments")
+                {
+                    <div aria-hidden="true" class="app-aside fade box-shadow-x nav-expand white" id="aside">
+                        @Html.Partial("_Sidebar")
+                    </div>
+                }
+            }
         <div class="app-content box-shadow-4 box-radius-4" id="content" role="main">
             <div class="content-header white box-shadow-4" id="content-header">
                 @Html.Partial("_Header")
