@@ -5,6 +5,8 @@ mono: none
 dotnet: 1.1.5
 
 script:
-  - dotnet restore
-  - dotnet build
+  - dotnet restore web/
+  - dotnet build web/
+  - dotnet restore TestCases/
+  - dotnet build TestCases/
   - dotnet test TestCases/TestCases.csproj
