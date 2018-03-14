@@ -1,8 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Services
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>@ViewBag.Title | E-Learning Pad</title>
+    <title>@ViewBag.Title | @Extensions.Uni</title>
     <meta content="e-learning, university" name="description">
     <meta content="width=device-width,initial-scale=1,maximum-scale=1,minimal-ui" name="viewport">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
@@ -98,7 +100,7 @@
             </div>
             <div class="content-footer white" id="content-footer">
                 <div class="d-flex p-3">
-                    <span class="text-sm text-muted flex">&copy; Copyright. E-Learning Pad @DateTime.Now.Year</span>
+                    <span class="text-sm text-muted flex">&copy; Copyright. @Extensions.Uni @DateTime.Now.Year</span>
                     <div class="text-sm text-muted">
                         Version @System.Reflection.Assembly.GetEntryAssembly().GetName().Version
                     </div>

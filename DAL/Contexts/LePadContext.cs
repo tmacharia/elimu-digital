@@ -32,7 +32,8 @@ namespace DAL.Contexts
         public virtual DbSet<Admin> Administrators { get; set; }
         public virtual DbSet<StudentUnit> StudentUnits { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
-
+        public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<DiscussionBoard> DiscussionBoards { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

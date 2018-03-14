@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Paginator;
 using Paginator.Models;
 using Services;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +19,15 @@ namespace web.Controllers
     [Authorize]
     public class UnitsController : Controller
     {
+        private readonly INotificationManager _notify;
         private readonly UserManager<AppUser> _userManager;
         private readonly IDataManager _dataManager;
         private readonly IRepositoryFactory _repos;
         private readonly IMapper _mapper;
 
-        public UnitsController(UserManager<AppUser> userManager,IDataManager dataManager, IRepositoryFactory factory, IMapper mapper)
+        public UnitsController(INotificationManager notificationManager,UserManager<AppUser> userManager,IDataManager dataManager, IRepositoryFactory factory, IMapper mapper)
         {
+            _notify = notificationManager;
             _userManager = userManager;
             _dataManager = dataManager;
             _repos = factory;

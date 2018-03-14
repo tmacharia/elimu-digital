@@ -21,6 +21,8 @@ namespace Services
     /// </summary>
     public static class Extensions
     {
+        private static string _uni;
+
         /// <summary>
         /// Adds all mapping profiles for the application to the default Dependency Injection
         /// container for asp.net core as a singleton service. To use the added service in
@@ -127,7 +129,11 @@ namespace Services
         {
             get
             {
-                return "Greenstalk University";
+                return _uni;
+            }
+            set
+            {
+                _uni = value;
             }
         }
         private static string RemoveAccent(string s)

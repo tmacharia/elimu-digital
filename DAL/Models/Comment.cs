@@ -13,5 +13,6 @@ namespace DAL.Models
 
         [Required]
         public virtual Profile By { get; set; }
+        public virtual ICollection<Comment> Replies { get; set; }
     }
 }

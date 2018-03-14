@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,16 +19,19 @@ namespace web.Controllers
     [Route("contents")]
     public class ContentsController : Controller
     {
+        private readonly INotificationManager _notify;
         private readonly IRepositoryFactory _repos;
         private readonly UserManager<AppUser> _userManager;
         private readonly IUploader _uploader;
         private readonly IMapper _mapper;
 
-        public ContentsController(IRepositoryFactory factory, 
+        public ContentsController(INotificationManager notificationManager,
+                                  IRepositoryFactory factory, 
                                   UserManager<AppUser> userManager, 
                                   IUploader uploader,
                                   IMapper mapper)
         {
+            _notify = notificationManager;
             _repos = factory;
             _userManager = userManager;
             _uploader = uploader;
@@ -138,6 +142,8 @@ namespace web.Controllers
 
             content = _repos.Contents.Create(content);
             _repos.Commit();
+
+            await _notify.OnNewContent(content);
 
             return RedirectPermanent($"/contents/{content.Id}/{Services.Extensions.GenerateSlug(content.Title)}");
         }

@@ -14,6 +14,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Services;
 using Swashbuckle.AspNetCore.Swagger;
+using Services.Interfaces;
+using Services.Implementations;
 
 namespace web
 {
@@ -29,7 +31,7 @@ namespace web
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
-            
+            Services.Extensions.Uni = SystemName;
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -62,11 +64,12 @@ namespace web
             // Add application services
             services.AddAutoMapper();
             services.AddTransient<ISettingsManager>(s => new SettingsManager(Configuration.GetSection("Settings")));
-            services.AddTransient<IEmailSender>(e => new AuthMessageSender(MailTitle,AdminEmail,MailPassword));
+            services.AddTransient<IEmailSender>(e => new AuthMessageSender(SystemName,AdminEmail,MailPassword));
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddTransient<IUploader>(u => new UploaderService(BlobAccount));
             services.AddTransient<IRepositoryFactory, RepositoryFactory>();
             services.AddTransient<IDataManager, DataManager>();
+            services.AddTransient<INotificationManager, NotificationManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -128,7 +131,7 @@ namespace web
                 return Configuration.GetConnectionString("BlobStorage");
             }
         }
-        private string MailTitle
+        private string SystemName
         {
             get
             {

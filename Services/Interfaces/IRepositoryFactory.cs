@@ -26,6 +26,8 @@ namespace Services
         IRepository<Lecturer> Lecturers { get; }
         IRepository<Admin> Administrators { get; }
         IRepository<Notification> Notifications { get; }
+        IRepository<DiscussionBoard> DiscussionBoards { get; }
+        IRepository<Post> Posts { get; }
 
         void Commit();
     }

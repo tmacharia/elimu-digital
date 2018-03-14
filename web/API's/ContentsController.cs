@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Interfaces;
 using Services.Security;
 using System;
 using System.Collections.Generic;
@@ -22,16 +23,19 @@ namespace web.API_s
     {
         private readonly IRepositoryFactory _repos;
         private readonly UserManager<AppUser> _userManager;
+        private readonly INotificationManager _notify;
         private readonly IUploader _uploader;
         private readonly IMapper _mapper;
 
         public ContentsController(IRepositoryFactory factory,
                                   UserManager<AppUser> userManager,
+                                  INotificationManager notificationManager,
                                   IUploader uploader,
                                   IMapper mapper)
         {
             _repos = factory;
             _userManager = userManager;
+            _notify = notificationManager;
             _uploader = uploader;
             _mapper = mapper;
         }
@@ -86,6 +90,8 @@ namespace web.API_s
             // save content finally
             content = _repos.Contents.Create(content);
             _repos.Commit();
+
+            await _notify.OnNewContent(content);
 
             return Created($"api/contents/{content.Id}", content);
         }

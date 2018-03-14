@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Paginator;
 using Paginator.Models;
+using Services.Interfaces;
 
 namespace web.API_s
 {
@@ -17,11 +18,13 @@ namespace web.API_s
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryFactory _repos;
+        private readonly INotificationManager _notify;
 
-        public UnitsController(IMapper mapper, IRepositoryFactory factory)
+        public UnitsController(IMapper mapper, IRepositoryFactory factory, INotificationManager notificationManager)
         {
             _mapper = mapper;
             _repos = factory;
+            _notify = notificationManager;
         }
 
 
@@ -60,6 +63,8 @@ namespace web.API_s
             unit.Course = course;
             unit = _repos.Units.Create(unit);
             _repos.Commit();
+
+            _notify.OnNewUnit(unit);
 
             return Ok("Created!");
         }

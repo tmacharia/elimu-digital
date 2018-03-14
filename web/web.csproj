@@ -22,6 +22,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Dockerfile" />
+  </ItemGroup>
+
+  <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\js\site.min.js" />
   </ItemGroup>
 
