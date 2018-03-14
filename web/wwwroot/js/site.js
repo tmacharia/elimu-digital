@@ -102,7 +102,12 @@ function postLike(id,elem) {
             updateLikes();
         },
         error: function (res) {
-            parseError(res.responseText);
+            if (res.status === 403) {
+                error('You are not authorized to perform this action');
+            } else {
+                parseError(res.responseText);
+            }
+            
         }
     });
 

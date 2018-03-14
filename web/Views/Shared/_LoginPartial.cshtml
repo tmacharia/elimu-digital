@@ -1,9 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using Services
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/primary.css">
     <meta charset="utf-8">
-    <title>@ViewBag.Title | E-Learning Pad</title>
+    <title>@ViewBag.Title | @Extensions.Uni</title>
     <meta content="e-learning, university" name="description">
     <meta content="width=device-width,initial-scale=1,maximum-scale=1,minimal-ui" name="viewport">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
@@ -53,7 +55,7 @@
             <div class="mx-auto">
                 <a class="navbar-brand" href="/">
 
-                    <span class="hidden-folded d-inline">E-Learning Pad</span>
+                    <span class="hidden-folded d-inline">@Extensions.Uni</span>
                 </a>
             </div>
         </div>
