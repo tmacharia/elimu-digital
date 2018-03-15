@@ -45,6 +45,43 @@
     </environment>
 </head>
 <body>
+    <style>
+        body{
+            background-color:transparent;
+        }
+        .bg {
+            top: 0;
+            left: 0;
+            right: 0;
+            position: absolute;
+            height: 100%;
+            z-index:-1;
+            
+            background: url('../../images/library_2.jpg') no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            -webkit-filter: blur(5px);
+            -moz-filter: blur(5px);
+            -o-filter: blur(5px);
+            -ms-filter: blur(5px);
+            filter: blur(5px);
+            -webkit-transition: all 3s ease-in-out;
+            transition: all 3s ease-in-out;
+        }
+
+        .accounts-partials {
+            background: rgba(255, 255, 255, 0.9);
+            width: auto;
+            height: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 5px 30px;
+            border-radius: 10px;
+            margin-top: 8rem;
+        }
+    </style>
     <noscript>
         Javascript has to be enabled in browser settings for this application
         to run properly.
@@ -55,15 +92,15 @@
             <div class="mx-auto">
                 <a class="navbar-brand" href="/">
 
-                    <span class="hidden-folded d-inline">@Extensions.Uni</span>
+                    <span class="hidden-folded d-inline"><i class="ion ion-university ion-2x"></i> @Extensions.Uni</span>
                 </a>
             </div>
         </div>
-        <div id="content-body">
+        <div class="accounts-partials">
             @RenderBody()
         </div>
     </div>
-
+    <div class="bg"></div>
     <script src="~/js/site.js"></script>
     <script src="~/js/app.min.js"></script>
 </body>

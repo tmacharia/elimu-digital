@@ -284,33 +284,33 @@ function parseError(responseText) {
         error(msg);
     }
 }
-var unit = {};
+(function () {
+    var unit = {};
 
-$('#unitForm').submit(function (e) {
-    e.preventDefault();
+    
 
-    postUnit();
-})
+    $('#unitBtnSubmit').click(function (e) {
+        //e.preventDefault();
 
-$('#unitBtnSubmit').click(function (e) {
-    e.preventDefault();
+        if (_proc === 'Assign Lec') {
+            //pushAssignLec();
+        }
+        else {
+            postUnit();
+        }
+        
+    })
 
-    postUnit();
-})
+    $('#allocateUnitForm').submit(function (e) {
+        e.preventDefault();
 
-$('#assignLecForm').submit(function (e) {
-    e.preventDefault();
-
-    pushAssignLec();
-})
-
-$('#allocateUnitForm').submit(function (e) {
-    e.preventDefault();
-
-    pushAllocateUnit();
+        pushAllocateUnit();
+    })
 })
 
 function postUnit() {
+    unit = {};
+
     unit.Name = $('#unitName').val();
 
     loadingBtn('unitBtnSubmit', true);
@@ -345,7 +345,8 @@ function postUnit() {
     });
 }
 
-function onAssignLecturer(name,id) {
+function onAssignLecturer(name, id) {
+    unit = {};
     unit.id = id;
     $('#unit_assign').text(name);
     $('#lecSelect').empty();

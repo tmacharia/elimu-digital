@@ -102,7 +102,7 @@
                                             </span>
                                          }
                                     </td>
-                                    <td>@item.UnitStudents.Count</td>
+                                    <td>@item.UnitStudents.Distinct().ToList().Count</td>
                                     <td>
                                         <i class="fa fa-thumbs-up" title="Likes"></i> @item.Likes.Count
                                     </td>

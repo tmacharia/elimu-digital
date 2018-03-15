@@ -46,15 +46,17 @@ namespace web.Controllers
                 ViewBag.lecturers = _repos.Lecturers.ListWith("Profile").ToList();
                 ViewBag.students = _repos.Students.ListWith("Profile").ToList();
             }
-            else if(User.Role() == "Lecturer")
+            else if(User.Role() == "Lecturer" && user.AccountId > 0)
             {
                 ViewBag.students = _dashManager.MyStudents(user.AccountId,10);
                 ViewBag.units = _dashManager.MyUnits<Lecturer>(user.AccountId, 10).ToList();
                 ViewBag.classes = _dashManager.MyClasses<Lecturer>(user.AccountId, 10).ToList();
                 ViewBag.lecturers = _repos.Lecturers.ListWith("Profile").ToList();
             }
-            else if(User.Role() == "Student")
+            else if(User.Role() == "Student" && user.AccountId > 0)
             {
+                ViewBag.myprofile = _repos.Students
+                                       .GetWith(user.AccountId, "Course");
                 ViewBag.lecturers = _dashManager.MyLecturers(user.AccountId, 10).ToList();
                 ViewBag.units = _dashManager.MyUnits<Student>(user.AccountId, 10).ToList();
                 ViewBag.classes = _dashManager.MyClasses<Student>(user.AccountId, 10).ToList();

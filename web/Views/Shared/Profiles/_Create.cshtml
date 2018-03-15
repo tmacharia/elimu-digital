@@ -23,6 +23,16 @@
                 <p>This form appears once, fill it to the best of your ability.</p>
 
                 <form role="form" id="profileForm" method="post" enctype="multipart/form-data" action="/account/profile">
+                    @{ 
+                        if(User.Role() == "Student")
+                        {
+                            <input type="hidden" hidden name="Type" value="2" />
+                        }
+                        else if(User.Role() == "Lecturer")
+                        {
+                            <input type="hidden" hidden name="Type" value="1" />
+                        }
+                    }
                     <div class="form-group">
                         <span class="w-96">
                             <img id="userImgPrw" class="img-thumbnail" src="@Url.Content(User.PhotoUrl())" />
@@ -40,25 +50,29 @@
                         <label>ID Number</label>
                         <input class="form-control" required name="ID" id="idNum" placeholder="National ID Number" type="number" />
                     </div>
-
                     
 
-                    <fieldset id="others" style="display:none;">
-                        <div class="form-group">
-                            <label>Year of Study</label>
-                            <input class="form-control" required name="YrOfStudy" placeholder="e.g 2, 4" type="number" />
-                        </div>
+                    @{ 
+                        if(User.Role() == "Student")
+                        {
+                            <fieldset id="others">
+                                <div class="form-group">
+                                    <label>Year of Study</label>
+                                    <input class="form-control" required name="YrOfStudy" placeholder="e.g 2, 4" type="number" />
+                                </div>
 
-                        <div class="form-group">
-                            <label>Academic Year</label>
-                            <input class="form-control" required name="AcademicYr" placeholder="e.g 2018/2019" type="text" />
-                        </div>
+                                <div class="form-group">
+                                    <label>Academic Year</label>
+                                    <input class="form-control" required name="AcademicYr" placeholder="e.g 2018/2019" type="text" />
+                                </div>
 
-                        <div class="form-group">
-                            <label>Registration Number</label>
-                            <input class="form-control" required name="RegNo" placeholder="" type="text" />
-                        </div>
-                    </fieldset>
+                                <div class="form-group">
+                                    <label>Registration Number</label>
+                                    <input class="form-control" required name="RegNo" placeholder="" type="text" />
+                                </div>
+                            </fieldset>
+                        }
+                    }
 
                     <div class="modal-footer">
                         <button class="btn dark-white p-x-md" data-dismiss="modal" type="button">Cancel</button>

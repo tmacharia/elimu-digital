@@ -36,12 +36,19 @@
             {
                 <li class="col-sm-4 col-12 col-md-3">
                     <div class="p-3 box pointer">
-                        <a class="d-block" href="/courses/@item.Id/@item.GenerateSlug()">
-                            @item.Name.Trancate()
+                        <a class="d-block" >
+                            <a href="/courses/@item.Id/@item.GenerateSlug()">
+                                @item.Name.Trancate()
+                            </a>
 
-                            <span class="pull-right pointer text-default" title="Delete course: @item.Name">
-                                <i class="ion ion-ios-close" onclick="onDeleteCourse(@item.Id)" title="Delete course: @item.Name"></i>
-                            </span>
+                            @{ 
+                                if(User.Role() == "Administrator")
+                                {
+                                    <span class="pull-right pointer text-default" title="Delete course: @item.Name">
+                                        <i class="ion ion-ios-close" onclick="onDeleteCourse(@item.Id)" title="Delete course: @item.Name"></i>
+                                    </span>
+                                }
+                            }
                         </a>
                         <br />
                         <div class="text-xs">

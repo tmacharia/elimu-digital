@@ -229,34 +229,19 @@ namespace web.Controllers
                     user.AccountType = AccountType.Administrator;
                 }
 
-                // add user to role
-                switch (user.AccountType)
-                {
-                    case AccountType.Lecturer:
-                        await _userManager.AddToRoleAsync(user, "Lecturer");
-                        break;
-                    case AccountType.Student:
-                        await _userManager.AddToRoleAsync(user, "Student");
-                        break;
-                    case AccountType.Administrator:
-                        await _userManager.AddToRoleAsync(user, "Admin");
-                        break;
-                    default:
-                        break;
-                }
-
                 // add claims we need in the app (userId, accountType)
 
                 var claims = new List<Claim>{
                     new Claim("UserId", user.Id),
-                    new Claim("Role", CheckRole(user)),
                     new Claim("ProfileId", profile.Id.ToString())
                 };
+
                 if(!string.IsNullOrWhiteSpace(profile.FullNames))
                 {
                     claims.Add(new Claim("FullNames", profile.FullNames));
                 }
-                else if(!string.IsNullOrWhiteSpace(profile.PhotoUrl))
+
+                if (!string.IsNullOrWhiteSpace(profile.PhotoUrl))
                 {
                     claims.Add(new Claim("PhotoUrl", profile.PhotoUrl));
                 }
@@ -411,17 +396,31 @@ namespace web.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new AppUser { UserName = model.Email, Email = model.Email, AccountType = AccountType.None };
+                var user = new AppUser { UserName = model.Email, Email = model.Email, AccountType = model.AccountType };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    // add user to role
+                    switch (user.AccountType)
+                    {
+                        case AccountType.Lecturer:
+                            await _userManager.AddToRoleAsync(user, "Lecturer");
+                            break;
+                        case AccountType.Student:
+                            await _userManager.AddToRoleAsync(user, "Student");
+                            break;
+                        default:
+                            break;
+                    }
+
+                    await _userManager.AddClaimAsync(user, new Claim("Role", user.AccountType.ToString()));
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
                     // Send an email with this link
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                    //    $"<h3 style='color:#53a6fa;'>Welcome to E-Learning,</h3>\n\n" +
-                    //    $"Please confirm your account by clicking this <a href='{callbackUrl}'>link</a>");
+                    await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
+                        $"<h3 style='color:#53a6fa;'>Welcome to Gobel Digital University,</h3>\n\n" +
+                        $"Please confirm your account by clicking this <a href='{callbackUrl}'>link</a>");
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);

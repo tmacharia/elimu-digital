@@ -7,6 +7,7 @@
 
     var lecturers = (IList<Lecturer>)ViewBag.lecturers;
     var students = (IList<Student>)ViewBag.students;
+    var myprofile = (Student)ViewBag.myprofile;
 }
 
 <div class="padding">
@@ -105,20 +106,62 @@
             }
             else if (User.Role() == "Student")
             {
-                <div class="jumbotron">
-                    <h4>Welcome student to @Extensions.Uni</h4>
+                if (myprofile == null)
+                {
+                    <div class="jumbotron">
+                        <h4>Welcome student to @Extensions.Uni</h4>
 
-                    <p>
-                        Start pursuing your goals by equipping yourself with the relevant skills
-                        required with our world-class courses.
-                    </p>
+                        <p>
+                            Start pursuing your goals by equipping yourself with the relevant skills
+                            required with our world-class courses.
+                        </p>
 
-                    <a class="btn btn-danger" href="/courses/enrollment">Enrollments</a>
-                </div>
+                        <a class="btn btn-danger" href="/courses/enrollment">Enrollments</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="jumbotron col-md-5">
+                        <h4>
+                            @switch (myprofile.Course.Type)
+                             {
+                                 case CourseType.Certificate:
+                                     <i class="fa fa-certificate"></i>
+                                     break;
+                                 case CourseType.Diploma:
+                                     <i class="fa fa-certificate text-warning"></i>
+                                     break;
+                                 case CourseType.Degree:
+                                     <i class="fa fa-certificate text-success"></i>
+                                     break;
+                                 case CourseType.Masters:
+                                     <i class="fa fa-certificate text-info"></i>
+                                     break;
+                                 case CourseType.Phd:
+                                     <i class="fa fa-certificate text-danger"></i>
+                                     break;
+                                 default:
+                                     break;
+                             }
+                            <span> @myprofile.Course.Name</span>
+                        </h4>
+                        <br />
+                        <p>
+                            <b>Registration No: </b>@myprofile.RegNo
+                        </p>
+                        <p>
+                            <b>Current Year: </b>@myprofile.YearOfStudy
+                        </p>
+                        <p>
+                            <b>Academic Year: </b>@myprofile.AcademicYear
+                        </p>
+                    </div>
+                }
+
             }
-            else if(User.Role() == "Administrator")
+            else if (User.Role() == "Administrator")
             {
-                 <div class="row">
+                <div class="row">
                     <div class="col-sm-6">
                         <div class="box">
                             <div class="box-header">
