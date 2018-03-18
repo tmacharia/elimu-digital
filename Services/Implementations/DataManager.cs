@@ -20,7 +20,7 @@ namespace Services
         public IEnumerable<Lecturer> MyLecturers(int studentId, int count)
         {
             // get all my units
-            IEnumerable<Lecturer> lecturers = _repos.StudentUnits
+            List<Lecturer> lecturers = _repos.StudentUnits
                                               .ListWith("Unit",
                                                         "Unit.Lecturer",
                                                         "Unit.Lecturer.Profile",
@@ -28,10 +28,29 @@ namespace Services
                                               .Where(x => x.StudentId == studentId)
                                               .Select(x => x.Unit)
                                               .Select(x => x.Lecturer)
-                                              .Take(count)
                                               .SkipWhile(x => x == null)
-                                              .Distinct();
-            return lecturers;
+                                              .ToList();
+
+            // get lecturers by course
+            var lecs = _repos.Students
+                              .GetWith(studentId,
+                                       "Course",
+                                       "Course.Units",
+                                       "Course.Units.Lecturer",
+                                       "Course.Units.Lecturer.Profile",
+                                       "Course.Units.Lecturer.Likes")
+                              .Course
+                              .Units
+                              .Select(x => x.Lecturer)
+                              .SkipWhile(x => x == null)
+                              .ToList();
+
+
+            lecturers.AddRange(lecs);
+
+            return lecturers.Distinct()
+                            .SkipWhile(x => x == null)
+                            .Take(count);
         }
 
         public IList<Student> MyStudents(int lecturerId, int count)
@@ -112,6 +131,7 @@ namespace Services
                 var lec = _repos.Lecturers
                               .GetWith(id,
                                        "Units",
+                                       "Units.Course",
                                        "Units.Lecturer",
                                        "Units.Lecturer.Profile",
                                        "Units.UnitStudents",
@@ -158,10 +178,32 @@ namespace Services
                                     "StudentUnits.Student.Course")
                              .StudentUnits
                              .Select(x => x.Student)
-                             .SkipWhile(x => x == null)
+                             .SkipWhile(x => x == null || x.Id == id)
                              .Distinct();
 
             return students;
+        }
+
+        public IEnumerable<Lecturer> MyColleagues(int lecturerId)
+        {
+            List<Lecturer> lecturers = new List<Lecturer>();
+
+            var courses = _repos.Lecturers
+                                .GetWith(lecturerId, "Units", "Units.Course")
+                                .Units.Select(x => x.Course).ToList();
+
+            foreach (var item in courses)
+            {
+                var lecs = _repos.Units
+                                 .ListWith("Course", "Lecturer", "Lecturer.Profile")
+                                 .Where(x => x.Id == item.Id)
+                                 .Select(x => x.Lecturer)
+                                 .SkipWhile(x => x == null);
+
+                lecturers.AddRange(lecs);
+            }
+            
+            return lecturers;
         }
     }
 }

@@ -1,8 +1,5 @@
-﻿(function () {
-    var unit = {};
-
-    
-
+﻿var unit = {};
+(function () {
     $('#unitBtnSubmit').click(function (e) {
         //e.preventDefault();
 
@@ -12,20 +9,16 @@
         else {
             postUnit();
         }
-        
-    })
 
-    $('#allocateUnitForm').submit(function (e) {
-        e.preventDefault();
-
-        pushAllocateUnit();
-    })
+    });
 })
 
 function postUnit() {
     unit = {};
 
     unit.Name = $('#unitName').val();
+    unit.Level = $('#Level').val();
+    unit.Semester = $('#Semester').val();
 
     loadingBtn('unitBtnSubmit', true);
 
@@ -111,6 +104,7 @@ function pushAssignLec() {
 }
 
 function onAllocateUnit(name, id) {
+    unit = {};
     unit.id = id;
     $('#unit_allocate').text(name);
     $('#roomSelect').empty();

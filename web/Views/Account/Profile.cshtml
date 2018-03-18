@@ -72,7 +72,28 @@
 
                                     if(student.Course != null)
                                     {
-                                        <i class="fa fa-certificate"></i> @student.Course.Name
+                                        @switch (student.Course.Type)
+                                         {
+                                             case CourseType.Certificate:
+                                                 <i class="fa fa-certificate"></i>
+                                                 break;
+                                             case CourseType.Diploma:
+                                                 <i class="fa fa-certificate text-warning"></i>
+                                                 break;
+                                             case CourseType.Degree:
+                                                 <i class="fa fa-certificate text-success"></i>
+                                                 break;
+                                             case CourseType.Masters:
+                                                 <i class="fa fa-certificate text-info"></i>
+                                                 break;
+                                             case CourseType.Phd:
+                                                 <i class="fa fa-certificate text-danger"></i>
+                                                 break;
+                                             default:
+                                                 break;
+                                         }
+                                        
+                                        @student.Course.Name
                                     }
                                     else
                                     {

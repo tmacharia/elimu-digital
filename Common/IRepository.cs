@@ -35,6 +35,7 @@ namespace Common
         /// <returns>Object instance as found in the repository. Null if it does not exist.</returns>
         T Get(int id);
         T Get(Guid uuid);
+        T Get(Func<T,bool> func);
         T GetWith(int id, params string[] navigationProperties);
         T GetWith(Guid uuid, params string[] navigationProperties);
         /// <summary>
@@ -63,7 +64,7 @@ namespace Common
         /// </summary>
         /// <param name="expression">Predicate as an expression func of any type</param>
         /// <returns>An IEnumerable of all objects matching search predicate</returns>
-        IEnumerable<T> Get(Func<T, bool> expression);
+        //IEnumerable<T> Get(Func<T, bool> expression);
 
         bool Remove(T entity);
         bool Remove(int id);

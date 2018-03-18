@@ -70,6 +70,7 @@ namespace web
             services.AddTransient<IRepositoryFactory, RepositoryFactory>();
             services.AddTransient<IDataManager, DataManager>();
             services.AddTransient<INotificationManager, NotificationManager>();
+            services.AddTransient<IProgressTracker, ProgressTracker>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -146,10 +146,7 @@ namespace web.Controllers
                 ViewBag.lecturer = lecturer;
                 ViewBag.units = _dataManager.MyUnits<Lecturer>(user.AccountId).ToList();
 
-                ViewBag.colleagues = _repos.Lecturers
-                                           .ListWith("Profile")
-                                           .Take(10)
-                                           .ToList();
+                ViewBag.colleagues = _dataManager.MyColleagues(user.AccountId).Take(10).ToList();
             }
 
             return View(profile);
@@ -253,8 +250,6 @@ namespace web.Controllers
 
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignOutAsync();
-
                     return RedirectPermanent("/");
                 }
                 else

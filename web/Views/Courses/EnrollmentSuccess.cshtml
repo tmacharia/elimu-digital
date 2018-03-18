@@ -7,11 +7,34 @@
 }
 
 <div class="padding">
-    <div class="jumbotron">
-        <h4><i class="fa fa-check-circle text-success"></i> @ViewBag.Title</h4>
-        <br />
-        <p>
+    <div class="jumbotron col-md-5">
+        <h4>@ViewBag.Title <i class="fa fa-check-circle"></i></h4> 
+        <h5>
+            @switch (Model.Type)
+             {
+                 case CourseType.Certificate:
+                     <i class="fa fa-certificate"></i>
+                     break;
+                 case CourseType.Diploma:
+                     <i class="fa fa-certificate text-warning"></i>
+                     break;
+                 case CourseType.Degree:
+                     <i class="fa fa-certificate text-success"></i>
+                     break;
+                 case CourseType.Masters:
+                     <i class="fa fa-certificate text-info"></i>
+                     break;
+                 case CourseType.Phd:
+                     <i class="fa fa-certificate text-danger"></i>
+                     break;
+                 default:
+                     break;
+             }
             @Model.Name
-        </p>
+        </h5>
+        <br />
+        <a class="btn btn-info" href="/units" style="color:white;">
+            View my units
+        </a>
     </div>
 </div>

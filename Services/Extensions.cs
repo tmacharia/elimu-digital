@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Services.Security;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using DAL.Models;
 
 namespace Services
 {

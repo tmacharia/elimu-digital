@@ -41,6 +41,7 @@ namespace DAL.Models
 
         public virtual Profile Profile { get; set; }
         public virtual Course Course { get; set; }
+        public virtual ICollection<StudentCourse> StudentCourses { get; set; }
         public virtual ICollection<StudentUnit> StudentUnits { get; set; }
         public virtual ICollection<Score> Scores { get; set; }
     }

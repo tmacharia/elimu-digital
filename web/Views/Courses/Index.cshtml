@@ -14,7 +14,22 @@
 </style>
 <div class="padding">
     <h4>
-        Courses <span class="ml-auto h6"><b class="badge danger">@Model.Count</b></span>
+        @{ 
+            if(User.Role() == "Student")
+            {
+                <span>My Courses</span>
+            }
+            else if(User.Role() == "Lecturer")
+            {
+                <span>Assigned Courses</span>
+            }
+            else
+            {
+                <span>Courses</span>
+            }
+        } 
+        
+        <span class="ml-auto h6"><b class="badge danger">@Model.Count</b></span>
 
         @{ 
             if(User.Role() == "Administrator")
@@ -51,7 +66,7 @@
                             }
                         </a>
                         <br />
-                        <div class="text-xs">
+                        <div class="text-xs" style="margin-top:7px;">
                             <span>
                                 <i class="ion ion-android-list" title="Units"></i>
                                 <strong title="Units">@item.Units.Count units</strong>

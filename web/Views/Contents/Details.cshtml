@@ -1,15 +1,20 @@
 @using DAL.Models
+@using DAL.Extensions
+@using Common.ViewModels
 @using Services
 @model Content
 @{
     ViewBag.Title = Model.Title;
     ViewBag.Action = "Contents";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    CourseworkProgress progress = (CourseworkProgress)ViewBag.progress;
+    IList<StudentProgressViewModel> studentsProgress = (IList<StudentProgressViewModel>)ViewBag.studentsProgress;
 }
 <style>
     #webplayer {
         max-width: 800px;
     }
+
     .plyr {
         border-radius: 4px;
         margin-bottom: 15px;
@@ -19,23 +24,114 @@
     <span class="hidden" id="CommentId">@Model.Id</span>
     <div class="row">
         <div class="col-md-7">
-            @{ 
-                if(Model.Type == FormatType.Video)
+            @{
+                if (Model.Type == FormatType.Video)
                 {
-                     <div id="webplayer">
-                         <video controls data-plyr='{"title": @Model.Title, "volume":3}'>
-                             <!-- Video files -->
-                             <source src="@Model.Url" type="video/mp4">
+                    <div id="webplayer">
+                        <video id="player" controls data-plyr='{"title": @Model.Title, "volume":3}'>
+                            <!-- Video files -->
+                            <source src="@Model.Url" type="video/mp4">
 
-                             <!-- Fallback for browsers that don't support the <video> element -->
-                             <a href="@Model.Url" download>Download</a>
-                         </video>
-                     </div>
+                            <!-- Fallback for browsers that don't support the <video> element -->
+                            <a href="@Model.Url" id="downloadContentBtn">Download</a>
+                        </video>
+                    </div>
                 }
             }
             @{
                 Html.RenderPartial("Contents/_Metadata", Model);
             }
         </div>
+        <div class="col-md-3">
+            @{
+                if (User.Role() == "Student")
+                {
+                    <div class="box p-3">
+                        <span class="pull-right">
+                            @if (progress.IsComplete)
+                            {
+                                <i class="fa fa-check-circle text-success"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-refresh pointer" id="refreshBtn" title="Click here to refresh"></i>
+                            }
+                        </span>
+                        <div class="d-flex">
+                            <span class="text-muted">Progress</span>
+                        </div>
+                        <h2 class="@(progress.IsComplete == true ? "text-success" : "")">
+                            @progress.PercentageComplete %
+                        </h2>
+                        <div class="progress" style="height:5px;">
+                            <div class="progress-bar bg-@(progress.IsComplete == true ? "success" : "info")"
+                                 role="progressbar"
+                                 style="width:@progress.PercentageComplete%">
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="box p-3">
+                        <div class="d-flex" style="padding-bottom:5px;">
+                            <span class="text-muted">Track Students Progress</span>
+                        </div>
+                        @for(int i=0; i<studentsProgress.Count;i++)
+                        {
+                            var prg = studentsProgress[i];
+                            int n = i + 1;
+                            <div>
+                                <span>@n. @prg.FullNames
+                                    <span class="pull-right">
+                                        @prg.Progress%
+                                    </span>
+                                </span>
+                                <div class="progress" style="height:5px; margin-top:3px; margin-left:10px;">
+                                    <div class="progress-bar bg-@(prg.Progress > 98 ? "success" : "info")"
+                                         role="progressbar"
+                                         style="width:@prg.Progress%">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                }
+            }
+        </div>
     </div>
 </div>
+
+@if (User.Role() == "Student")
+{
+    <script type="text/javascript">
+    window.onbeforeunload = onExit;
+
+    $('#refreshBtn').click(function (e) {
+        e.preventDefault();
+
+        location.reload();
+    });
+
+    function onExit(e) {
+
+        var cont_type = '@Model.Type';
+        var vm = players[0];
+        var total = parseFloat('@progress.Overall');
+        var _complete = '@progress.IsComplete';
+
+        if (cont_type === 'Video') {
+            if (_complete === 'False') {
+                if (isNaN(total) || total < 1) {
+                    postInitialProgress('@progress.Id', vm.getCurrentTime(), vm.getDuration());
+                } else {
+                    postProgress('@progress.Id', vm.getCurrentTime());
+                }
+            }
+        }
+
+        return;
+    };
+    </script>
+}

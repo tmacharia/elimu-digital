@@ -106,43 +106,7 @@
             $('#others').hide();
         }
     }
-    //$('#profileForm').submit(function (e) {
-    //    e.preventDefault();
-
-    //    console.log('submitting...');
-
-    //    var form = $('#profileForm')[0];
-
-    //    var data = new FormData();
-        
-    //    if (selectedFile) {
-    //        data.append('file', selectedFile);
-    //    }
-
-    //    data.append('FullNames', $('#fullNames').val());
-    //    data.append('IdNumber', $('#idNum').val());
-    //    data.append('Type', $('#accountType').val());
-
-    //    toggleBtn('busy');
-
-    //    console.log(selectedFile);
-
-    //    jQuery.ajax({
-    //        url: '/account/profile',
-    //        data: data,
-    //        contentType: undefined,
-    //        method: 'POST',
-    //        type: 'POST',
-    //        success: function (res) {
-    //            console.log(res);
-    //            toggleBtn('off');
-    //        },
-    //        error: function (res) {
-    //            console.log(res);
-    //            toggleBtn('off');
-    //        }
-    //    });
-    //})
+    
     function toggleBtn(val) {
         if (val === 'busy') {
             $('#btnSubmit').text('Creating profile..');

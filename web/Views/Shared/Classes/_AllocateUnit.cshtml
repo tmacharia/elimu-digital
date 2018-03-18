@@ -31,7 +31,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn dark-white p-x-md" data-dismiss="modal" type="button">Cancel</button>
-                        <button class="btn danger p-x-md" id="allocateUnitBtnSubmit" type="submit">Submit</button>
+                        <button class="btn danger p-x-md" id="allocateUnitBtnSubmit" type="button">Submit</button>
                     </div>
                 </form>
             </div>
@@ -40,3 +40,8 @@
     </div>
 </div>
 
+<script>
+    $('#allocateUnitBtnSubmit').click(function (e) {
+        pushAllocateUnit();
+    });
+</script>

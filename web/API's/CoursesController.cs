@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common.Models;
 using Common.ViewModels;
 using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -15,11 +16,13 @@ namespace web.API_s
     [Route("api/courses")]
     public class CoursesController : Controller
     {
+        private readonly IUploader _uploader;
         private readonly IMapper _mapper;
         private readonly IRepositoryFactory _repos;
 
-        public CoursesController(IMapper mapper, IRepositoryFactory factory)
+        public CoursesController(IUploader uploader,IMapper mapper, IRepositoryFactory factory)
         {
+            _uploader = uploader;
             _mapper = mapper;
             _repos = factory;
         }
@@ -40,15 +43,17 @@ namespace web.API_s
         // Create
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult Create(int schoolId, CourseViewModel model)
+        public async Task<IActionResult> Create(CourseViewModel model)
         {
-            if (!ModelState.IsValid || schoolId < 1)
-            {
-                return BadRequest(ModelState);
-            }
-
             Course course = _mapper.Map<Course>(model);
             course.Code = Guid.NewGuid();
+
+            // upload backdrop image
+            if (Request.Form.Files.Count > 0)
+            {
+                IFile file = new FormFile(Request.Form.Files[0]);
+                course.BackdropUrl = await _uploader.Upload(file);
+            }
 
             // get school
             var school = _repos.Schools.Get(1);
@@ -62,7 +67,7 @@ namespace web.API_s
             course = _repos.Courses.Create(course);
             _repos.Commit();
 
-            return Ok("Created!");
+            return RedirectPermanent(Request.Headers["Referer"].ToString());
         }
 
         // Get

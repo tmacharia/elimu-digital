@@ -34,6 +34,8 @@ namespace DAL.Contexts
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<DiscussionBoard> DiscussionBoards { get; set; }
+        public virtual DbSet<CourseworkProgress> CourseworkProgress { get; set; }
+        public virtual DbSet<StudentCourse> StudentCourses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -51,6 +53,19 @@ namespace DAL.Contexts
                    .HasOne(s => s.Unit)
                    .WithMany(s => s.UnitStudents)
                    .HasForeignKey(s => s.UnitId);
+
+            builder.Entity<StudentCourse>()
+                   .HasKey(c => new { c.StudentId, c.CourseId });
+
+            builder.Entity<StudentCourse>()
+                   .HasOne(c => c.Student)
+                   .WithMany(c => c.StudentCourses)
+                   .HasForeignKey(c => c.StudentId);
+
+            builder.Entity<StudentCourse>()
+                   .HasOne(c => c.Course)
+                   .WithMany(c => c.CourseStudents)
+                   .HasForeignKey(c => c.CourseId);
         }
     }
 }

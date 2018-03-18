@@ -12,6 +12,8 @@ namespace Common.ViewModels
         [MaxLength(100)]
         public string Name { get; set; }
         public Guid Code { get; set; }
+        public int Level { get; set; }
+        public int Semester { get; set; }
 
         public virtual Course Course { get; set; }
         public virtual Lecturer Lecturer { get; set; }

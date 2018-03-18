@@ -98,7 +98,7 @@
                                     <div>
                                         <span class="item-date text-xs">
                                             @{
-                                                if (item.Lecturer == null)
+                                                if (item.Lecturer == null && User.Role() == "Administrator")
                                                 {
                                                     <span class="item-action dropdown pull-right">
                                                         <a class="text-muted" data-toggle="dropdown" href="#">

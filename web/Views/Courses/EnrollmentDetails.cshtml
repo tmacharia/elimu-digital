@@ -60,11 +60,13 @@
                             }
 
                         }
-                        else
+                        @if(Model.Units == null || Model.Units.Count < 1)
                         {
                             <br />
                             <center>
-                                No units exist for this course. <b class="text-muted">Start adding units today.</b>
+                                Units not yet added.
+                                <br />
+                                <b class="text-muted">Please contact <a href="mailto:admin@elimudigital.com">administrator</a></b>
                             </center>
                             <br />
                             <br />

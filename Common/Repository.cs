@@ -66,6 +66,11 @@ namespace Common
                            .GetValue(x)
                            .ToString()) == uuid);
         }
+        T IRepository<T>.Get(Func<T, bool> func)
+        {
+            return _context.Set<T>()
+                           .FirstOrDefault(func);
+        }
         public T GetWith(int Id,params string[] navigationProperties)
         {
             bool IDFuncer(T val)
@@ -166,5 +171,7 @@ namespace Common
         {
             _context.Dispose();
         }
+
+        
     }
 }

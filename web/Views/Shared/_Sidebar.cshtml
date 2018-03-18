@@ -84,17 +84,22 @@
                             </li>
                         }
 
-                        @if(ViewBag.Action == "Lecturers")
-                        {
-                            <li class="active">
-                                <a href="/lecturers"><span class="nav-icon"><i class="fa fa-user-secret"></i></span> <span class="nav-text">Lecturers</span></a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li>
-                                <a href="/lecturers"><span class="nav-icon"><i class="fa fa-user-secret"></i></span> <span class="nav-text">Lecturers</span></a>
-                            </li>
+                        @{ 
+                            if(User.Role() != "Lecturer")
+                            {
+                                if(ViewBag.Action == "Lecturers")
+                                {
+                                    <li class="active">
+                                        <a href="/lecturers"><span class="nav-icon"><i class="fa fa-user-secret"></i></span> <span class="nav-text">Lecturers</span></a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a href="/lecturers"><span class="nav-icon"><i class="fa fa-user-secret"></i></span> <span class="nav-text">Lecturers</span></a>
+                                    </li>
+                                }
+                            }
                         }
 
                         @if(ViewBag.Action == "Students")

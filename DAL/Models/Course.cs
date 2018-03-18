@@ -19,13 +19,15 @@ namespace DAL.Models
         public string BackdropUrl { get; set; }
         public string DefaultColor { get; set; }
         public Guid Code { get; set; }
-
+        [DefaultValue(4)]
+        public int Years { get; set; }
         [DefaultValue(2)]
         public CourseType Type { get; set; }
 
         public virtual School School { get; set; }
         public virtual ICollection<Unit> Units { get; set; }
         public virtual ICollection<Student> Students { get; set; }
+        public virtual ICollection<StudentCourse> CourseStudents { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
     }
 }

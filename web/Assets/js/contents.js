@@ -1,11 +1,13 @@
-﻿(function () {
+﻿var players;
+
+(function () {
     // This is the bare minimum JavaScript. You can opt to pass no arguments to setup.
     // e.g. just plyr.setup(); and leave it at that if you have no need for events
-    var instances = plyr.setup({
+    players = plyr.setup({
         // Output to console
         debug: false
     });
-
+    players[0].on('ended', onExit);
     // Get an element
     function get(selector) {
         return document.querySelector(selector);
@@ -19,33 +21,6 @@
         element.addEventListener(type, callback, false);
     }
 
-    // Loop through each instance
-    instances.forEach(function (instance) {
-        // Play
-        on('.js-play', 'click', function () {
-            instance.play();
-        });
-
-        // Pause
-        on('.js-pause', 'click', function () {
-            instance.pause();
-        });
-
-        // Stop
-        on('.js-stop', 'click', function () {
-            instance.stop();
-        });
-
-        // Rewind
-        on('.js-rewind', 'click', function () {
-            instance.rewind();
-        });
-
-        // Forward
-        on('.js-forward', 'click', function () {
-            instance.forward();
-        });
-    });
 })();
 
 function onLikeContent(id, title, elem) {
@@ -103,5 +78,46 @@ function onComment() {
         error: function (res) {
             parseError(res.responseText);
         }
+    })
+}
+function postInitialProgress(progressId, current, total)
+{
+    $.ajax({
+        method: 'POST',
+        url: '/api/progress/initialize',
+        data: { id: progressId, current: current, overall: total},
+        type: 'json',
+        success: function (res) {
+          console.log(res);
+        },
+        error: function (res) {
+            parseError(res.responseText);
+        }
+    })
+}
+function postProgress(id, current) {
+    $.ajax({
+        method: 'POST',
+        url: '/api/progress',
+        data: { id: id, current: current},
+        type: 'json',
+        success: function (res) {
+            console.log(res);
+            if (res.isComplete) {
+                yay('Coursework completed! Please refresh page.')
+            }
+        },
+        error: function (res) {
+            parseError(res.responseText);
+        }
+    })
+}
+function onDownloadContent(id) {
+    console.log('Downloading...');
+    $.ajax({
+        method: 'POST',
+        url: '/api/progress/download',
+        data: { id: id },
+        type: 'json'
     })
 }

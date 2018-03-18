@@ -21,18 +21,21 @@ namespace web.Controllers
     {
         private readonly INotificationManager _notify;
         private readonly IRepositoryFactory _repos;
+        private readonly IProgressTracker _progressTracker;
         private readonly UserManager<AppUser> _userManager;
         private readonly IUploader _uploader;
         private readonly IMapper _mapper;
 
         public ContentsController(INotificationManager notificationManager,
                                   IRepositoryFactory factory, 
+                                  IProgressTracker progressTracker,
                                   UserManager<AppUser> userManager, 
                                   IUploader uploader,
                                   IMapper mapper)
         {
             _notify = notificationManager;
             _repos = factory;
+            _progressTracker = progressTracker;
             _userManager = userManager;
             _uploader = uploader;
             _mapper = mapper;
@@ -173,7 +176,7 @@ namespace web.Controllers
 
         [HttpGet]
         [Route("{id}/{title}")]
-        public IActionResult Details(int id, string title)
+        public async Task<IActionResult> Details(int id, string title)
         {
             if(id < 1)
             {
@@ -192,6 +195,17 @@ namespace web.Controllers
             if(content == null)
             {
                 return NotFound("Content record with that id does not exist.");
+            }
+
+            AppUser user = await _userManager.GetUserAsync(User);
+
+            if(user.AccountType == AccountType.Student)
+            {
+                ViewBag.progress = _progressTracker.GetProgress(content.Id, user.AccountId);
+            }
+            else if(user.AccountType == AccountType.Lecturer)
+            {
+                ViewBag.studentsProgress = _progressTracker.TrackProgress(content.Id);
             }
 
             return View(content);

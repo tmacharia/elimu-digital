@@ -28,6 +28,8 @@ namespace Services
         IRepository<Notification> Notifications { get; }
         IRepository<DiscussionBoard> DiscussionBoards { get; }
         IRepository<Post> Posts { get; }
+        IRepository<CourseworkProgress> CourseworkProgress { get; }
+        IRepository<StudentCourse> StudentCourses { get; }
 
         void Commit();
     }

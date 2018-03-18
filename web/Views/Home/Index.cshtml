@@ -41,26 +41,42 @@
                                 <h3>
                                     My Colleagues
                                 </h3>
+                                <span>Other lecturers who teach in the same Courses as you do.</span>
                             </div>
                             <div class="list inset">
-                                @foreach (var item in lecturers)
+                                @{ 
+                                    if(lecturers != null)
+                                    {
+                                        foreach (var item in lecturers)
+                                        {
+                                            <div class="list-item" data-id="item-5">
+                                                <span class="w-40 avatar circle blue-grey">
+                                                    <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
+                                                </span>
+                                                <div class="list-body">
+                                                    <a class="item-title _500" href="#">@item.Profile.FullNames</a>
+                                                    <div class="item-except text-sm text-muted h-1x">
+                                                        Lecturer
+                                                    </div>
+                                                    <div class="item-tag tag">
+                                                        <span class="item-date text-xs text-muted">@item.Timestamp.ToString()</span>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    }
+                                }
+
+                                @if(lecturers == null || lecturers.Count < 1)
                                 {
-                                    <div class="list-item" data-id="item-5">
-                                        <span class="w-40 avatar circle blue-grey">
-                                            <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
-                                        </span>
-                                        <div class="list-body">
-                                            <a class="item-title _500" href="#">@item.Profile.FullNames</a>
-                                            <div class="item-except text-sm text-muted h-1x">
-                                                Lecturer
-                                            </div>
-                                            <div class="item-tag tag">
-                                                <span class="item-date text-xs text-muted">@item.Timestamp.ToString()</span>
-                                            </div>
-                                        </div>
-                                        <div>
-                                        </div>
-                                    </div>
+                                    <br />
+                                    <center>
+                                        <b>0 </b><i> found.</i>
+                                    </center>
+                                    <br />
                                 }
                             </div>
                         </div>
@@ -73,29 +89,24 @@
                                 </h3>
                             </div>
                             <div class="list inset">
-                                @foreach (var item in students)
+                                @if(students != null)
                                 {
-                                    <div class="list-item" data-id="item-11">
-                                        <span class="avatar w-32">
-                                            <img alt="." class="w-40 circle" src="@Url.Content(item.Profile.PhotoUrl)" />
-                                        </span>
-                                        <div class="list-body">
-                                            <a class="item-title _500" href="#">@item.Profile.FullNames</a>
-                                            <div class="item-except text-sm text-muted h-1x">
-                                                Student
-                                            </div>
-                                            <div class="item-tag tag hide"></div>
-                                        </div>
-                                        <div>
-                                            <div class="item-action dropdown">
-                                                <a class="text-muted" data-toggle="dropdown" href="/students/@item.Id/@Extensions.GenerateSlug(item?.Profile.FullNames)"><i class="fa fa-fw fa-ellipsis-v"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-right text-color" role="menu">
-                                                    <a class="dropdown-item"><i class="fa fa-tag"></i> Action</a> <a class="dropdown-item"><i class="fa fa-pencil"></i> Another action</a> <a class="dropdown-item"><i class="fa fa-reply"></i> Something else here</a>
-                                                    <div class="dropdown-divider"></div><a class="dropdown-item"><i class="fa fa-ellipsis-h"></i> Separated link</a>
+                                    foreach (var item in students)
+                                    {
+                                        <div class="list-item" data-id="item-11">
+                                            <span class="avatar w-32">
+                                                <img alt="." class="w-40 circle" src="@Url.Content(item.Profile.PhotoUrl)" />
+                                            </span>
+                                            <div class="list-body">
+                                                <a class="item-title _500" href="#">@item.Profile.FullNames</a>
+                                                <div class="item-except text-sm text-muted h-1x">
+                                                    Student
                                                 </div>
+                                                <div class="item-tag tag hide"></div>
                                             </div>
+                                        
                                         </div>
-                                    </div>
+                                    }
 
                                 }
                             </div>
@@ -106,9 +117,9 @@
             }
             else if (User.Role() == "Student")
             {
-                if (myprofile == null)
+                if (myprofile == null || myprofile.Course == null)
                 {
-                    <div class="jumbotron">
+                    <div class="jumbotron col-md-5">
                         <h4>Welcome student to @Extensions.Uni</h4>
 
                         <p>

@@ -3,7 +3,10 @@
 $('#courseForm').submit(function (e) {
     e.preventDefault();
 
-    postCourse();
+    var frm = $('#courseForm').serialize();
+
+    console.log(frm);
+    //postCourse();
 });
 
 

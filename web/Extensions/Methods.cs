@@ -17,7 +17,9 @@ namespace web.Extensions
                 new SelectListItem(){Text="Tuesday",Value="2"},
                 new SelectListItem(){Text="Wednesday",Value="3"},
                 new SelectListItem(){Text="Thursday",Value="4"},
-                new SelectListItem(){Text="Friday",Value="5"}
+                new SelectListItem(){Text="Friday",Value="5"},
+                new SelectListItem(){Text="Saturday",Value="6"},
+                new SelectListItem(){Text="Sunday",Value="7"}
             };
 
             return list;

@@ -17,6 +17,8 @@ namespace DAL.Models
         [MaxLength(100)]
         public string Name { get; set; }
         public Guid Code { get; set; }
+        public int Level { get; set; }
+        public int Semester { get; set; }
 
         [Required]
         public virtual Course Course { get; set; }

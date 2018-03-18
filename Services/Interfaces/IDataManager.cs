@@ -11,6 +11,7 @@ namespace Services
         SummaryViewModel GetSummary();
         IList<Student> MyStudents(int lecturerId,int count);
         IEnumerable<Lecturer> MyLecturers(int studentId, int count=5000);
+        IEnumerable<Lecturer> MyColleagues(int lecturerId);
 
         IEnumerable<Student> MyClassMates(int id);
         IEnumerable<Unit> MyUnits<T>(int id, int count=5000) where T : class;
