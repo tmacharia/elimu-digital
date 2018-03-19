@@ -56,7 +56,8 @@ namespace web.Controllers
             else if(User.Role() == "Student" && user.AccountId > 0)
             {
                 ViewBag.myprofile = _repos.Students
-                                       .GetWith(user.AccountId, "Course");
+                                          .GetWith(user.AccountId, "Course");
+                ViewBag.mycourses = _dashManager.MyCourses(user.AccountId);
                 ViewBag.lecturers = _dashManager.MyLecturers(user.AccountId, 10).ToList();
                 ViewBag.units = _dashManager.MyUnits<Student>(user.AccountId, 10).ToList();
                 ViewBag.classes = _dashManager.MyClasses<Student>(user.AccountId, 10).ToList();

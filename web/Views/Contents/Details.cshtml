@@ -9,12 +9,28 @@
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
     CourseworkProgress progress = (CourseworkProgress)ViewBag.progress;
     IList<StudentProgressViewModel> studentsProgress = (IList<StudentProgressViewModel>)ViewBag.studentsProgress;
+    bool isYoutube = Extensions.IsYoutube(Model.Url);
+    Model.Url = Model.Url.Replace("watch?v=", "embed/");
 }
 <style>
     #webplayer {
         max-width: 800px;
     }
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        padding-top: 30px;
+        height: 0;
+        overflow: hidden;
+    }
 
+        .video-container iframe, .video-container object, .video-container embed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
     .plyr {
         border-radius: 4px;
         margin-bottom: 15px;
@@ -27,15 +43,24 @@
             @{
                 if (Model.Type == FormatType.Video)
                 {
-                    <div id="webplayer">
-                        <video id="player" controls data-plyr='{"title": @Model.Title, "volume":3}'>
-                            <!-- Video files -->
-                            <source src="@Model.Url" type="video/mp4">
+                    if (isYoutube)
+                    {
+                        <div id="video-container">
+                            <iframe width="560" height="315" src="@Model.Url" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="webplayer">
+                            <video id="player" controls data-plyr='{"title": @Model.Title, "volume":3}'>
+                                <!-- Video files -->
+                                <source src="@Model.Url" type="video/mp4">
 
-                            <!-- Fallback for browsers that don't support the <video> element -->
-                            <a href="@Model.Url" id="downloadContentBtn">Download</a>
-                        </video>
-                    </div>
+                                <!-- Fallback for browsers that don't support the <video> element -->
+                                <a href="@Model.Url" id="downloadContentBtn">Download</a>
+                            </video>
+                        </div>
+                    }
                 }
             }
             @{
@@ -74,7 +99,7 @@
                 else
                 {
                     <div class="box p-3">
-                        <div class="d-flex" style="padding-bottom:5px;">
+                        <div class="d-flex" style="margin-bottom:10px !important;">
                             <span class="text-muted">Track Students Progress</span>
                         </div>
                         @for(int i=0; i<studentsProgress.Count;i++)

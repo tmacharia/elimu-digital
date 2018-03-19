@@ -132,7 +132,7 @@ namespace web.Controllers
 
                 ViewBag.student = student;
 
-                ViewBag.units = _dataManager.MyUnits<Student>(user.AccountId).ToList();
+                ViewBag.units = _dataManager.MyUnits<Student>(user.AccountId,10).ToList();
 
                 ViewBag.mates = _dataManager.MyClassMates(user.AccountId).ToList();
             }

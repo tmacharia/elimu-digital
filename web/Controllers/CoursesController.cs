@@ -18,11 +18,15 @@ namespace web.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IRepositoryFactory _repos;
+        private readonly IDataManager _dataManager;
 
-        public CoursesController(UserManager<AppUser> userManager,IRepositoryFactory factory)
+        public CoursesController(UserManager<AppUser> userManager,
+                                 IRepositoryFactory factory,
+                                 IDataManager dataManager)
         {
             _userManager = userManager;
             _repos = factory;
+            _dataManager = dataManager;
         }
 
         [HttpGet]
@@ -30,14 +34,14 @@ namespace web.Controllers
         {
             ViewBag.Action = "Courses";
 
-            IList<Course> courses = new List<Course>();
+            List<Course> courses = new List<Course>();
             AppUser user = await _userManager.GetUserAsync(User);
 
             if(User.Role() == "Administrator")
             {
                 courses = _repos.Courses
                                 .ListWith("Units", "Students", "Likes")
-                                .ToArray();
+                                .ToList();
             }
             else if(User.Role() == "Lecturer")
             {
@@ -50,21 +54,23 @@ namespace web.Controllers
                                         "Units.Course.Likes")
                                 .Units
                                 .Select(x => x.Course)
-                                .ToArray();
+                                .ToList();
             }
             else if(User.Role() == "Student")
             {
-                var course = _repos.Students
-                                   .GetWith(user.AccountId, 
-                                            "Course",
-                                            "Course.Units",
-                                            "Course.Students",
-                                            "Course.Likes")
-                                   .Course;
+                var mycourses = _dataManager.MyCourses(user.AccountId);
 
-                if(course != null)
+                if(mycourses.Main != null)
                 {
-                    courses.Add(course);
+                    courses.Add(mycourses.Main);
+                }
+
+                if(mycourses.Others != null)
+                {
+                    if(mycourses.Others.Count > 0)
+                    {
+                        courses.AddRange(mycourses.Others);
+                    }
                 }
             }
 
@@ -78,12 +84,29 @@ namespace web.Controllers
         [HttpGet]
         [Route("courses/enrollment")]
         [Authorize(Roles = "Student, Administrator")]
-        public IActionResult Enrollment()
+        public async Task<IActionResult> Enrollment()
         {
-            IEnumerable<Course> courses = new List<Course>();
+            List<Course> courses = new List<Course>();
+            AppUser user = await _userManager.GetUserAsync(User);
+
+            var mycourses = _dataManager.MyCourses(user.AccountId);
 
             courses = _repos.Courses
-                            .ListWith("Units", "Students", "Likes");
+                            .ListWith("Units", "Students", "Likes")
+                            .ToList();
+                            
+            if(mycourses.Main != null)
+            {
+                courses.Remove(mycourses.Main);
+            }
+
+            if(mycourses.Others != null)
+            {
+                foreach (var item in mycourses.Others)
+                {
+                    courses.Remove(item);
+                }
+            }
 
             return View(courses);
         }
@@ -123,8 +146,23 @@ namespace web.Controllers
             Student student = _repos.Students
                                     .GetWith(user.AccountId, "Course");
 
-            student.Course = course;
-            student = _repos.Students.Update(student);
+            if(student.Course == null)
+            {
+                student.Course = course;
+                student = _repos.Students.Update(student);
+            }
+            else
+            {
+                StudentCourse studentCourse = new StudentCourse()
+                {
+                    CourseId = course.Id,
+                    StudentId = user.AccountId,
+                    Course = course,
+                    Student = student
+                };
+
+                studentCourse = _repos.StudentCourses.Create(studentCourse);
+            }
 
             foreach (var item in course.Units)
             {
@@ -171,6 +209,17 @@ namespace web.Controllers
                                            "Students",
                                            "Students.Profile", 
                                            "Likes");
+
+            var courseStudents = _repos.StudentCourses
+                                       .ListWith("Student", "Student.Profile")
+                                       .Where(x => x.CourseId == id)
+                                       .Select(x => x.Student)
+                                       .ToList();
+
+            foreach (var item in courseStudents)
+            {
+                course.Students.Add(item);
+            }
 
             if(course == null)
             {

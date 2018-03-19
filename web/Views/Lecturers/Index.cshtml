@@ -30,65 +30,64 @@
 
         <div class="list inset ">
             @if (Model.Count > 0)
-    {
-        @foreach (var item in Model)
-{
-    if (item == null)
-    {
-        <div class="list-item " data-id="item-5">
-            <span class="w-40 avatar circle blue-grey">
-                @if (item != null)
-        {
-            if (item.Profile != null)
             {
-                <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
-                    }
-                    else
-                    {
-                        <img alt="." src="~/images/avatar-1577909_960_720.png" />
-                }
-
-                }
-                else
+                @foreach (var item in Model)
                 {
-                        <img alt="." src="~/images/avatar-1577909_960_720.png" />
-                }
-            </span>
-            <div class="list-body">
-                <a class="item-title _500" href="#">
-                    @{
-                    if (!string.IsNullOrWhiteSpace(item.Profile.FullNames))
+                    if (item != null)
                     {
-                        <span>@item.Profile.FullNames</span>
-                        }
-                        else
-                        {
-                            <span>No name.</span>
-                }
-                        }
-                    </a>
-                    <div class="item-except text-sm text-muted h-1x">
-                        <span>
-                            Units: @item.Units.Count
-                        </span>
-                        <span title="Likes">
-                            <i class="fa fa-thumbs-up" title="Likes"></i> @item.Likes.Count
-                        </span>
+                        <div class="list-item " data-id="item-5">
+                            <span class="w-40 avatar circle blue-grey">
+                                @if (item != null)
+                                {
+                                    if (item.Profile != null)
+                                    {
+                                        <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
+                                    }
+                                    else
+                                    {
+                                        <img alt="." src="~/images/avatar-1577909_960_720.png" />
+                                    }
+
+                                 }
+                                 else
+                                 {
+                                     <img alt="." src="~/images/avatar-1577909_960_720.png" />
+                                 }
+                            </span>
+                        <div class="list-body">
+                            <a class="item-title _500" href="#">
+                                @{
+                                    if (!string.IsNullOrWhiteSpace(item.Profile.FullNames))
+                                    {
+                                        <span>@item.Profile.FullNames</span>
+                                    }
+                                    else
+                                    {
+                                        <span>No name.</span>
+                                    }
+                                 }
+                                </a>
+                                <div class="item-except text-sm text-muted h-1x">
+                                    <span>
+                                        Units: @item.Units.Count
+                                    </span>
+                                    <span title="Likes">
+                                        <i class="fa fa-thumbs-up" title="Likes"></i> @item.Likes.Count
+                                    </span>
+                                </div>
+                                <div class="item-tag tag">
+
+                                </div>
+                            </div>
+                            <div>
+
+                            <span class="item-date text-xs text-muted">@item.Timestamp.ToString()</span>
+                        </div>
                     </div>
-                    <div class="item-tag tag">
+                    }
+                 }
 
-                    </div>
-                </div>
-                <div>
-
-                <span class="item-date text-xs text-muted">@item.Timestamp.ToString()</span>
-            </div>
-        </div>
-
-}
-}
-
-}
+             }
         </div>
     </div>
 

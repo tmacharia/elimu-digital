@@ -30,22 +30,25 @@ namespace web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Lecturer> lecturers = new List<Lecturer>();
+            IList<Lecturer> lecturers = new List<Lecturer>();
             AppUser user = await _userManager.GetUserAsync(User);
 
             if(User.Role() == "Administrator")
             {
                 lecturers = _repos.Lecturers
-                                  .ListWith("Profile", "Units", "Likes");
+                                  .ListWith("Profile", "Units", "Likes")
+                                  .ToList();
             }
             else if(User.Role() == "Lecturer")
             {
                 lecturers = _repos.Lecturers
-                                  .ListWith("Profile","Units","Likes");
+                                  .ListWith("Profile", "Units", "Likes")
+                                  .ToList();
             }
             else if(User.Role() == "Student")
             {
-                lecturers = _dataManager.MyLecturers(user.AccountId);
+                lecturers = _dataManager.MyLecturers(user.AccountId)
+                                        .ToList();
             }
 
             if(lecturers == null)

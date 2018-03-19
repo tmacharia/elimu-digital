@@ -115,15 +115,15 @@ namespace Services
         {
             return builder.UseMiddleware<SecurityMiddleware>();
         }
-        public static string Trancate(this string s)
+        public static string Trancate(this string s, int length=25)
         {
-            if(s.Length < 25)
+            if(s.Length < length)
             {
                 return s;
             }
             else
             {
-                return s.Substring(0, 24) + "...";
+                return s.Substring(0, length-1) + "...";
             }
         }
         public static string Uni
@@ -209,6 +209,17 @@ namespace Services
             }
 
             return list;
+        }
+        public static bool IsYoutube(string s)
+        {
+            if (s.Contains("youtube.com"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

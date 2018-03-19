@@ -148,13 +148,22 @@
                                             </a>
                                             <div class="list-body">
                                                 <div class="text-ellipsis">
-                                                    <a href="/units/@item.Id/@item.GenerateSlug()">@item.Name</a>
+                                                    <a href="/units/@item.Id/@item.GenerateSlug()">@item.Name.Trancate(35)</a>
                                                 </div><small class="text-muted text-ellipsis">@item.Course.Name</small>
                                             </div>
                                         </div>
                                     </div>
                                 }
                                 
+                                @{ 
+                                    if(_units.Count >= 10)
+                                    {
+                                        <div class="col-sm-1">
+                                            <a href="#" class="btn btn-warning">see more...</a>
+                                        </div>
+
+                                    }
+                                }
                             </div>
                         </div>
                         <div class="tab-pane fade" id="tab_2">

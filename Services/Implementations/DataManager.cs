@@ -21,36 +21,39 @@ namespace Services
         {
             // get all my units
             List<Lecturer> lecturers = _repos.StudentUnits
-                                              .ListWith("Unit",
+                                             .ListWith("Unit",
                                                         "Unit.Lecturer",
                                                         "Unit.Lecturer.Profile",
                                                         "Unit.Lecturer.Likes")
                                               .Where(x => x.StudentId == studentId)
                                               .Select(x => x.Unit)
                                               .Select(x => x.Lecturer)
-                                              .SkipWhile(x => x == null)
+                                              .Distinct()
                                               .ToList();
 
             // get lecturers by course
-            var lecs = _repos.Students
-                              .GetWith(studentId,
+
+            var crs = _repos.Students
+                             .GetWith(studentId,
                                        "Course",
                                        "Course.Units",
                                        "Course.Units.Lecturer",
                                        "Course.Units.Lecturer.Profile",
                                        "Course.Units.Lecturer.Likes")
-                              .Course
-                              .Units
+                              .Course;
+                              
+            if(crs != null)
+            {
+                var lecs = crs.Units
+                              .SkipWhile(x => x.Lecturer == null)
                               .Select(x => x.Lecturer)
-                              .SkipWhile(x => x == null)
+                              .Distinct()
                               .ToList();
 
+                lecturers.AddRange(lecs);
+            }
 
-            lecturers.AddRange(lecs);
-
-            return lecturers.Distinct()
-                            .SkipWhile(x => x == null)
-                            .Take(count);
+            return lecturers.Distinct();
         }
 
         public IList<Student> MyStudents(int lecturerId, int count)
@@ -87,7 +90,7 @@ namespace Services
                                 .StudentUnits
                                 .Select(x => x.Unit)
                                 .Select(x => x.Class)
-                                .SkipWhile(x => x == null);
+                                .TakeWhile(x => x == null);
             }
             else if(typeof(T) == typeof(Lecturer))
             {
@@ -99,12 +102,28 @@ namespace Services
                                         "Units.Class.Likes")
                                 .Units
                                 .Select(x => x.Class)
-                                .SkipWhile(x => x == null);
+                                .TakeWhile(x => x == null);
             }
 
             return classes.Take(count);
         }
+        public MyCoursesViewModel MyCourses(int studentId)
+        {
+            MyCoursesViewModel model = new MyCoursesViewModel
+            {
+                Main = _repos.Students
+                               .GetWith(studentId, "Course", "Course.Units")
+                               .Course,
 
+                Others = _repos.StudentCourses
+                                 .ListWith("Course","Course.Units")
+                                 .Where(x => x.StudentId == studentId)
+                                 .Select(x => x.Course)
+                                 .ToList()
+            };
+
+            return model;
+        }
         public IEnumerable<Unit> MyUnits<T>(int id, int count) where T : class
         {
             IEnumerable<Unit> units = new List<Unit>();
@@ -188,22 +207,45 @@ namespace Services
         {
             List<Lecturer> lecturers = new List<Lecturer>();
 
-            var courses = _repos.Lecturers
-                                .GetWith(lecturerId, "Units", "Units.Course")
-                                .Units.Select(x => x.Course).ToList();
+            //var lecturer = _repos.Lecturers
+            //                     .ListWith("Units", "Units.Course")
+            //                     .FirstOrDefault(x => x.Id == lecturerId);
 
-            foreach (var item in courses)
-            {
-                var lecs = _repos.Units
-                                 .ListWith("Course", "Lecturer", "Lecturer.Profile")
-                                 .Where(x => x.Id == item.Id)
-                                 .Select(x => x.Lecturer)
-                                 .SkipWhile(x => x == null);
+            //var courses = lecturer.Units
+            //                      .Select(x => x.Course)
+            //                      .Distinct()
+            //                      .ToList();
 
-                lecturers.AddRange(lecs);
-            }
-            
-            return lecturers;
+            lecturers = _repos.Lecturers.ListWith("Units",
+                                                  "Units.Course",
+                                                  "Units.Course.Units",
+                                                  "Units.Course.Units.Lecturer",
+                                                  "Units.Course.Units.Lecturer.Profile")
+                                        .Where(x => x.Id == lecturerId)
+                                        .SelectMany(x => x.Units)
+                                        .Select(x => x.Course)
+                                        .SelectMany(x => x.Units)
+                                        .Select(x => x.Lecturer)
+                                        .TakeWhile(x => x != null)
+                                        .ToList();
+
+            //foreach (var item in courses)
+            //{
+            //    var lecs = _repos.Units
+            //                     .ListWith("Course",
+            //                               "Lecturer",
+            //                               "Lecturer.Profile")
+            //                     .Where(x => x.Course.Id == item.Id)
+            //                     .Select(x => x.Lecturer)
+            //                     .ToList();
+
+            //    lecturers.AddRange(lecs);
+            //}
+
+            return lecturers.TakeWhile(x => x != null)
+                            .TakeWhile(x => x.Id != lecturerId)
+                            .Distinct()
+                            .ToList();
         }
     }
 }

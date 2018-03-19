@@ -1,4 +1,5 @@
 ﻿@using DAL.Models
+@using Services
 @model Course
 @{
     ViewBag.Title = "Course Enrollment Successful";
@@ -7,8 +8,13 @@
 }
 
 <div class="padding">
-    <div class="jumbotron col-md-5">
-        <h4>@ViewBag.Title <i class="fa fa-check-circle"></i></h4> 
+    <div class="text-center">
+        <span>
+            <i class="fa fa-check-circle fa-4x text-success"></i>
+        </span>
+        <br />
+        <br />
+        <h4 class="text-success">@ViewBag.Title</h4> 
         <h5>
             @switch (Model.Type)
              {
@@ -33,8 +39,13 @@
             @Model.Name
         </h5>
         <br />
-        <a class="btn btn-info" href="/units" style="color:white;">
-            View my units
-        </a>
+        <div>
+            <a class="btn btn-primary" href="/">
+                <i class="fa fa-home"></i> Home
+            </a>
+            <a class="btn btn-primary" href="/courses/@Model.Id/@Model.GenerateSlug()" style="color:white;">
+                <i class="fa fa-leaf"></i> Proceed to course
+            </a>
+        </div>
     </div>
 </div>

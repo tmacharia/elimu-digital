@@ -1,5 +1,6 @@
 ﻿@using DAL.Models
 @using DAL.Extensions
+@using Common.ViewModels
 @using Services
 @{ 
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
@@ -8,8 +9,32 @@
     var lecturers = (IList<Lecturer>)ViewBag.lecturers;
     var students = (IList<Student>)ViewBag.students;
     var myprofile = (Student)ViewBag.myprofile;
+    var myCourses = (MyCoursesViewModel)ViewBag.mycourses;
 }
-
+<style>
+    .courses{
+        padding-top:0px;
+    }
+    .main-course{
+        background:#f3f6f9;
+        padding-left:10px;
+        padding-top:8px;
+        padding-bottom:8px;
+        margin-top:5px;
+        border-left:5px solid rgba(0, 148, 255, 0.65);
+    }
+    .other-course {
+        background: #f3f6f9;
+        padding-left: 10px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        margin-top: 5px;
+        border-left: 3px solid #dbe0e6;
+    }
+    .other-courses{
+        margin-top:10px;
+    }
+</style>
 <div class="padding">
 
     @{
@@ -44,8 +69,8 @@
                                 <span>Other lecturers who teach in the same Courses as you do.</span>
                             </div>
                             <div class="list inset">
-                                @{ 
-                                    if(lecturers != null)
+                                @{
+                                    if (lecturers != null)
                                     {
                                         foreach (var item in lecturers)
                                         {
@@ -70,7 +95,7 @@
                                     }
                                 }
 
-                                @if(lecturers == null || lecturers.Count < 1)
+                                @if (lecturers == null || lecturers.Count < 1)
                                 {
                                     <br />
                                     <center>
@@ -89,7 +114,7 @@
                                 </h3>
                             </div>
                             <div class="list inset">
-                                @if(students != null)
+                                @if (students != null)
                                 {
                                     foreach (var item in students)
                                     {
@@ -104,7 +129,7 @@
                                                 </div>
                                                 <div class="item-tag tag hide"></div>
                                             </div>
-                                        
+
                                         </div>
                                     }
 
@@ -117,58 +142,106 @@
             }
             else if (User.Role() == "Student")
             {
-                if (myprofile == null || myprofile.Course == null)
-                {
-                    <div class="jumbotron col-md-5">
-                        <h4>Welcome student to @Extensions.Uni</h4>
+                <div class="row">
+                    <div class="jumbotron col-md-4">
+                        <h3>Hi @User.FullNames(),</h3>
+                        <h6>Welcome student to @Extensions.Uni</h6>
 
                         <p>
                             Start pursuing your goals by equipping yourself with the relevant skills
                             required with our world-class courses.
                         </p>
 
-                        <a class="btn btn-danger" href="/courses/enrollment">Enrollments</a>
+                        <a class="btn btn-danger" href="/courses/enrollment">
+                            @(myCourses.Main == null ? "Enrollments" : "Enroll to another course")
+                        </a>
                     </div>
-                }
-                else
-                {
-                    <div class="jumbotron col-md-5">
-                        <h4>
-                            @switch (myprofile.Course.Type)
-                             {
-                                 case CourseType.Certificate:
-                                     <i class="fa fa-certificate"></i>
-                                     break;
-                                 case CourseType.Diploma:
-                                     <i class="fa fa-certificate text-warning"></i>
-                                     break;
-                                 case CourseType.Degree:
-                                     <i class="fa fa-certificate text-success"></i>
-                                     break;
-                                 case CourseType.Masters:
-                                     <i class="fa fa-certificate text-info"></i>
-                                     break;
-                                 case CourseType.Phd:
-                                     <i class="fa fa-certificate text-danger"></i>
-                                     break;
-                                 default:
-                                     break;
-                             }
-                            <span> @myprofile.Course.Name</span>
-                        </h4>
-                        <br />
-                        <p>
-                            <b>Registration No: </b>@myprofile.RegNo
-                        </p>
-                        <p>
-                            <b>Current Year: </b>@myprofile.YearOfStudy
-                        </p>
-                        <p>
-                            <b>Academic Year: </b>@myprofile.AcademicYear
-                        </p>
-                    </div>
-                }
+                    <div class="col-md-4">
+                        <div class="box">
+                            <div class="box-header">
+                                <h4><i class="fa fa-leaf"></i> Enrolled courses</h4>
+                            </div>
+                            <div class="box-body courses">
+                                @{ 
+                                    if(myCourses.Main != null)
+                                    {
+                                        <b>Main Course</b>
+                                        <div class="main-course">
+                                            <a href="/courses/@myCourses.Main.Id/@myCourses.Main.GenerateSlug()" class="h4">
+                                                @switch (myCourses.Main.Type)
+                                                {
+                                                    case CourseType.Certificate:
+                                                        <i class="fa fa-certificate"></i>
+                                                        break;
+                                                    case CourseType.Diploma:
+                                                        <i class="fa fa-certificate text-warning"></i>
+                                                        break;
+                                                    case CourseType.Degree:
+                                                        <i class="fa fa-certificate text-success"></i>
+                                                        break;
+                                                    case CourseType.Masters:
+                                                        <i class="fa fa-certificate text-info"></i>
+                                                        break;
+                                                    case CourseType.Phd:
+                                                        <i class="fa fa-certificate text-danger"></i>
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                                <span> @myCourses.Main.Name</span>
+                                            </a>
+                                            <br />
+                                            <span>
+                                                Program duration: @myCourses.Main.Years year(s)
+                                            </span>
+                                        </div>
+                                    }
 
+                                    if(myCourses.Others != null && myCourses.Others.Count > 0)
+                                    {
+                                        <div class="other-courses">
+                                            <p>
+                                                <b>Others</b>
+                                            </p>
+                                            <ul class="list-unstyled">
+                                                @foreach (var item in myCourses.Others)
+                                                {
+                                                    <li class="other-course">
+                                                        <a href="/courses/@item.Id/@item.GenerateSlug()">
+                                                            <span>
+                                                            @switch (item.Type)
+                                                            {
+                                                                case CourseType.Certificate:
+                                                                    <i class="fa fa-certificate"></i>
+                                                                    break;
+                                                                case CourseType.Diploma:
+                                                                    <i class="fa fa-certificate text-warning"></i>
+                                                                    break;
+                                                                case CourseType.Degree:
+                                                                    <i class="fa fa-certificate text-success"></i>
+                                                                    break;
+                                                                case CourseType.Masters:
+                                                                    <i class="fa fa-certificate text-info"></i>
+                                                                    break;
+                                                                case CourseType.Phd:
+                                                                    <i class="fa fa-certificate text-danger"></i>
+                                                                    break;
+                                                                default:
+                                                                    break;
+                                                            }
+                                                            </span>
+                                                            <span> @item.Name</span>
+                                                        </a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
             else if (User.Role() == "Administrator")
             {

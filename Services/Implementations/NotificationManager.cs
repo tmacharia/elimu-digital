@@ -121,7 +121,11 @@ namespace Services.Implementations
                 Message = $"Uploaded content: {content.Title}",
                 By = content.UploadedBy?.Profile
             };
-            post.Medias.Add(content);
+
+            post.Medias = new List<Content>
+            {
+                content
+            };
             post = _repos.Posts.Create(post);
 
             // get unit board

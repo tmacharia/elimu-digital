@@ -16,7 +16,8 @@
         min-height:48px;
     }
 </style>
-<form class="padding" 
+
+<form class="padding col-md-6" 
       role="form" 
       id="UploadForm" 
       method="post" 
@@ -26,13 +27,15 @@
         Upload New Content
 
         <span class="pull-right top-right">
-            <i class="fa fa-umbrella"></i> @unit.Name
+            <span><i class="fa fa-umbrella"></i> @unit.Name</span>
+            <br />
+            <span class="pull-right">@unit.Course.Name</span>
         </span>
     </h4>
 
     <div class="box p-3">
         <div class="row">
-            <span class="col-md-8">
+            <span class="col-md-10">
                 Add <b>documents, videos or audio</b> recording to this unit with additional <b>metadata</b>
                 to help students of this unit be able to search and find it and provide
                 further instructions on how to consume the content.
@@ -40,14 +43,37 @@
         </div>
         <br />
         <div class="form-group">
+            <strong>Choose Option<span class="text-danger">*</span></strong>
+            <select class="form-control col-md-6" name="ContentType" onchange="toggleDiv(this)">
+                <option value="2" label="File" selected></option>
+            </select>
+        </div>
+        <div id="UrlDiv" style="display:none;">
+            <div class="form-group">
+                <strong>Content Url<span class="text-danger">*</span></strong>
+                <input type="url" id="Url" required name="Url" class="form-control col-md-6" placeholder="http://" />
+            </div>
+
+            <div class="form-group">
+                <strong>Type<span class="text-danger">*</span></strong>
+                <select class="form-control col-md-6" name="UrlFileType">
+                    <option value="0" label="Audio"></option>
+                    <option value="1" label="Video" selected></option>
+                    <option value="2" label="Image"></option>
+                    <option value="3" label="Document"></option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group" id="FileDiv" >
             <strong>
                 Select a file<span class="text-danger">*</span>
             </strong>
             <label class="form-control col-md-6 ContentFileLabel" for="ContentFile">
                 <i class="FileName"></i>
-                <span for="ContentFile" class="btn btn-primary col-md-3 pull-right">BROWSE</span>
+                <span for="ContentFile" class="btn btn-primary col-md-4 pull-right">BROWSE</span>
             </label>
-            <input required type="file" name="File" id="ContentFile" class="form-control col-md-6"  />
+            <input type="file" name="File" id="ContentFile" class="form-control col-md-6"  />
         </div>
 
         <div id="metadata">
@@ -67,8 +93,6 @@
                 <textarea id="Description" name="Desc" title="Description" required class="form-control col-md-7" rows="4"></textarea>
             </div>
         </div>
-
-
     </div>
     <div class="form-group">
         <span class="pull-right">
@@ -80,41 +104,36 @@
 
 <script>
     var selectedFile = null;
-
+    $(document).ready(function (e) {
+        $('#FileDiv').hide();
+    })
     $('#ContentFile').change(function (e) {
         selectedFile = e.target.files[0];
 
         console.log(selectedFile);
         $('.FileName').text(selectedFile.name+', '+ fileSize(selectedFile.size));
     });
-    //$('#UploadForm').submit(function (e) {
-    //    e.preventDefault();
+    function toggleDiv(elem)
+    {
+        var val = parseInt($(elem)[0].value);
 
-    //    var formdata = new FormData();
-    //    formdata.append('Title', $('#Title').val());
-    //    formdata.append('Desc', $('#Description').val());
-    //    formdata.append('File', selectedFile);
+        if (val === 1) {
+            $('#UrlDiv').show();
+            $('#FileDiv').hide();
 
-    //    console.log(formdata);
+            $('#Url').prop('required', true);
+            $('#ContentFile').prop('required', false);
+        }
+        else if (val === 2) {
+            $('#FileDiv').show();
+            $('#UrlDiv').hide();
 
-    //    $.ajax({
-    //        method: 'POST',
-    //        url: '/contents/add/' + -1,
-    //        data: formdata,
-    //        success: function (response) {
-    //            yay(response);
-    //            console.log(response);
-    //        },
-    //        error: function (response) {
-    //            if (response.responseText) {
-    //                error(response.responseText);
-    //            } else {
-    //                error(response.statusText);
-    //            }
-    //            console.log(response);
-    //        }
-    //    })
-    //})
+            $('#Url').prop('required', false);
+            $('#ContentFile').prop('required', true);
+        }
+
+        console.log(val);
+    }
     function fileSize(bytes) {
         var exp = Math.log(bytes) / Math.log(1024) | 0;
         var result = (bytes / Math.pow(1024, exp)).toFixed(2);

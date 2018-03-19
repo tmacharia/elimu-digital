@@ -61,7 +61,7 @@ namespace web.Controllers
                 return BadRequest("Invalid unit id.");
             }
 
-            var unit = _repos.Units.Get(unitId);
+            var unit = _repos.Units.GetWith(unitId,"Course");
             
             if(unit == null)
             {
@@ -122,27 +122,44 @@ namespace web.Controllers
                 UploadedBy = lec
             };
 
+            int contentType = int.Parse(Request.Form["ContentType"]);
 
-            // try upload attached file
-            if(Request.Form.Files.Count < 1)
+            if(contentType == 1)
             {
-                return BadRequest("No file attached to the upload request. Contents must point to valid uploaded files.");
+                if (string.IsNullOrWhiteSpace(Request.Form["Url"]))
+                {
+                    return Redirect(Request.Headers["Referer"]);
+                }
+                else
+                {
+                    content.FileName = "Uploaded via Url";
+                    content.Type = (FormatType)int.Parse(Request.Form["UrlFileType"]);
+                    content.Url = Request.Form["Url"];
+                }
             }
-
-            IFile file = new FormFile(Request.Form.Files[0]);
-
-            content.FileName = file.FileName;
-            content.Type = file.Format;
-
-            try
+            else if(contentType == 2)
             {
-                content.Url = await _uploader.Upload(file);
-            }
-            catch (Exception ex)
-            {
-                return this.Error(HttpStatusCode.InternalServerError, "Uploading file failed! Please try again.");
-            }
+                // try upload attached file
+                if (Request.Form.Files.Count < 1)
+                {
+                    return BadRequest("No file attached to the upload request. Contents must point to valid uploaded files.");
+                }
 
+                IFile file = new FormFile(Request.Form.Files[0]);
+
+                content.FileName = file.FileName;
+                content.Type = file.Format;
+
+                try
+                {
+                    content.Url = await _uploader.Upload(file);
+                }
+                catch (Exception ex)
+                {
+                    return this.Error(HttpStatusCode.InternalServerError, "Uploading file failed! Please try again.");
+                }
+            }
+            
             content = _repos.Contents.Create(content);
             _repos.Commit();
 

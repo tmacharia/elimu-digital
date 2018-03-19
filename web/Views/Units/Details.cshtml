@@ -24,6 +24,9 @@
     .content-box{
         padding-bottom:30px !important;
     }
+    .file {
+        background: #e6e6e6 !important;
+    }
 </style>
 
 <div class="padding">
@@ -175,8 +178,8 @@
             <div class="row">
                 @foreach (var item in Model.Contents)
                 {
-                    <div class="col-md-3 col-sm-6">
-                        <div class="box p-3 content-box">
+                    <div class="col col-lg-3 col-md-3 col-sm-4 col-xs-6">
+                        <div class="box p-3 content-box file">
                             @switch (item.Type)
                             {
                                 case FormatType.Audio:

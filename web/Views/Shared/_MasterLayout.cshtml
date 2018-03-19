@@ -9,7 +9,6 @@
     <title>@ViewBag.Title | @Extensions.Uni</title>
     <meta content="e-learning, university" name="description">
     <meta content="width=device-width,initial-scale=1,maximum-scale=1,minimal-ui" name="viewport">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="black-translucent" name="apple-mobile-web-app-status-barstyle">
     <link href="~/images/Graduation_Hat-512.ico" rel="apple-touch-icon">
@@ -85,7 +84,11 @@
     <div class="app" id="app">
         
             @{ 
-                if(ViewBag.Title != "Enrollments")
+                if(ViewBag.Title == "Enrollments" || ViewBag.Title == "Course Enrollment Successful")
+                {
+
+                }
+                else
                 {
                     <div aria-hidden="true" class="app-aside fade box-shadow-x nav-expand white" id="aside">
                         @Html.Partial("_Sidebar")
@@ -101,14 +104,25 @@
             <div class="content-main" id="content-main">
                 @RenderBody()
             </div>
-            <div class="content-footer white" id="content-footer">
-                <div class="d-flex p-3">
-                    <span class="text-sm text-muted flex">&copy; Copyright. @Extensions.Uni @DateTime.Now.Year</span>
-                    <div class="text-sm text-muted">
-                        Version @System.Reflection.Assembly.GetEntryAssembly().GetName().Version
+            
+            @{ 
+                if(ViewBag.Title == "Enrollments" || ViewBag.Title == "Course Enrollment Successful")
+                {
+
+
+                }
+                else
+                {
+                    <div class="content-footer white" id="content-footer">
+                        <div class="d-flex p-3">
+                            <span class="text-sm text-muted flex">&copy; Copyright. @Extensions.Uni @DateTime.Now.Year</span>
+                            <div class="text-sm text-muted">
+                                Version @System.Reflection.Assembly.GetEntryAssembly().GetName().Version
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                }
+            }
         </div>
     </div>
 
