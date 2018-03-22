@@ -10,6 +10,9 @@ using System.Linq;
 using Paginator;
 using Paginator.Models;
 using Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace web.API_s
 {
@@ -18,11 +21,15 @@ namespace web.API_s
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryFactory _repos;
+        private readonly IDataManager _dataManager;
+        private readonly UserManager<AppUser> _userManager;
         private readonly INotificationManager _notify;
 
-        public UnitsController(IMapper mapper, IRepositoryFactory factory, INotificationManager notificationManager)
+        public UnitsController(IMapper mapper, IDataManager dataManager, UserManager<AppUser> userManager, IRepositoryFactory factory, INotificationManager notificationManager)
         {
             _mapper = mapper;
+            _userManager = userManager;
+            _dataManager = dataManager;
             _repos = factory;
             _notify = notificationManager;
         }
@@ -37,6 +44,25 @@ namespace web.API_s
                                       .ToPaged(page, itemsperpage);
 
             return View(rest);
+        }
+
+        [HttpGet]
+        [Route("my")]
+        public async Task<IActionResult> MyUnits()
+        {
+            AppUser user = await _userManager.GetUserAsync(User);
+            List<UnitViewModel> list = new List<UnitViewModel>();
+
+            var myUnits = _dataManager.MyUnits<Lecturer>(user.AccountId, 100)
+                                      .Select(x => new
+                                      {
+                                          x.Id,
+                                          x.Name,
+                                          Course = x.Course.Name
+                                      });
+
+
+            return Ok(myUnits);
         }
 
         // Create

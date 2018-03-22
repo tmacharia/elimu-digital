@@ -1,0 +1,24 @@
+﻿@using Services
+@using DAL.Models
+@using DAL.Extensions
+@model IList<Exam>
+@{
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    ViewBag.Title = "Examinations";
+    ViewBag.Action = "Exams";
+}
+
+<div class="padding">
+    <h3>
+        @ViewBag.Title
+        <span class="ml-auto h6"><b class="badge danger">@Model.Count</b></span>
+
+        <span class="pull-right">
+            <button class="btn btn-success" data-toggle="modal" data-target="#setExamUnitChooserModal" onclick="onSelectUnit4Exam()">
+                <i class="fa fa-cube"></i> Set New Exam
+            </button>
+        </span>
+    </h3>
+</div>
+
+@Html.Partial("Exams/_SetExamUnitChooser")

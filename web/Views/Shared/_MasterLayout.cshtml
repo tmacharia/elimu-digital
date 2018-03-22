@@ -24,7 +24,8 @@
     <link href="~/libs/bootstrap-formhelpers/dist/css/bootstrap-formhelpers.min.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet">
     <link href="~/libs/plyr/dist/plyr.css" rel="stylesheet" />
-
+    <link href="~/libs/angular-material/angular-material.css" rel="stylesheet" />
+    <link href="~/libs/angular-material-datetimepicker/dist/material-datetimepicker.min.css" rel="stylesheet" />
 
 
     <environment names="Development">
@@ -35,6 +36,13 @@
         <script src="~/libs/bootstrap-formhelpers/dist/js/bootstrap-formhelpers.js"></script>
         <script src="~/libs/datejs/date.min.js"></script>
         <script src="~/libs/plyr/dist/plyr.js"></script>
+        <script src="~/libs/moment/moment.js"></script>
+        <script src="~/libs/angular/angular.min.js"></script>
+        <script src="~/libs/angular-aria/angular-aria.min.js"></script>
+        <script src="~/libs/angular-animate/angular-animate.min.js"></script>
+        <script src="~/libs/angular-material/angular-material.min.js"></script>
+        <script src="~/libs/angular-material-datetimepicker/dist/angular-material-datetimepicker.min.js"></script>
+        <script src="~/js/site.min.js"></script>
     </environment>
 
     <environment names="Staging,Production">
@@ -71,10 +79,11 @@
         <script src="https://cdn.plyr.io/2.0.18/plyr.js"
                 asp-fallback-src="~/libs/plyr/dist/plyr.js">
         </script>
+        <script src="~/js/toastr.js"></script>
         <script src="~/js/app.min.js"></script>
     </environment>
 </head>
-<body class="pace-done ">
+<body class="pace-done " ng-app="gobel-app">
 
     <noscript>
         Javascript has to be enabled in browser settings for this application
@@ -132,7 +141,7 @@
     }
     <!--End-->
     
-    <script src="~/js/site.js"></script>
-
+    
+    <script src="~/js/angular-site.js"></script>
 </body>
 </html>

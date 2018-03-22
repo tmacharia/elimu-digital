@@ -9,7 +9,7 @@ namespace DAL.Models
     {
         [Required(ErrorMessage = "Answer value cannot be null.")]
         public string Text { get; set; }
-
+        public bool IsCorrect { get; set; }
         public virtual Content Media { get; set; }
         [Required(ErrorMessage = "An answer should be linked to a question.")]
         public virtual Question Question { get; set; }

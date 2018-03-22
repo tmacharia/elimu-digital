@@ -71,6 +71,7 @@ namespace web
             services.AddTransient<IDataManager, DataManager>();
             services.AddTransient<INotificationManager, NotificationManager>();
             services.AddTransient<IProgressTracker, ProgressTracker>();
+            services.AddTransient<IExamManager, ExamManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

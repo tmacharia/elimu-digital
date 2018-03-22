@@ -16,7 +16,7 @@ namespace DAL.Models
         public decimal Marks { get; set; }
 
         public virtual Content Media { get; set; }
-        public virtual Answer Answer { get; set; }
+        public virtual ICollection<Answer> Answers { get; set; }
         [Required]
         public virtual Exam Exam { get; set; }
     }

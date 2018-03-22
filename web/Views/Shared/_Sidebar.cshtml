@@ -128,6 +128,19 @@
                             </li>
                         }
 
+                        @if(ViewBag.Action == "Exams")
+                        {
+                            <li class="active">
+                                <a href="/exams"><span class="nav-icon"><i class="fa fa-cubes"></i></span> <span class="nav-text">Exams</span></a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="/exams"><span class="nav-icon"><i class="fa fa-cubes"></i></span> <span class="nav-text">Exams</span></a>
+                            </li>
+                        }
+
                         @if(User.IsInRole("Student"))
                         {
                             <li class="nav-header hidden-folded"><span class="text-xs">Your collection</span></li>

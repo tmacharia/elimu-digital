@@ -26,8 +26,13 @@
   {
     "outputFileName": "wwwroot/js/site.js",
     "inputFiles": [
-      "Assets/js/*.js",
-      "Assets/js/*/*.js"
+      "Assets/js/*.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/angular-site.js",
+    "inputFiles": [
+      "Assets/js/app/*.js"
     ]
   },
   {

@@ -22,6 +22,7 @@ namespace DAL.Models
         [Required]
         [TimeCompare(Comparison.GreaterThan,"Start",DurationSpec.Hours,3)]
         public DateTime End { get; set; }
+        public DateTime Date { get; set; }
 
         [Required]
         public virtual Unit Unit { get; set; }

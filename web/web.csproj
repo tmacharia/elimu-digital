@@ -77,7 +77,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Exams\" />
     <Folder Include="Views\Lecturers\" />
     <Folder Include="Views\Units\" />
   </ItemGroup>
