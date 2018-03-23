@@ -40,10 +40,10 @@ namespace web.API_s
         public IActionResult Index(int page = 1, int itemsperpage = 10)
         {
             Result<Unit> rest = _repos.Units
-                                      .ListWith("Lecturer", "Students", "Course")
+                                      .List
                                       .ToPaged(page, itemsperpage);
 
-            return View(rest);
+            return Ok(rest);
         }
 
         [HttpGet]

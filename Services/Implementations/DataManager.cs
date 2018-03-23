@@ -140,9 +140,12 @@ namespace Services
                                        "Course.Units.UnitStudents",
                                        "Course.Units.Likes");
                 
-                if(std.Course != null)
+                if(std != null)
                 {
-                    units = std.Course.Units;
+                    if (std.Course != null)
+                    {
+                        units = std.Course.Units;
+                    }
                 }
             }
             else if(typeof(T) == typeof(Lecturer))
@@ -195,12 +198,19 @@ namespace Services
                                     "StudentUnits.Student",
                                     "StudentUnits.Student.Profile",
                                     "StudentUnits.Student.Course")
-                             .StudentUnits
+                             ?.StudentUnits
                              .Select(x => x.Student)
                              .SkipWhile(x => x == null || x.Id == id)
                              .Distinct();
 
-            return students;
+            if(students == null)
+            {
+                return new List<Student>();
+            }
+            else
+            {
+                return students;
+            }
         }
 
         public IEnumerable<Lecturer> MyColleagues(int lecturerId)

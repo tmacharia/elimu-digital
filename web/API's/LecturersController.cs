@@ -21,7 +21,7 @@ namespace web.API_s
             _repos = factory;
             _mapper = mapper;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
             var lecs = _repos.Lecturers

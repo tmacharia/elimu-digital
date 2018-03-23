@@ -36,17 +36,17 @@ namespace Services
                 var mime = new MimeMessage();
 
                 mime.From.Add(new MailboxAddress(Title, mail));
-                mime.To.Add(new MailboxAddress("", email));
+                mime.To.Add(new MailboxAddress(email, email));
                 mime.Subject = subject;
                 mime.Body = new TextPart(TextFormat.Html) { Text = message + Footer };
 
                 using (var client = new SmtpClient())
                 {
-                    client.LocalDomain = "e-learningpad.com";
+                    //client.LocalDomain = "e-learningpad.com";
                     var smtp = settings.GetSMTPServer(mail);
 
 
-                    await client.ConnectAsync(smtp.Host, 25, SecureSocketOptions.StartTls).ConfigureAwait(false);
+                    await client.ConnectAsync(smtp.Host, smtp.Port, SecureSocketOptions.StartTls).ConfigureAwait(false);
 
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
                     client.Authenticate(smtp.UserName, _password);

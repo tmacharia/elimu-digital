@@ -31,9 +31,9 @@ namespace web.API_s
         [HttpGet]
         public IActionResult Index()
         {
-            IList<Course> courses = _repos.Courses
-                                          .ListWith("Units","School")
-                                          .ToList();
+            IEnumerable<Course> courses = _repos.Courses
+                                          .ListWith();
+                                          //.ToList();
 
             var entities = _mapper.Map<List<CourseViewModel>>(courses);
 

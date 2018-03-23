@@ -27,8 +27,8 @@ namespace Services
                 {
                     Host = "smtp.gmail.com",
                     UserName = name,
-                    Authentication = "SSL",
-                    Port = 465,
+                    Authentication = "TLS",
+                    Port = 587,
                 };
             }
             else if (host == "outlook")

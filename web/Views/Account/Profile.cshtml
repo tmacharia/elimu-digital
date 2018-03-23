@@ -70,36 +70,45 @@
                                 {
                                     var student = (Student)ViewBag.student;
 
-                                    if(student.Course != null)
+                                    if(student != null)
                                     {
-                                        @switch (student.Course.Type)
-                                         {
-                                             case CourseType.Certificate:
-                                                 <i class="fa fa-certificate"></i>
-                                                 break;
-                                             case CourseType.Diploma:
-                                                 <i class="fa fa-certificate text-warning"></i>
-                                                 break;
-                                             case CourseType.Degree:
-                                                 <i class="fa fa-certificate text-success"></i>
-                                                 break;
-                                             case CourseType.Masters:
-                                                 <i class="fa fa-certificate text-info"></i>
-                                                 break;
-                                             case CourseType.Phd:
-                                                 <i class="fa fa-certificate text-danger"></i>
-                                                 break;
-                                             default:
-                                                 break;
-                                         }
+                                        if(student.Course != null)
+                                        {
+                                            @switch (student.Course.Type)
+                                             {
+                                                 case CourseType.Certificate:
+                                                     <i class="fa fa-certificate"></i>
+                                                     break;
+                                                 case CourseType.Diploma:
+                                                     <i class="fa fa-certificate text-warning"></i>
+                                                     break;
+                                                 case CourseType.Degree:
+                                                     <i class="fa fa-certificate text-success"></i>
+                                                     break;
+                                                 case CourseType.Masters:
+                                                     <i class="fa fa-certificate text-info"></i>
+                                                     break;
+                                                 case CourseType.Phd:
+                                                     <i class="fa fa-certificate text-danger"></i>
+                                                     break;
+                                                 default:
+                                                     break;
+                                             }
                                         
-                                        @student.Course.Name
+                                            @student.Course.Name
+                                        }
+                                        else
+                                        {
+                                            <span>Not enrolled to any course yet.</span>
+                                            <br />
+                                            <a class="btn btn-danger" href="/courses/enrollment">Enroll today</a>
+                                        }
+
                                     }
                                     else
                                     {
-                                        <span>Not enrolled to any course yet.</span>
-                                        <br />
-                                        <a class="btn btn-danger" href="/courses/enrollment">Enroll today</a>
+                                        <span><i class="fa fa-shield text-danger"></i> Profile not set.</span>
+
                                     }
                                 }
                                 else

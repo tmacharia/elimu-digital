@@ -23,6 +23,7 @@ namespace web.API_s
             _mapper = mapper;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             var classes = _repos.Classes

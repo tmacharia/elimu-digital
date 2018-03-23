@@ -64,7 +64,7 @@ namespace web.Controllers
         }
 
         [HttpPost]
-        [Route("api/exams/create/{id}")]
+        [Route("api/exams/create")]
         [Authorize(Roles = "Lecturer")]
         public IActionResult Create(int id, Exam model)
         {
@@ -73,7 +73,22 @@ namespace web.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(model);
+            if(id < 1)
+            {
+                return BadRequest("Invalid unit Id.");
+            }
+
+            var unit = _repos.Units.Get(id);
+            if(unit == null)
+            {
+                return NotFound("Unit does not exist in records.");
+            }
+
+            model.Unit = unit;
+            model = _repos.Exams.Create(model);
+            _repos.Commit();
+
+            return Ok(model.Id);
         }
     }
 }

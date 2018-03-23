@@ -46,7 +46,9 @@
         <i class="fa fa-cube"></i> @ViewBag.Title
 
         <span class="pull-right">
-            <button type="button" class="btn btn-success" ng-click="onSubmitExam()">Submit Exam</button>
+            <button type="button" class="btn btn-success" ng-disabled="loader" ng-click="onSubmitExam()">
+                <span> <i class="fa fa-circle-o-notch fa-spin" ng-show="loader"></i> Submit Exam</span>
+            </button>
         </span>
     </h2>
     <br />
@@ -54,6 +56,12 @@
         <div class="box col-md-5">
             <div class="box-body">
                 <div id="newExamForm">
+                    <div class="form-group">
+                        <label><b>Exam Title <span class="text-danger">*</span></b></label>
+                        <input type="text" class="form-control"
+                               placeholder="e.g Final Year Exam"
+                               ng-model="Name" />
+                    </div>
                     <div class="form-group">
                         <i>(When will the exam take place?)</i>
                         <br />
@@ -68,7 +76,7 @@
                                date="false"
                                time="true"
                                type="text"
-                               id="time"
+                               id="startTime"
                                short-time="true"
                                placeholder="Starting Time"
                                min-date="minDate"
@@ -81,7 +89,7 @@
                                date="false"
                                time="true"
                                type="text"
-                               id="time"
+                               id="endTime"
                                short-time="true"
                                placeholder="End Time"
                                min-date="minDate"

@@ -11,13 +11,11 @@ namespace DAL.Models
         [DataType(DataType.MultilineText)]
         public string Text { get; set; }
 
-        [MinLength(1)]
-        [MaxLength(50)]
         public decimal Marks { get; set; }
 
         public virtual Content Media { get; set; }
         public virtual ICollection<Answer> Answers { get; set; }
-        [Required]
+        
         public virtual Exam Exam { get; set; }
     }
 }

@@ -13,11 +13,16 @@
         @ViewBag.Title
         <span class="ml-auto h6"><b class="badge danger">@Model.Count</b></span>
 
-        <span class="pull-right">
-            <button class="btn btn-success" data-toggle="modal" data-target="#setExamUnitChooserModal" onclick="onSelectUnit4Exam()">
-                <i class="fa fa-cube"></i> Set New Exam
-            </button>
-        </span>
+        @{ 
+            if(User.Role() == "Lecturer")
+            {
+                <span class="pull-right">
+                    <button class="btn btn-success" data-toggle="modal" data-target="#setExamUnitChooserModal" onclick="onSelectUnit4Exam()">
+                        <i class="fa fa-cube"></i> Set New Exam
+                    </button>
+                </span>
+            }
+        }
     </h3>
 </div>
 

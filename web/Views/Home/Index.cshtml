@@ -10,6 +10,10 @@
     var students = (IList<Student>)ViewBag.students;
     var myprofile = (Student)ViewBag.myprofile;
     var myCourses = (MyCoursesViewModel)ViewBag.mycourses;
+    if(myCourses == null)
+    {
+        myCourses = new MyCoursesViewModel();
+    }
 }
 <style>
     .courses{

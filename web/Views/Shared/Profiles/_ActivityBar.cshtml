@@ -49,15 +49,19 @@
                 {
                     var student = (Student)ViewBag.student;
 
-                    <a class="d-inline-block px-3 text-center" href="#">
-                        <span class="text-md d-block">@likes.Count</span>
-                        <small class="text-xs text-muted">Likes</small>
-                    </a>
+                    if(student != null)
+                    {
+                        <a class="d-inline-block px-3 text-center" href="#">
+                            <span class="text-md d-block">@likes.Count</span>
+                            <small class="text-xs text-muted">Likes</small>
+                        </a>
 
-                    <a class="d-inline-block px-3 text-center" href="#">
-                        <span class="text-md d-block">@student.StudentUnits.Count</span>
-                        <small class="text-xs text-muted">Units</small>
-                    </a>
+                        <a class="d-inline-block px-3 text-center" href="#">
+                            <span class="text-md d-block">@student.StudentUnits.Count</span>
+                            <small class="text-xs text-muted">Units</small>
+                        </a>
+
+                    }
                 }
             }
 
