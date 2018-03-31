@@ -13,13 +13,20 @@ function loadingBtn(id, bool) {
 }
 
 function yay(msg) {
-    toastr.success(msg);
+    toastr.success(msg, 'Success');
 }
-
+function info(msg) {
+    toastr.info(msg, 'Information');
+}
 function error(msg) {
-    toastr.error(msg);
+    toastr.error(msg, 'Error');
 }
-
+function warning(msg) {
+    toastr.warning(msg, 'Warning', {
+        progressBar: true,
+        positionClass: 'toast-bottom-right'
+    });
+}
 function deleteConfirm() {
     
 }
@@ -52,4 +59,36 @@ function slugify(string) {
       .replace(/\-\-+/g, "-")
       .replace(/^-+/, "")
       .replace(/-+$/, "");
+}
+
+function newGuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+/**
+     * @@param num The number to round off
+     * @@param precision The number of decimal places to preserve
+     */
+function roundOff(number, decimal) {
+    var zeros = new String(1.0.toFixed(decimal));
+    zeros = zeros.substr(2);
+    var mul_div = parseInt("1" + zeros);
+    var increment = parseFloat("." + zeros + "01");
+    if (((number * (mul_div * 10)) % 10) >= 5)
+    { number += increment; }
+    return Math.round(number * mul_div) / mul_div;
+}
+Date.prototype.addHours = function (h) {
+    this.setHours(this.getHours() + h);
+    return this;
+}
+Date.prototype.addMinutes = function (m) {
+    this.setMinutes(this.getMinutes() + m);
+    return this;
+}
+Date.prototype.addSeconds = function (s) {
+    this.setSeconds(this.getSeconds() + s);
+    return this;
 }

@@ -79,8 +79,4 @@
     <Folder Include="Views\Units\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\css\toastr.css" />
-  </ItemGroup>
-
 </Project>

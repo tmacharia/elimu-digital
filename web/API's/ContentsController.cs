@@ -237,7 +237,7 @@ namespace web.API_s
             }
 
             var content = _repos.Contents
-                                .GetWith(id, "Unit", "UploadedBy");
+                                .GetWith(id, "Likes","Comments");
 
             if(content == null)
             {
@@ -247,7 +247,7 @@ namespace web.API_s
             _repos.Contents.Remove(content);
             _repos.Commit();
 
-            return Ok("Deleted!");
+            return Ok($"{content.Title} Deleted!");
         }
 
 

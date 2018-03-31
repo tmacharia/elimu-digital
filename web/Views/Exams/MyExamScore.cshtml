@@ -1,0 +1,8 @@
+﻿@using DAL.Extensions
+@using DAL.Models
+@model Exam
+@{
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    ViewBag.Title = $"{Model.Name} - Exam";
+    ViewBag.Action = "Exams";
+}

@@ -3,8 +3,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="~/css/primary.css">
-
     <meta charset="utf-8">
     <title>@ViewBag.Title | @Extensions.Uni</title>
     <meta content="e-learning, university" name="description">
@@ -12,78 +10,19 @@
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="black-translucent" name="apple-mobile-web-app-status-barstyle">
     <link href="~/images/Graduation_Hat-512.ico" rel="apple-touch-icon">
-    <meta content="E-Learning pad" name="apple-mobile-web-app-title">
+    <meta content="Elimu Digital" name="apple-mobile-web-app-title">
     <meta content="yes" name="mobile-web-app-capable">
+    <meta name="author" content="Timothy Macharia" />
     <link href="~/images/Graduation_Hat-512.ico" rel="shortcut icon" sizes="196x196">
-
-    <link rel="stylesheet" href="~/css/app.min.css" />
-    <link href="~/libs/Ionicons/css/ionicons.min.css" rel="stylesheet" />
-    <link href="~/libs/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="~/css/toastr.css" rel="stylesheet" />
-    <link href="~/libs/jquery-confirm2/dist/jquery-confirm.min.css" rel="stylesheet" />
-    <link href="~/libs/bootstrap-formhelpers/dist/css/bootstrap-formhelpers.min.css" rel="stylesheet" />
-    <link href="~/css/site.css" rel="stylesheet">
-    <link href="~/libs/plyr/dist/plyr.css" rel="stylesheet" />
-    <link href="~/libs/angular-material/angular-material.css" rel="stylesheet" />
-    <link href="~/libs/angular-material-datetimepicker/dist/material-datetimepicker.min.css" rel="stylesheet" />
-
-
+    
     <environment names="Development">
-        <script src="~/libs/jquery/dist/jquery.js"></script>
-        <script src="~/js/app.min.js"></script>
-        <script src="~/libs/jquery-confirm2/js/jquery-confirm.js"></script>
-        <script src="~/js/toastr.js"></script>
-        <script src="~/libs/bootstrap-formhelpers/dist/js/bootstrap-formhelpers.js"></script>
-        <script src="~/libs/datejs/date.min.js"></script>
-        <script src="~/libs/plyr/dist/plyr.js"></script>
-        <script src="~/libs/moment/moment.js"></script>
-        <script src="~/libs/angular/angular.min.js"></script>
-        <script src="~/libs/angular-aria/angular-aria.min.js"></script>
-        <script src="~/libs/angular-animate/angular-animate.min.js"></script>
-        <script src="~/libs/angular-material/angular-material.min.js"></script>
-        <script src="~/libs/angular-material-datetimepicker/dist/angular-material-datetimepicker.min.js"></script>
-        <script src="~/js/site.min.js"></script>
+        @Html.Partial("_DevResources")
     </environment>
-
     <environment names="Staging,Production">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-                asp-fallback-src="~/libs/jquery/dist/jquery.min.js"
-                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-                crossorigin="anonymous">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"
-                asp-fallback-src="~/libs/jquery-validation/dist/jquery.validate.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.validator"
-                crossorigin="anonymous"
-                integrity="sha384-Fnqn3nxp3506LP/7Y3j/25BlWeA3PXTyT1l78LjECcPaKCV12TsZP7yyMxOe/G/k">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"
-                asp-fallback-src="~/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"
-                crossorigin="anonymous"
-                integrity="sha384-JrXK+k53HACyavUKOsL+NkmSesD2P+73eDMrbTtTk0h4RmOF8hF8apPlkp26JlyH">
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"
-                asp-fallback-src="~/libs/notifyjs/dist/notify.js"
-                integrity="sha256-tSRROoGfGWTveRpDHFiWVz+UXt+xKNe90wwGn25lpw8="
-                crossorigin="anonymous">
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"
-                asp-fallback-src="~/libs/jquery-confirm2/dist/jquery-confirm.min.js">
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-formhelpers/2.3.0/js/bootstrap-formhelpers.min.js"
-                asp-fallback-src="~/libs/bootstrap-formhelpers/dist/js/bootstrap-formhelpers.min.js"
-                integrity="sha256-H7Mu9l17V/M6Q1gDKdv27je+tbS2QnKmoNcFypq/NIQ="
-                crossorigin="anonymous">
-        </script>
-        <script src="https://cdn.plyr.io/2.0.18/plyr.js"
-                asp-fallback-src="~/libs/plyr/dist/plyr.js">
-        </script>
-        <script src="~/js/toastr.js"></script>
-        <script src="~/js/app.min.js"></script>
+        @Html.Partial("_ProdResources")
     </environment>
 </head>
-<body class="pace-done " ng-app="gobel-app">
+<body class="pace-done ">
 
     <noscript>
         Javascript has to be enabled in browser settings for this application
@@ -140,8 +79,6 @@
         Html.RenderPartial("~/Views/Shared/Profiles/_Create.cshtml");
     }
     <!--End-->
-    
-    
-    <script src="~/js/angular-site.js"></script>
+
 </body>
 </html>

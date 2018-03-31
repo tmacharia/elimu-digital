@@ -1,25 +1,27 @@
 ﻿@using DAL.Extensions
+@using DAL.Models
+@model Unit
 @{
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
-    ViewBag.Title = "Examinations";
+    ViewBag.Title = $"{Model.Name} - Exam(s)";
     ViewBag.Action = "Exams";
 }
 
 <div class="padding" ng-app="gobel-app">
-    <div ng-controller="examCtrl" ng-init="onInitExamIndex()">
+    <div ng-controller="examCtrl" ng-init="onInitUnitExams('@Model.Id')">
         <h3>
-            {{title}}
+            @ViewBag.Title
             <span class="ml-auto h6"><b class="badge danger">{{exams.length}}</b></span>
 
             @{
-            if (User.Role() == "Lecturer")
-            {
-                <span class="pull-right">
-                    <button class="btn btn-success" data-toggle="modal" data-target="#setExamUnitChooserModal" onclick="onSelectUnit4Exam()">
-                        <i class="fa fa-cube"></i> Set New Exam
-                    </button>
-                </span>
-        }
+                if (User.Role() == "Lecturer")
+                {
+                    <span class="pull-right">
+                        <button class="btn btn-success" data-toggle="modal" data-target="#setExamUnitChooserModal" onclick="onSelectUnit4Exam()">
+                            <i class="fa fa-cube"></i> Set New Exam
+                        </button>
+                    </span>
+                }
             }
         </h3>
         <br />
@@ -63,7 +65,7 @@
                 <br />
                 <br />
                 <p>
-                    fetching exams...
+                    fetching unit exams...
                 </p>
             </center>
         </div>
@@ -73,14 +75,14 @@
                 <br />
                 <br />
                 <p>
-                    <span>No exams scheduled.</span>
+                    <span>No exams for this unit yet.</span>
                     <br />
                     @if (User.Role() == "Lecturer")
-                {
-                    <a class="underline" data-toggle="modal" data-target="#setExamUnitChooserModal" onclick="onSelectUnit4Exam()">
-                        <b>Schedule now!</b>
-                    </a>
-            }
+                    {
+                        <a class="underline" data-toggle="modal" data-target="#setExamUnitChooserModal" onclick="onSelectUnit4Exam()">
+                            <b>Schedule now!</b>
+                        </a>
+                    }
                 </p>
             </center>
         </div>

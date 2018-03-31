@@ -40,125 +40,127 @@
         padding-bottom: 10px;
     }
 </style>
-<input hidden value="@Model.Unit.Id" id="UnitId"/>
-<div class="padding" ng-controller="examCtrl">
-    <h2>
-        <i class="fa fa-cube"></i> @ViewBag.Title
 
-        <span class="pull-right">
-            <button type="button" class="btn btn-success" ng-disabled="loader" ng-click="onSubmitExam()">
-                <span> <i class="fa fa-circle-o-notch fa-spin" ng-show="loader"></i> Submit Exam</span>
-            </button>
-        </span>
-    </h2>
-    <br />
-    <div class="row">
-        <div class="box col-md-5">
-            <div class="box-body">
-                <div id="newExamForm">
-                    <div class="form-group">
-                        <label><b>Exam Title <span class="text-danger">*</span></b></label>
-                        <input type="text" class="form-control"
-                               placeholder="e.g Final Year Exam"
-                               ng-model="Name" />
-                    </div>
-                    <div class="form-group">
-                        <i>(When will the exam take place?)</i>
-                        <br />
-                        <input time="false" date="true" mdc-datetime-picker="" type="text" id="date"
-                               placeholder="Choose a Date"
-                               ng-model="examDate"
-                               min-date="minDate" max-date="maxDate"
-                               class=" md-input" readonly="readonly">
-                    </div>
-                    <div class="form-group">
-                        <input mdc-datetime-picker
-                               date="false"
-                               time="true"
-                               type="text"
-                               id="startTime"
-                               short-time="true"
-                               placeholder="Starting Time"
-                               min-date="minDate"
-                               format="hh:mm a"
-                               ng-model="StartTime"
-                               class=" md-input">
-                    </div>
-                    <div class="form-group">
-                        <input mdc-datetime-picker
-                               date="false"
-                               time="true"
-                               type="text"
-                               id="endTime"
-                               short-time="true"
-                               placeholder="End Time"
-                               min-date="minDate"
-                               format="hh:mm a"
-                               ng-model="EndTime"
-                               class=" md-input">
+<div ng-app="gobel-app">
+    <input hidden value="@Model.Unit.Id" id="UnitId" />
+    <div class="padding" ng-controller="examCtrl">
+        <h2>
+            <i class="fa fa-cube"></i> @ViewBag.Title
+
+            <span class="pull-right">
+                <button type="button" class="btn btn-success" ng-disabled="loader" ng-click="onSubmitExam()">
+                    <span> <i class="fa fa-circle-o-notch fa-spin" ng-show="loader"></i> Submit Exam</span>
+                </button>
+            </span>
+        </h2>
+        <br />
+        <div class="row">
+            <div class="box col-md-5">
+                <div class="box-body">
+                    <div id="newExamForm">
+                        <div class="form-group">
+                            <label><b>Exam Title <span class="text-danger">*</span></b></label>
+                            <input type="text" class="form-control"
+                                   placeholder="e.g Final Year Exam"
+                                   ng-model="Name" />
+                        </div>
+                        <div class="form-group">
+                            <i>(When will the exam take place?)</i>
+                            <br />
+                            <input time="false" date="true" mdc-datetime-picker="" type="text" id="date"
+                                   placeholder="Choose a Date"
+                                   ng-model="examDate"
+                                   min-date="minDate" max-date="maxDate"
+                                   class=" md-input" readonly="readonly">
+                        </div>
+                        <div class="form-group">
+                            <input mdc-datetime-picker
+                                   date="false"
+                                   time="true"
+                                   type="text"
+                                   id="startTime"
+                                   short-time="true"
+                                   placeholder="Starting Time"
+                                   min-date="minDate"
+                                   format="hh:mm a"
+                                   ng-model="StartTime"
+                                   class=" md-input">
+                        </div>
+                        <div class="form-group">
+                            <input mdc-datetime-picker
+                                   date="false"
+                                   time="true"
+                                   type="text"
+                                   id="endTime"
+                                   short-time="true"
+                                   placeholder="End Time"
+                                   min-date="minDate"
+                                   format="hh:mm a"
+                                   ng-model="EndTime"
+                                   class=" md-input">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="box exam-time">
-                <h1>
-                    <span class="exam-time-date">
-                        <i class="fa fa-calendar"></i> {{examDate | date:'MM/dd/yyyy'}}
-                    </span>
-                    <br />
-                    <span class="exam-time-m">
-                        {{StartTime | date:'hh:mm'}} <span class="exam-time-date">{{StartTime | date:'a'}}</span>
-                    </span>
-                    <p class="exam-time-separator">to</p>
-                    <span class="exam-time-m">
-                        {{EndTime | date:'hh:mm'}} <span class="exam-time-date">{{EndTime | date:'a'}}</span>
-                    </span>
-                </h1>
+            <div class="col-md-3">
+                <div class="box exam-time">
+                    <h1>
+                        <span class="exam-time-date">
+                            <i class="fa fa-calendar"></i> {{examDate | date:'MM/dd/yyyy'}}
+                        </span>
+                        <br />
+                        <span class="exam-time-m">
+                            {{StartTime | date:'hh:mm'}} <span class="exam-time-date">{{StartTime | date:'a'}}</span>
+                        </span>
+                        <p class="exam-time-separator">to</p>
+                        <span class="exam-time-m">
+                            {{EndTime | date:'hh:mm'}} <span class="exam-time-date">{{EndTime | date:'a'}}</span>
+                        </span>
+                    </h1>
+                </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="box col-md-8">
+                <div class="box-header">
+                    <h2>
+                        Questions
+
+                        <span class="pull-right">
+                            <button class="btn btn-warning" ng-click="onAddQuestion()">
+                                <i class="fa fa-plus"></i> add
+                            </button>
+                        </span>
+                    </h2>
+                </div>
+                <div class="box-body">
+                    <ol>
+                        <li ng-repeat="que in questions">
+                            <p>
+                                {{que.Text}} ({{que.Marks}} mark(s))
+                                <span class="pull-right">
+                                    {{que.Answers.length}} answer(s)
+                                    <span ng-click="onRemoveQuestion(que)" class="pointer"> <i class="fa fa-trash text-danger"></i></span>
+                                </span>
+                            </p>
+                        </li>
+                    </ol>
+
+                    <center ng-show="questions.length < 1">
+                        <br />
+                        <span>No questions added for this exam.</span>
+                        <br />
+                        <br />
+                    </center>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        @Html.Partial("Exams/_AddQuestion")
     </div>
-
-    <div class="row">
-        <div class="box col-md-8">
-            <div class="box-header">
-                <h2>
-                    Questions
-
-                    <span class="pull-right">
-                        <button class="btn btn-warning" ng-click="onAddQuestion()">
-                            <i class="fa fa-plus"></i> add
-                        </button>
-                    </span>
-                </h2>
-            </div>
-            <div class="box-body">
-                <ol>
-                    <li ng-repeat="que in questions">
-                        <p>
-                            {{que.Text}} ({{que.Marks}} mark(s))
-                            <span class="pull-right">
-                                {{que.Answers.length}} answer(s)
-                                <span ng-click="onRemoveQuestion(que)" class="pointer"> <i class="fa fa-trash text-danger"></i></span>
-                            </span>
-                        </p>
-                    </li>
-                </ol>
-
-                <center ng-show="questions.length < 1">
-                    <br />
-                    <span>No questions added for this exam.</span>
-                    <br />
-                    <br />
-                </center>
-            </div>
-            
-        </div>
-        
-
-    </div>
-
-    @Html.Partial("Exams/_AddQuestion")
 </div>
-
 

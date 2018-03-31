@@ -5,14 +5,35 @@
         .module('gobel-app')
         .controller('examCtrl', examCtrl);
 
-    examCtrl.$inject = ['$scope'];
+    examCtrl.$inject = ['$scope','$timeout','$interval'];
 
-    function examCtrl($scope) {
+    function examCtrl($scope, $timeout,$interval) {
+        $scope.title = '';
+        $scope.exams = [];
         $scope.questions = [];
         $scope.question = {
             Answers: []
         };
 
+        $scope.calendarDate = function (date) {
+            return moment().to(date);
+        }
+        $scope.minutesToExam = function (date) {
+            var x = new moment(date);
+            var now = new moment();
+            var duration = moment.duration(x.diff(now)).as('minutes');
+            duration = roundOff(duration, 2);
+            return duration;
+        }
+
+        $scope.onInitExamIndex = function () {
+            $scope.title = 'Examinations';
+            //$scope.loader = true;
+            fetchExams();
+        }
+        $scope.onInitUnitExams = function (id) {
+            fetchExamsByUnit(id);
+        }
         $scope.onAddQuestion = function () {
             $scope.question = {
                 Answers: []
@@ -64,26 +85,31 @@
             $scope.exam.Questions = $scope.questions;
 
             if (!$scope.Name) {
-                error('Specify exam title/name. e.g Supplementary exam, Final year exam e.t.c');
+                warning('Specify exam title/name. e.g Supplementary exam, Final year exam e.t.c');
                 return;
             }
 
             if ($scope.examDate === undefined) {
-                error('Choose a date for this exam.');
+                warning('Pick a date for this exam.');
                 return;
             }
 
             if ($scope.StartTime === undefined || $scope.EndTime === undefined) {
-                error('Choose start and end time for this exam.');
+                warning('Pick start and end time for this exam.');
                 return;
             }
 
             if ($scope.questions < 1) {
-                error('Exam has no questions. Add at-least one question to continue.');
+                warning('Exam has no questions. Add at-least one question to continue.');
                 return;
             }
 
             postExam();
+        }
+        $scope.onSelectExam = function (exam) {
+            $scope.selectedExam = exam;
+            $('#examDetailsModal').modal('show');
+            fetchExamDetails(exam.id);
         }
 
         function postExam() {
@@ -113,6 +139,123 @@
                     $scope.loader = false;
                 }
             })
+            $scope.loader = false;
+        }
+        function fetchExams() {
+            $scope.loader = true;
+            $scope.exams = [];
+            $.ajax({
+                method: 'GET',
+                url: '/api/exams',
+                success: function (res) {
+                    if (res instanceof Array) {
+                        if (res.length < 1) {
+                            info('You have no exams scheduled yet!');
+                        }
+                        else {
+                            for (var i = 0; i < res.length; i++) {
+                                $scope.$apply(function () {
+                                    $scope.exams.push(res[i]);
+                                })
+                            }
+                        }
+                    }
+                },
+                error: function (res) {
+                    if (res.responseText) {
+                        parseError(res.responseText);
+                    } else {
+                        error(res.statusText);
+                    }
+                }
+            });
+
+            $scope.loader = false;
+        }
+        function fetchExamDetails(id) {
+            $scope.detailsLoader = true;
+
+            $.ajax({
+                method: 'GET',
+                url: '/api/exams/' + id,
+                success: function (res) {
+                    $scope.$apply(function () {
+                        $scope.selectedExam = res;
+                        
+                    })
+                    onDetailsSuccess();
+                },
+                error: function (res) {
+                    if (res.responseText) {
+                        parseError(res.responseText);
+                    } else {
+                        error(res.statusText);
+                    }
+                }
+            });
+
+            $scope.detailsLoader = false;
+        }
+        function onDetailsSuccess() {
+            $('.accordion-section-title').click(function (e) {
+                // Grab current anchor value
+                var currentAttrValue = $(this).attr('href');
+
+                if ($(e.target).is('.active')) {
+                    close_accordion_section();
+
+                    // Add icon
+                    e.target.children[1].firstElementChild.className = 'fa fa-plus';
+                }
+                else {
+                    close_accordion_section();
+
+                    // Add active class to section title
+                    $(this).addClass('active');
+
+                    // Add icon
+                    e.target.children[1].firstElementChild.className = 'fa fa-minus';
+
+                    // Open up the hidden content panel
+                    $('.accordion ' + currentAttrValue).slideDown(300).addClass('open');
+                }
+
+                e.preventDefault();
+            });
+        }
+        function close_accordion_section() {
+            $('.accordion .accordion-section-title').removeClass('active');
+            $('.accordion .accordion-section-content').slideUp(300).removeClass('open');
+        }
+        function fetchExamsByUnit(id) {
+            $scope.loader = true;
+            $scope.exams = [];
+            $.ajax({
+                method: 'GET',
+                url: '/api/exams/unit/'+id,
+                success: function (res) {
+                    if (res instanceof Array) {
+                        if (res.length < 1) {
+                            info('You have no exams scheduled yet!');
+                        }
+                        else {
+                            for (var i = 0; i < res.length; i++) {
+                                $scope.$apply(function () {
+                                    $scope.exams.push(res[i]);
+                                })
+                            }
+                        }
+                    }
+                },
+                error: function (res) {
+                    if (res.responseText) {
+                        parseError(res.responseText);
+                    } else {
+                        error(res.statusText);
+                    }
+                }
+            });
+
             $scope.loader = false;
         }
     }

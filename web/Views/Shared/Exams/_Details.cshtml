@@ -1,0 +1,227 @@
+﻿@using DAL.Extensions
+<style>
+    .modal-title{
+        width:100%;
+    }
+    .modal-title .pull-right{
+        font-size:.9rem;
+        padding-top:5px;
+    }
+    .modal-body{
+        padding:0 1rem;
+    }
+    .card{
+        padding:10px;
+    }
+    .exam-instructor {
+        margin-top: -20px;
+        text-align:center;
+    }
+    .exam-instructor .w-32{
+        height:80px;
+        width:80px;
+    }
+    .top-right{
+        font-size:.7rem !important;
+        float:right;
+    }
+    /*----- Accordion -----*/
+    .accordion, .accordion * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .accordion {
+        overflow: hidden;
+        border-radius: 3px;
+        background: #ffffff;
+        margin-bottom:5px;
+    }
+
+    /*----- Section Titles -----*/
+    .accordion-section-title {
+        width: 100%;
+        padding: 15px;
+        display: inline-block;
+        border-bottom: 1px solid #1a1a1a;
+        background: #f1f1f1;
+        transition: all linear 0.15s;
+        color: #444;
+    }
+
+    .accordion-section-title.active, .accordion-section-title:hover {
+        background: #f2f2f2;
+        /* Type */
+        text-decoration: none;
+    }
+
+    .accordion-section:last-child .accordion-section-title {
+        border-bottom: none;
+    }
+
+    /*----- Section Content -----*/
+    .accordion-section-content {
+        padding: 15px;
+        display: none;
+    }
+    .btn-block{
+        font-weight:400;
+    }
+</style>
+<div class="modal fade" data-backdrop="true" id="examDetailsModal">
+    <div class="modal-dialog animate" id="animate">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <i class="ion ion-ribbon-b ion-2x"></i>  {{selectedExam.name}}
+                    <span class="pull-right">
+                        <span>
+                            <span title="Urgent: Be ready to sit for this exam."
+                                  ng-show="minutesToExam(selectedExam.moment) > 0 && minutesToExam(selectedExam.moment) < 60">
+                                <i class="ion ion-record text-danger blink"></i>
+                            </span>
+
+                            <span ng-show="minutesToExam(selectedExam.moment) < 0"
+                                  title="Exam Completed!">
+                                    <i class="ion ion-checkmark-circled text-success"></i> Completed!
+                                <br />
+                                <span class="top-right">
+                                    <i>{{calendarDate(selectedExam.moment)}}</i>
+                                </span>
+                            </span>
+                        </span>
+                        <span class="top-right" ng-hide="minutesToExam(selectedExam.moment) < 0">
+                            <i class="fa fa-clock-o"></i> <i> {{calendarDate(selectedExam.moment)}}</i>
+                        </span>
+                    </span>
+                </h4>
+            </div>
+            <div class="modal-body p-lg">
+                <!--Busy Indicator-->
+                <div ng-show="detailsLoader">
+                    <center>
+                        <span>
+                            <i class="fa fa-spinner fa-3x fa-spin"></i>
+                            <br />
+                            <br />
+                            <p>
+                                loading...
+                            </p>
+                        </span>
+                    </center>
+                </div>
+                <!--End-->
+
+                <!--Content-->
+                <div ng-hide="detailsLoader">
+                    <p>
+                        <i class="fa fa-calendar"></i> {{selectedExam.date | date:'mediumDate'}}
+                    </p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <span>
+                                    <i class="ion ion-android-time"></i>
+                                    <span>
+                                        Start: <b> {{selectedExam.start | date:'shortTime'}}</b>
+                                    </span>
+                                </span>
+                                <br />
+                                <span>
+                                    <i class="ion ion-android-alarm-clock"></i>
+                                    <span>
+                                        Stop: <b> {{selectedExam.end | date:'shortTime'}}</b>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="pull-right exam-instructor">
+                                <a class="avatar w-32" href="#">
+                                    @*<span class="avatar w-40 rounded grey hide">J</span>*@
+                                    <img alt="user avatar" class="w-40 circle" src="{{selectedExam.instructor.photoUrl}}">
+                                </a>
+                                <p>
+                                    <b>{{selectedExam.instructor.fullNames}}</b>
+                                    <br />
+                                    <span>Instructor</span>
+                                </p>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="#">
+                            <i class="fa fa-leaf"> </i> Course: <pre>{{selectedExam.course.name}}</pre>
+                        </a>
+                        <a href="#">
+                            <i class="fa fa-umbrella"> </i> Unit: <pre> {{selectedExam.unit.name}}</pre>
+                        </a>
+                    </div>
+
+                    @{ 
+                        if(User.Role() == "Lecturer" || User.Role() == "Administrator")
+                        {
+                            <div>
+                                <br />
+                                <h5>
+                                    <span>
+                                        Questions <span class="badge badge-sm badge-danger h6">{{selectedExam.questions.length}}</span>
+                                    </span>
+                                </h5>
+                                <div class="accordion" ng-repeat="que in selectedExam.questions">
+                                    <div class="accordion-section">
+                                        <a class="accordion-section-title" href="#accordion-{{que.id}}">
+                                            {{que.text}} <i> ({{que.marks}} mrks)</i>
+
+                                            <span class="pull-right">
+                                                <i class="fa fa-plus"></i>
+                                            </span>
+                                        </a>
+
+                                        <div id="accordion-{{que.id}}" class="accordion-section-content">
+                                            <h6>Answers</h6>
+
+                                            <ul style="list-style-type:lower-latin">
+                                                <li ng-repeat="ans in que.answers">
+                                                    {{ans.text}}
+                                                </li>
+                                            </ul>
+                                        </div><!--end .accordion-section-content-->
+                                    </div><!--end .accordion-section-->
+                                </div><!--end .accordion-->
+                            </div>
+                        }
+                        else
+                        {
+                            <center>
+                                <br />
+                                <a class="btn btn-primary btn-lg text-white btn-block"
+                                   ng-show="minutesToExam(selectedExam.moment) > 0">
+                                    <i class="ion ion-2x ion-ios-locked"></i> <span class="text-uppercase"> Unlock {{calendarDate(selectedExam.moment)}}</span>
+                                </a>
+                                <a class="btn btn-success btn-lg text-white btn-block"
+                                   ng-show="minutesToExam(selectedExam.moment) < 0 && minutesToExam(selectedExam.moment) > -180">
+                                    <i class="ion ion-2x ion-ios-unlocked"></i> <span class="text-uppercase"> Continue to exam</span>
+                                </a>
+                                <a class="btn btn-danger btn-lg text-white btn-block"
+                                   ng-show="minutesToExam(selectedExam.moment) < -180">
+                                    <i class="ion ion-2x ion-ios-locked"></i> <span class="text-uppercase"> Expired</span>
+                                </a>
+                                <br />
+                            </center>
+                        }
+                    }
+                </div>
+                <!--End-->
+
+                <div class="modal-footer">
+                    <button class="btn btn-default dark-white p-x-md" data-dismiss="modal" type="button">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

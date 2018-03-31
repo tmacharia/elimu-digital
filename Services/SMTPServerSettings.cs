@@ -65,7 +65,7 @@ namespace Services
             {
                 return new SMTPServerSettings()
                 {
-                    Host = "smtp.gmail.com",
+                    Host = "smtp.zoho.com",
                     Authentication = "SSL",
                     UserName = name,
                     Port = 465,

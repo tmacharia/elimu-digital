@@ -38,7 +38,7 @@ namespace Services
                 mime.From.Add(new MailboxAddress(Title, mail));
                 mime.To.Add(new MailboxAddress(email, email));
                 mime.Subject = subject;
-                mime.Body = new TextPart(TextFormat.Html) { Text = message + Footer };
+                mime.Body = new TextPart(TextFormat.Html) { Text = message };
 
                 using (var client = new SmtpClient())
                 {
@@ -46,9 +46,9 @@ namespace Services
                     var smtp = settings.GetSMTPServer(mail);
 
 
-                    await client.ConnectAsync(smtp.Host, smtp.Port, SecureSocketOptions.StartTls).ConfigureAwait(false);
+                    await client.ConnectAsync(smtp.Host, smtp.Port, SecureSocketOptions.SslOnConnect).ConfigureAwait(false);
 
-                    client.AuthenticationMechanisms.Remove("XOAUTH2");
+                    //client.AuthenticationMechanisms.Remove("XOAUTH2");
                     client.Authenticate(smtp.UserName, _password);
 
                     await client.SendAsync(mime).ConfigureAwait(false);
@@ -66,15 +66,5 @@ namespace Services
             // Plug in your SMS service here to send a text message.
             return Task.FromResult(0);
         }
-
-        #region Private Section
-        private string Footer
-        {
-            get
-            {
-                return $"<br/><br/>Thank you,<br/> {Title} Support Team.";
-            }
-        }
-        #endregion
     }
 }

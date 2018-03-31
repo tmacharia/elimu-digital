@@ -34,6 +34,7 @@ namespace Services
         private readonly IRepository<Post> _posts;
         private readonly IRepository<CourseworkProgress> _progress;
         private readonly IRepository<StudentCourse> _studentCourses;
+        private readonly IRepository<ExamSession> _examSessions;
         #endregion
 
         public RepositoryFactory(LePadContext context)
@@ -62,6 +63,7 @@ namespace Services
             _posts = new Repository<Post>(_context);
             _progress = new Repository<CourseworkProgress>(_context);
             _studentCourses = new Repository<StudentCourse>(_context);
+            _examSessions = new Repository<ExamSession>(_context);
         }
 
         public IRepository<Answer> Answers => _answers;
@@ -106,6 +108,8 @@ namespace Services
         public IRepository<CourseworkProgress> CourseworkProgress => _progress;
 
         public IRepository<StudentCourse> StudentCourses => _studentCourses;
+
+        public IRepository<ExamSession> ExamSessions => _examSessions;
 
         public void Commit()
         {

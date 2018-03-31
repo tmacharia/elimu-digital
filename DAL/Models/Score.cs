@@ -11,9 +11,9 @@ namespace DAL.Models
     public class Score : Base
     {
         [Required]
-        [MinLength(0)]
-        [MaxLength(100)]
         public decimal Attained { get; set; }
+        public int StudentId { get; set; }
+        public int ExamId { get; set; }
 
         [NotMapped]
         public decimal Percentage
@@ -32,23 +32,23 @@ namespace DAL.Models
         {
             get
             {
-                if(this.Percentage >= 70 && this.Percentage <= 100)
+                if (this.Percentage >= 70 && this.Percentage <= 100)
                 {
                     return Grade.A;
                 }
-                else if(this.Percentage >= 60)
+                else if (this.Percentage >= 60)
                 {
                     return Grade.B;
                 }
-                else if(this.Percentage >= 50)
+                else if (this.Percentage >= 50)
                 {
                     return Grade.C;
                 }
-                else if(this.Percentage >= 40)
+                else if (this.Percentage >= 40)
                 {
                     return Grade.D;
                 }
-                else if(this.Percentage > 0 && this.Percentage < 40)
+                else if (this.Percentage > 0 && this.Percentage < 40)
                 {
                     return Grade.E;
                 }
@@ -59,9 +59,8 @@ namespace DAL.Models
             }
         }
 
-        [Required]
+
         public virtual Student Student { get; set; }
-        [Required]
         public virtual Exam Exam { get; set; }
     }
 }

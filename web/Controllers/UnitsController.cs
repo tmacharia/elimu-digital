@@ -128,5 +128,12 @@ namespace web.Controllers
 
             return View(rest);
         }
+
+        [HttpGet]
+        [Route("units/{id}/{name}/exams")]
+        public IActionResult UnitExams(int id,string name)
+        {
+            return Redirect($"/exams/for-unit/{id}/{name}");
+        }
     }
 }

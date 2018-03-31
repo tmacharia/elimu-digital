@@ -16,6 +16,7 @@
     #webplayer {
         max-width: 800px;
     }
+
     .video-container {
         position: relative;
         padding-bottom: 56.25%;
@@ -24,20 +25,53 @@
         overflow: hidden;
     }
 
-        .video-container iframe, .video-container object, .video-container embed {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
+    .video-container iframe, .video-container object, .video-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .image-container{
+        
+        overflow:hidden;
+    }
+    .image-container img{
+        left:0;
+        max-height:400px;
+        width:100%;
+    }
     .plyr {
         border-radius: 4px;
         margin-bottom: 15px;
     }
+
+    .danger-zone p {
+        margin-bottom: .5rem;
+    }
+
+    .danger-zone div p:last-child {
+        font-size: .7rem;
+    }
+
+    .btn-danger-zone {
+        background: #f3f3f3;
+        color: #ea2e49;
+    }
 </style>
 <div class="padding">
-    <span class="hidden" id="CommentId">@Model.Id</span>
+
+    <div class="row">
+        <span class="col">
+            <span class="">
+                <a href="/units/@Model.Unit.Id/@Model.Unit.GenerateSlug()"
+                    class="btn btn-default">
+                    <i class="fa fa-arrow-left"></i> Back to list
+                </a>
+            </span>
+        </span>
+    </div>
+    <br />
     <div class="row">
         <div class="col-md-7">
             @{
@@ -62,12 +96,82 @@
                         </div>
                     }
                 }
+                else if (Model.Type == FormatType.Image)
+                {
+                    <div class="col image-container">
+                        <img alt=".." class="img-responsive" src="@Model.Url" />
+                    </div>
+                }
+                else if (Model.Type == FormatType.Document)
+                {
+                    bool isPdf = Model.FileName.Contains(".pdf");
+                    //string base64Pdf = Extensions.PdfToBase64(Model.Url);
+
+                    if (isPdf)
+                    {
+                        <div class="box p-3 col">
+                            <div class="d-flex">
+                                <span>
+                                    <i class="fa fa-file-pdf-o fa-2x"></i>
+                                    <span style="font-size:1.1rem; margin-left:5px;"> @Model.FileName</span>
+                                </span>
+                            </div>
+                        </div>
+                        @*<script src="~/libs/pdfjs-dist/build/pdf.js"></script>
+                            <script>
+                                // If absolute URL from the remote server is provided, configure the CORS
+                                // header on that server.
+                                var reversed = btoa('@Html.Raw(base64Pdf)');
+                                var pdfData = atob(reversed);
+
+                                // Loaded via <script> tag, create shortcut to access PDF.js exports.
+                                var pdfjsLib = window['pdfjs-dist/build/pdf'];
+
+                                // The workerSrc property shall be specified.
+                                pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+
+                                // Using DocumentInitParameters object to load binary data.
+                                var loadingTask = pdfjsLib.getDocument({ data: pdfData });
+                                loadingTask.promise.then(function (pdf) {
+                                    console.log('PDF loaded');
+
+                                    // Fetch the first page
+                                    var pageNumber = 1;
+                                    pdf.getPage(pageNumber).then(function (page) {
+                                        console.log('Page loaded');
+
+                                        var scale = 1.5;
+                                        var viewport = page.getViewport(scale);
+
+                                        // Prepare canvas using PDF page dimensions
+                                        var canvas = document.getElementById('pdfCanvas');
+                                        var context = canvas.getContext('2d');
+                                        canvas.height = viewport.height;
+                                        canvas.width = viewport.width;
+
+                                        // Render PDF page into canvas context
+                                        var renderContext = {
+                                            canvasContext: context,
+                                            viewport: viewport
+                                        };
+                                        var renderTask = page.render(renderContext);
+                                        renderTask.then(function () {
+                                            console.log('Page rendered');
+                                        });
+                                    });
+                                }, function (reason) {
+                                    // PDF loading error
+                                    console.error(reason);
+                                });
+                            </script>*@
+                    }
+                }
             }
             @{
                 Html.RenderPartial("Contents/_Metadata", Model);
             }
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             @{
                 if (User.Role() == "Student")
                 {
@@ -98,36 +202,69 @@
                 }
                 else
                 {
-                    <div class="box p-3">
-                        <div class="d-flex" style="margin-bottom:10px !important;">
-                            <span class="text-muted">Track Students Progress</span>
-                        </div>
-                        @for(int i=0; i<studentsProgress.Count;i++)
-                        {
-                            var prg = studentsProgress[i];
-                            int n = i + 1;
-                            <div>
-                                <span>@n. @prg.FullNames
-                                    <span class="pull-right">
-                                        @prg.Progress%
+                    <div class="row">
+                        <div class="box p-3 col">
+                            <div class="d-flex" style="margin-bottom:10px !important;">
+                                <h6>Track Students Progress</h6>
+                            </div>
+                            @for (int i = 0; i < studentsProgress.Count; i++)
+                            {
+                                var prg = studentsProgress[i];
+                                int n = i + 1;
+                                <div>
+                                    <span>
+                                        @n. @prg.FullNames
+                                        <span class="pull-right">
+                                            @prg.Progress%
+                                        </span>
                                     </span>
-                                </span>
-                                <div class="progress" style="height:5px; margin-top:3px; margin-left:10px;">
-                                    <div class="progress-bar bg-@(prg.Progress > 98 ? "success" : "info")"
-                                         role="progressbar"
-                                         style="width:@prg.Progress%">
+                                    <div class="progress" style="height:5px; margin-top:3px; margin-left:10px;">
+                                        <div class="progress-bar bg-@(prg.Progress > 98 ? "success" : "info")"
+                                             role="progressbar"
+                                             style="width:@prg.Progress%">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        @{
+                            if (User.Role() == "Administrator" || User.ProfileId() == Model.UploadedBy.Profile.Id)
+                            {
+                                <div class="box p-3 col">
+                                    <div class="danger-zone">
+                                        <div>
+                                            <p class="bold">
+                                                Delete this content
+                                            </p>
+                                            <p>
+                                                Once you delete a content, it will become unavailable to all your students.
+                                            </p>
+                                            <button type="button"
+                                                    onclick="onDeleteContent('@Model.Id','@Model.Unit.Id','@Model.Unit.GenerateSlug()')"
+                                                    class="btn btn-default btn-danger-zone pull-right">
+                                                Delete content
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         }
                     </div>
-
                 }
             }
         </div>
     </div>
+    <span class="hidden" id="ContentId">@Model.Id</span>
 </div>
 
+<script src="~/libs/plyr/dist/plyr.js"></script>
+
+<script>
+    var player = new Plyr('#player');
+</script>
 @if (User.Role() == "Student")
 {
     <script type="text/javascript">
@@ -142,7 +279,7 @@
     function onExit(e) {
 
         var cont_type = '@Model.Type';
-        var vm = players[0];
+        var vm = player;
         var total = parseFloat('@progress.Overall');
         var _complete = '@progress.IsComplete';
 
@@ -160,3 +297,4 @@
     };
     </script>
 }
+

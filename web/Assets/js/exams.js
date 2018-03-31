@@ -1,4 +1,5 @@
 ﻿function onSelectUnit4Exam() {
+    $('#unitSelect').empty();
     $.ajax({
         method: 'GET',
         url: '/api/units/my',

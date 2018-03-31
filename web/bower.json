@@ -12,13 +12,16 @@
     "jquery-confirm2": "v3.3.2",
     "bootstrap-formhelpers": "2.3.0",
     "angular": "v1.6.9",
-    "angular-eonasdan-datetimepicker": "0.3.9",
     "angular-material": "v1.1.8",
     "angular-touch": "v1.6.9",
-    "angular-material-datetimepicker": "v1.5.1"
+    "angular-material-datetimepicker": "v1.5.1",
+    "plyr": "v3.0.3",
+    "toastr": "2.1.3",
+    "pdfobject": "1.2.0",
+    "pdfjs-dist": "v2.0.466"
   },
   "resolutions": {
     "bootstrap": "3.3.7",
-    "jquery": ">=1.6"
+    "jquery": ">=1.8"
   }
 }

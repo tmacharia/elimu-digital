@@ -14,6 +14,9 @@ using Services.Security;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using DAL.Models;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.IO;
 
 namespace Services
 {
@@ -219,6 +222,61 @@ namespace Services
             else
             {
                 return false;
+            }
+        }
+        public static string PdfToBase64(string url)
+        {
+            var client = new HttpClient();
+
+            Task<HttpResponseMessage> httpTask = Task.Run<HttpResponseMessage>(() =>
+            {
+                return client.GetAsync(url);
+            });
+
+            while (!httpTask.IsCompleted)
+            {
+                httpTask.Wait();
+            }
+
+            if (httpTask.Result.IsSuccessStatusCode)
+            {
+                Task<Stream> downloadTask = Task.Run<Stream>(() =>
+                {
+                    return httpTask.Result.Content.ReadAsStreamAsync();
+                });
+
+                while (!downloadTask.IsCompleted)
+                {
+                    downloadTask.Wait();
+                }
+
+                string contents = StreamToString(downloadTask.Result);
+
+                return $"data:application/pdf;base64,{contents}";
+                //return contents;
+            }
+
+            return "";
+        }
+        private static string StreamToString(Stream stream)
+        {
+            byte[] bytes;
+
+            using (var ms = new MemoryStream())
+            {
+                stream.CopyTo(ms);
+
+                bytes = ms.ToArray();
+            }
+            stream.Dispose();
+
+            return Convert.ToBase64String(bytes);
+        }
+        public static string PdfIcon
+        {
+            get
+            {
+                return "https://content.invisioncic.com/Mevernote/monthly_2016_12/pdfs-512.png.6032017addac747c4360d6a0f5e572a0.png";
             }
         }
     }

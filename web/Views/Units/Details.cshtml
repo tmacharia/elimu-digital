@@ -25,7 +25,14 @@
         padding-bottom:30px !important;
     }
     .file {
-        background: #e6e6e6 !important;
+        background: #f9fcff !important;
+    }
+    .lec-exam-buttons{
+        list-style-type:none;
+        padding:0;
+    }
+    .lec-exam-buttons li{
+        margin-bottom:5px;
     }
 </style>
 
@@ -153,7 +160,31 @@
                 }
             </div>
         </div>
-
+        <div class="col-md-3 col-sm-6">
+            @{ 
+                if(User.Role() == "Lecturer" && User.ProfileId() == Model?.Lecturer?.Profile.Id)
+                {
+                    <ol class="lec-exam-buttons">
+                        <li>
+                            <a class="btn btn-info text-white" href="/exams/set-for/@Model.GenerateSlug()/@Model.Id">
+                                <i class="fa fa-cube"></i> Prepare Exam
+                            </a>
+                        </li>
+                        <li>
+                            <a class="btn btn-default">
+                                <i class="fa fa-cubes"></i> Past Exams
+                            </a>
+                        </li>
+                    </ol>
+                }
+                else
+                {
+                    <a class="btn btn-info text-white" href="/units/@Model.Id/@Model.GenerateSlug()/exams">
+                        <i class="fa fa-cubes"></i> Exams
+                    </a>
+                }
+            }
+        </div>
     </div>
 
     <h6>
@@ -189,10 +220,10 @@
                                     <i class="fa fa-play-circle text-danger"></i>
                                     break;
                                 case FormatType.Image:
-                                    <i class="fa fa-file-image-o"></i>
+                                    <i class="fa fa-image"></i>
                                     break;
                                 case FormatType.Document:
-                                    <i class="fa fa-file-text"></i>
+                                    <i class="fa fa-file-text text-primary"></i>
                                     break;
                                 case FormatType.Unknown:
                                     <i class="fa fa-file"></i>

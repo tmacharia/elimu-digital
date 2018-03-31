@@ -13,6 +13,7 @@ namespace Common.ViewModels
         public string Name { get; set; }
         public CourseType Type { get; set; }
         public Guid Code { get; set; }
+        public int Years { get; set; }
         public string BackdropUrl { get; set; }
 
 

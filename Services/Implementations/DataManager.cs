@@ -126,7 +126,7 @@ namespace Services
         }
         public IEnumerable<Unit> MyUnits<T>(int id, int count) where T : class
         {
-            IEnumerable<Unit> units = new List<Unit>();
+            List<Unit> units = new List<Unit>();
 
             if (typeof(T) == typeof(Student))
             {
@@ -139,19 +139,39 @@ namespace Services
                                        "Course.Units.Class",
                                        "Course.Units.UnitStudents",
                                        "Course.Units.Likes");
-                
+
                 if(std != null)
                 {
                     if (std.Course != null)
                     {
-                        units = std.Course.Units;
+                        units.AddRange(std.Course.Units);
                     }
+                }
+
+                var unitsInOtherCourses = _repos.StudentCourses
+                                                .ListWith("Course",
+                                                          "Course.Units",
+                                                          "Course.Units.Lecturer",
+                                                          "Course.Units.Lecturer.Profile",
+                                                          "Course.Units.Class",
+                                                          "Course.Units.UnitStudents",
+                                                          "Course.Units.Likes")
+                                                .Where(x => x.StudentId == id)
+                                                .TakeWhile(x => x.Course != null)
+                                                .Select(x => x.Course)
+                                                .TakeWhile(x => x.Units != null && x.Units.Count > 0)
+                                                .SelectMany(x => x.Units);
+                                                
+
+                if (unitsInOtherCourses != null)
+                {
+                    units.AddRange(unitsInOtherCourses);
                 }
             }
             else if(typeof(T) == typeof(Lecturer))
             {
                 var lec = _repos.Lecturers
-                              .GetWith(id,
+                                .GetWith(id,
                                        "Units",
                                        "Units.Course",
                                        "Units.Lecturer",
@@ -161,7 +181,7 @@ namespace Services
 
                 if(lec.Units != null)
                 {
-                    units = lec.Units.SkipWhile(x => x == null);
+                    units.AddRange(lec.Units.TakeWhile(x => x != null));
                 }
             }
 
@@ -256,6 +276,67 @@ namespace Services
                             .TakeWhile(x => x.Id != lecturerId)
                             .Distinct()
                             .ToList();
+        }
+
+        public IList<ExamViewModel> MyExams<T>(int id, int count = 5000) where T : class
+        {
+            List<ExamViewModel> exams = new List<ExamViewModel>();
+
+            if (typeof(T) == typeof(Student))
+            {
+                var std = _repos.Students
+                                .GetWith(id,
+                                       "Course",
+                                       "Course.Units",
+                                       "Course.Units.Exams",
+                                       "Course.Units.Exams.Unit");
+
+                if (std != null)
+                {
+                    if (std.Course != null)
+                    {
+                        exams.AddRange(std.Course.Units
+                                          .SelectMany(x => x.Exams)
+                                          .Select(TransformFuncs.ToViewModel()));
+                    }
+                }
+
+                var _otherExams = _repos.StudentCourses
+                                        .ListWith("Course",
+                                                  "Course.Units",
+                                                  "Course.Units.Exams",
+                                                  "Course.Units.Exams.Unit")
+                                        .Where(x => x.StudentId == id)
+                                        .Select(x => x.Course)
+                                        .SelectMany(x => x.Units)
+                                        .SelectMany(x => x.Exams)
+                                        .Select(TransformFuncs.ToViewModel());
+
+
+                if (_otherExams != null)
+                {
+                    exams.AddRange(_otherExams);
+                }
+            }
+            else if (typeof(T) == typeof(Lecturer))
+            {
+                var lec = _repos.Lecturers
+                                .GetWith(id,
+                                       "Units",
+                                       "Units.Exams",
+                                       "Units.Exams.Unit");
+
+                if (lec.Units != null)
+                {
+                    var _exams = lec.Units.SelectMany(x => x.Exams)
+                                          .Select(TransformFuncs.ToViewModel());
+
+                    exams.AddRange(_exams);
+                }
+            }
+
+            return exams.Take(count)
+                        .ToList();
         }
     }
 }

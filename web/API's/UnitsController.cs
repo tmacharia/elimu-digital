@@ -111,14 +111,14 @@ namespace web.API_s
                               "Lecturer",
                               "Course");
 
-            if (unit != null)
+            if(unit == null)
             {
-                return Ok(unit);
+                return NotFound("Unit record with that id does not exist.");
             }
-            else
-            {
-                return NotFound();
-            }
+
+            UnitViewModel viewModel = _mapper.Map<UnitViewModel>(unit);
+
+            return Ok(viewModel);
         }
 
 
@@ -283,23 +283,22 @@ namespace web.API_s
         {
             if (id < 1)
             {
-                ModelState.AddModelError("Invalid unit Id", "Provide a valid 'Id' value greater than 0 to delete unit.");
-                return BadRequest(ModelState);
+                return BadRequest("Invalid unit Id");
             }
 
             Unit unit = _repos.Units
-                              .GetWith(id, "Course", "Lecturer");
+                              .GetWith(id, "UnitStudents", "Boards", "Exams",
+                                           "Likes", "Contents");
 
-            if (unit != null)
+            if(unit == null)
             {
-                _repos.Units.Remove(unit);
+                return NotFound("Unit record with that id not found.");
+            }
 
-                return Ok("Done!");
-            }
-            else
-            {
-                return NotFound();
-            }
+            _repos.Units.Remove(unit);
+            _repos.Commit();
+
+            return Ok();
         }
 
 

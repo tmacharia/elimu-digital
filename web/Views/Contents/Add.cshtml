@@ -17,7 +17,7 @@
     }
 </style>
 
-<form class="padding col-md-6" 
+<form class="padding col-md-8" 
       role="form" 
       id="UploadForm" 
       method="post" 
@@ -44,19 +44,19 @@
         <br />
         <div class="form-group">
             <strong>Choose Option<span class="text-danger">*</span></strong>
-            <select class="form-control col-md-6" name="ContentType" onchange="toggleDiv(this)">
+            <select class="form-control col-md-8" name="ContentType" onchange="toggleDiv(this)">
                 <option value="2" label="File" selected></option>
             </select>
         </div>
-        <div id="UrlDiv" style="display:none;">
+        <div id="UrlDiv">
             <div class="form-group">
                 <strong>Content Url<span class="text-danger">*</span></strong>
-                <input type="url" id="Url" required name="Url" class="form-control col-md-6" placeholder="http://" />
+                <input type="url" id="Url" required name="Url" class="form-control col-md-8" placeholder="http://" />
             </div>
 
             <div class="form-group">
                 <strong>Type<span class="text-danger">*</span></strong>
-                <select class="form-control col-md-6" name="UrlFileType">
+                <select class="form-control col-md-8" name="UrlFileType">
                     <option value="0" label="Audio"></option>
                     <option value="1" label="Video" selected></option>
                     <option value="2" label="Image"></option>
@@ -69,9 +69,9 @@
             <strong>
                 Select a file<span class="text-danger">*</span>
             </strong>
-            <label class="form-control col-md-6 ContentFileLabel" for="ContentFile">
+            <label class="form-control col-md-8 ContentFileLabel" for="ContentFile">
                 <i class="FileName"></i>
-                <span for="ContentFile" class="btn btn-primary col-md-4 pull-right">BROWSE</span>
+                <span for="ContentFile" class="btn btn-primary col-md-3 pull-right">BROWSE</span>
             </label>
             <input type="file" name="File" id="ContentFile" class="form-control col-md-6"  />
         </div>
@@ -79,7 +79,7 @@
         <div id="metadata">
             <div class="form-group">
                 <strong>Title<span class="text-danger">*</span></strong>
-                <input type="text" name="Title" id="Title" required placeholder="e.g Stock Market Logic" class="form-control col-md-7" />
+                <input type="text" name="Title" id="Title" required placeholder="e.g Stock Market Logic" class="form-control col-md-9" />
             </div>
 
             <div class="form-group">
@@ -90,14 +90,14 @@
                         how to consume the content.
                     </i>)
                 </p>
-                <textarea id="Description" name="Desc" title="Description" required class="form-control col-md-7" rows="4"></textarea>
+                <textarea id="Description" name="Desc" title="Description" required class="form-control col-md-9" rows="4"></textarea>
             </div>
         </div>
     </div>
     <div class="form-group">
         <span class="pull-right">
-            <button class="btn btn-default">Cancel</button>
-            <button class="btn btn-danger"><i class="fa fa-upload"></i> Upload</button>
+            <button class="btn btn-default" type="button" onclick="window.history.go(-1)">Cancel</button>
+            <button class="btn btn-danger" type="submit"><i class="fa fa-upload"></i> Upload</button>
         </span>
     </div>
 </form>
@@ -105,12 +105,12 @@
 <script>
     var selectedFile = null;
     $(document).ready(function (e) {
-        $('#FileDiv').hide();
+        $('#UrlDiv').hide();
+        $('#Url').prop('required', false);
     })
     $('#ContentFile').change(function (e) {
         selectedFile = e.target.files[0];
 
-        console.log(selectedFile);
         $('.FileName').text(selectedFile.name+', '+ fileSize(selectedFile.size));
     });
     function toggleDiv(elem)

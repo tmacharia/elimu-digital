@@ -159,13 +159,20 @@ namespace web.Controllers
                     return this.Error(HttpStatusCode.InternalServerError, "Uploading file failed! Please try again.");
                 }
             }
-            
-            content = _repos.Contents.Create(content);
-            _repos.Commit();
 
-            await _notify.OnNewContent(content);
+            try
+            {
+                content = _repos.Contents.Create(content);
+                _repos.Commit();
 
-            return RedirectPermanent($"/contents/{content.Id}/{Services.Extensions.GenerateSlug(content.Title)}");
+                await _notify.OnNewContent(content);
+
+                return RedirectPermanent($"/contents/{content.Id}/{Services.Extensions.GenerateSlug(content.Title)}");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpGet]

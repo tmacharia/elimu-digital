@@ -1,29 +1,4 @@
-﻿var players;
-
-(function () {
-    // This is the bare minimum JavaScript. You can opt to pass no arguments to setup.
-    // e.g. just plyr.setup(); and leave it at that if you have no need for events
-    players = plyr.setup({
-        // Output to console
-        debug: false
-    });
-    players[0].on('ended', onExit);
-    // Get an element
-    function get(selector) {
-        return document.querySelector(selector);
-    }
-
-    // Custom event handler (just for demo)
-    function on(element, type, callback) {
-        if (!(element instanceof HTMLElement)) {
-            element = get(element);
-        }
-        element.addEventListener(type, callback, false);
-    }
-
-})();
-
-function onLikeContent(id, title, elem) {
+﻿function onLikeContent(id, title, elem) {
     $(elem).prop('disabled', true);
     postLike(id,elem);
 }
@@ -57,7 +32,7 @@ function updateLikes() {
     elem.text(count);
 }
 function onComment() {
-    var id = parseInt($('#CommentId').text());
+    var id = parseInt($('#ContentId').text());
     
     var comment = {};
 
@@ -119,5 +94,58 @@ function onDownloadContent(id) {
         url: '/api/progress/download',
         data: { id: id },
         type: 'json'
+    })
+}
+function onDeleteContent(id,unitId,unitName) {
+    $.confirm({
+        theme: 'supervan',
+        title: 'Delete this record?',
+        content: 'Are you sure you want to delete this course?',
+        type: 'red',
+        typeAnimated: true,
+        buttons: {
+            yes: {
+                text: 'Delete',
+                btnClass: 'btn-red',
+                action: function () {
+                    deleteContent(id);
+                }
+            },
+            No: function () {
+
+            }
+        }
+    })
+}
+function deleteContent(id,unitId,unitName) {
+    $.confirm({
+        theme: 'supervan',
+        content: function () {
+            var self = this;
+
+            return $.ajax({
+                url: '/api/contents/' + id,
+                dataType: 'json',
+                method: 'DELETE',
+            }).fail(function (response) {
+                if (response.status === 200) {
+                    self.setType('green');
+                    self.setIcon('fa fa-check-circle');
+                    self.setTitle('Record deleted successfully.');
+                    self.setContent(response.responseText);
+                    self.onAction = function () {
+                        setTimeout(function () {
+                            window.history.go(-2);
+                        }, 500);
+                    }
+
+                } else {
+                    self.setType('red');
+                    self.setIcon('fa fa-ban');
+                    self.setContent(response.responseText);
+                    self.setTitle(response.statusText);
+                }
+            })
+        }
     })
 }

@@ -29,5 +29,6 @@ namespace DAL.Models
         public virtual ICollection<Like> Likes { get; set; }
         public virtual ICollection<StudentUnit> UnitStudents { get; set; }
         public virtual ICollection<Content> Contents { get; set; }
+        public virtual ICollection<DiscussionBoard> Boards { get; set; }
     }
 }

@@ -39,31 +39,6 @@ function postClass() {
     })
 }
 
-var players;
-
-(function () {
-    // This is the bare minimum JavaScript. You can opt to pass no arguments to setup.
-    // e.g. just plyr.setup(); and leave it at that if you have no need for events
-    players = plyr.setup({
-        // Output to console
-        debug: false
-    });
-    players[0].on('ended', onExit);
-    // Get an element
-    function get(selector) {
-        return document.querySelector(selector);
-    }
-
-    // Custom event handler (just for demo)
-    function on(element, type, callback) {
-        if (!(element instanceof HTMLElement)) {
-            element = get(element);
-        }
-        element.addEventListener(type, callback, false);
-    }
-
-})();
-
 function onLikeContent(id, title, elem) {
     $(elem).prop('disabled', true);
     postLike(id,elem);
@@ -98,7 +73,7 @@ function updateLikes() {
     elem.text(count);
 }
 function onComment() {
-    var id = parseInt($('#CommentId').text());
+    var id = parseInt($('#ContentId').text());
     
     var comment = {};
 
@@ -160,6 +135,59 @@ function onDownloadContent(id) {
         url: '/api/progress/download',
         data: { id: id },
         type: 'json'
+    })
+}
+function onDeleteContent(id,unitId,unitName) {
+    $.confirm({
+        theme: 'supervan',
+        title: 'Delete this record?',
+        content: 'Are you sure you want to delete this course?',
+        type: 'red',
+        typeAnimated: true,
+        buttons: {
+            yes: {
+                text: 'Delete',
+                btnClass: 'btn-red',
+                action: function () {
+                    deleteContent(id);
+                }
+            },
+            No: function () {
+
+            }
+        }
+    })
+}
+function deleteContent(id,unitId,unitName) {
+    $.confirm({
+        theme: 'supervan',
+        content: function () {
+            var self = this;
+
+            return $.ajax({
+                url: '/api/contents/' + id,
+                dataType: 'json',
+                method: 'DELETE',
+            }).fail(function (response) {
+                if (response.status === 200) {
+                    self.setType('green');
+                    self.setIcon('fa fa-check-circle');
+                    self.setTitle('Record deleted successfully.');
+                    self.setContent(response.responseText);
+                    self.onAction = function () {
+                        setTimeout(function () {
+                            window.history.go(-2);
+                        }, 500);
+                    }
+
+                } else {
+                    self.setType('red');
+                    self.setIcon('fa fa-ban');
+                    self.setContent(response.responseText);
+                    self.setTitle(response.statusText);
+                }
+            })
+        }
     })
 }
 var course = {};
@@ -260,6 +288,7 @@ function onSearch() {
 
 }
 function onSelectUnit4Exam() {
+    $('#unitSelect').empty();
     $.ajax({
         method: 'GET',
         url: '/api/units/my',
@@ -317,13 +346,20 @@ function loadingBtn(id, bool) {
 }
 
 function yay(msg) {
-    toastr.success(msg);
+    toastr.success(msg, 'Success');
 }
-
+function info(msg) {
+    toastr.info(msg, 'Information');
+}
 function error(msg) {
-    toastr.error(msg);
+    toastr.error(msg, 'Error');
 }
-
+function warning(msg) {
+    toastr.warning(msg, 'Warning', {
+        progressBar: true,
+        positionClass: 'toast-bottom-right'
+    });
+}
 function deleteConfirm() {
     
 }
@@ -357,6 +393,39 @@ function slugify(string) {
       .replace(/^-+/, "")
       .replace(/-+$/, "");
 }
+
+function newGuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+/**
+     * @@param num The number to round off
+     * @@param precision The number of decimal places to preserve
+     */
+function roundOff(number, decimal) {
+    var zeros = new String(1.0.toFixed(decimal));
+    zeros = zeros.substr(2);
+    var mul_div = parseInt("1" + zeros);
+    var increment = parseFloat("." + zeros + "01");
+    if (((number * (mul_div * 10)) % 10) >= 5)
+    { number += increment; }
+    return Math.round(number * mul_div) / mul_div;
+}
+Date.prototype.addHours = function (h) {
+    this.setHours(this.getHours() + h);
+    return this;
+}
+Date.prototype.addMinutes = function (m) {
+    this.setMinutes(this.getMinutes() + m);
+    return this;
+}
+Date.prototype.addSeconds = function (s) {
+    this.setSeconds(this.getSeconds() + s);
+    return this;
+}
+
 var unit = {};
 (function () {
     $('#unitBtnSubmit').click(function (e) {
@@ -511,6 +580,61 @@ function pushAllocateUnit() {
         },
         error: function (response) {
             error(response.responseText);
+        }
+    })
+}
+
+function onDeleteUnit(id) {
+    $.confirm({
+        theme: 'supervan',
+        title: 'Delete this record?',
+        content: 'Are you sure you want to delete this course?',
+        type: 'red',
+        typeAnimated: true,
+        buttons: {
+            yes: {
+                text: 'Delete',
+                btnClass: 'btn-red',
+                action: function () {
+                    deleteUnit(id);
+                }
+            },
+            No: function () {
+
+            }
+        }
+    })
+};
+
+function deleteUnit(id) {
+    $.confirm({
+        theme: 'supervan',
+        content: function () {
+            var self = this;
+
+            return $.ajax({
+                url: '/api/units/' + id,
+                dataType: 'json',
+                method: 'DELETE',
+            }).fail(function (response) {
+                if (response.status === 200) {
+                    self.setType('green');
+                    self.setIcon('fa fa-check-circle');
+                    self.setTitle(response.responseText);
+                    self.setContent('Record deleted successfully.');
+                    self.onAction = function () {
+                        setTimeout(function () {
+                            location.reload();
+                        }, 500);
+                    }
+
+                } else {
+                    self.setType('red');
+                    self.setIcon('fa fa-ban');
+                    self.setContent(response.responseText);
+                    self.setTitle(response.statusText);
+                }
+            })
         }
     })
 }

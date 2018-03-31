@@ -71,7 +71,6 @@ namespace web
             services.AddTransient<IDataManager, DataManager>();
             services.AddTransient<INotificationManager, NotificationManager>();
             services.AddTransient<IProgressTracker, ProgressTracker>();
-            services.AddTransient<IExamManager, ExamManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,7 +78,7 @@ namespace web
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -18,25 +18,22 @@ namespace web.Controllers
         private readonly INotificationManager _notify;
         private readonly UserManager<AppUser> _userManager;
         private readonly IRepositoryFactory _repos;
-        private readonly IExamManager _examManager;
         private readonly IMapper _mapper;
 
         public ExamsController(INotificationManager notificationManager,
                                UserManager<AppUser> userManager,
                                IRepositoryFactory factory, 
-                               IExamManager examManager,
                                IMapper mapper)
         {
             _notify = notificationManager;
             _repos = factory;
-            _examManager = examManager;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            return View(_examManager.All.ToList());
+            return View();
         }
 
         [HttpGet]
@@ -89,6 +86,101 @@ namespace web.Controllers
             _repos.Commit();
 
             return Ok(model.Id);
+        }
+
+        [HttpGet]
+        [Route("exams/for-unit/{id}/{name}")]
+        public IActionResult ExamsForUnit(int id,string name)
+        {
+            if(id < 1)
+            {
+                return BadRequest("Invalid unit Id.");
+            }
+
+            var unit = _repos.Units.Get(id);
+
+            if(unit == null)
+            {
+                return NotFound("Unit with that id does not exist in records.");
+            }
+
+            return View(unit);
+        }
+
+        [HttpGet]
+        [Route("exams/{id}/scores")]
+        public IActionResult ExamScores(int id)
+        {
+            if(id < 1)
+            {
+                return BadRequest("Invalid exam id.");
+            }
+
+            var exam = _repos.Exams.Get(id);
+
+            if (exam == null)
+            {
+                return NotFound("Exam not found.");
+            }
+
+            return View(exam);
+        }
+
+        [HttpGet]
+        [Route("exams/{id}/myscore")]
+        public IActionResult MyExamScore(int id)
+        {
+            if (id < 1)
+            {
+                return BadRequest("Invalid exam id.");
+            }
+
+            var exam = _repos.Exams.Get(id);
+
+            if (exam == null)
+            {
+                return NotFound("Exam not found.");
+            }
+
+            return View(exam);
+        }
+
+        [HttpGet]
+        [Route("exams/progress/{id}/{type}/{name}")]
+        public IActionResult Progress(int id,string type,string name)
+        {
+            if (id < 1)
+            {
+                return BadRequest("Invalid exam id.");
+            }
+
+            var exam = _repos.Exams.Get(id);
+
+            if (exam == null)
+            {
+                return NotFound("Exam not found.");
+            }
+
+            return View(exam);
+        }
+
+        [HttpGet]
+        [Route("exams/{id}/session")]
+        public IActionResult Session(int id)
+        {
+            if(id < 1)
+            {
+                return BadRequest("Invalid exam id.");
+            }
+
+            var exam = _repos.Exams.Get(id);
+
+            if(exam == null)
+            {
+                return NotFound("Exam record with that id does not exist in records.");
+            }
+
+            return View(exam);
         }
     }
 }

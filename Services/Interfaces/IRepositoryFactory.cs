@@ -30,6 +30,7 @@ namespace Services
         IRepository<Post> Posts { get; }
         IRepository<CourseworkProgress> CourseworkProgress { get; }
         IRepository<StudentCourse> StudentCourses { get; }
+        IRepository<ExamSession> ExamSessions { get; }
 
         void Commit();
     }

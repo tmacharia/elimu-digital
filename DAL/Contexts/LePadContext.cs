@@ -1,5 +1,6 @@
 ﻿using DAL.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,6 +37,7 @@ namespace DAL.Contexts
         public virtual DbSet<DiscussionBoard> DiscussionBoards { get; set; }
         public virtual DbSet<CourseworkProgress> CourseworkProgress { get; set; }
         public virtual DbSet<StudentCourse> StudentCourses { get; set; }
+        public virtual DbSet<ExamSession> ExamSessions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -47,12 +49,14 @@ namespace DAL.Contexts
             builder.Entity<StudentUnit>()
                    .HasOne(s => s.Student)
                    .WithMany(s => s.StudentUnits)
-                   .HasForeignKey(s => s.StudentId);
+                   .HasForeignKey(s => s.StudentId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<StudentUnit>()
                    .HasOne(s => s.Unit)
                    .WithMany(s => s.UnitStudents)
-                   .HasForeignKey(s => s.UnitId);
+                   .HasForeignKey(s => s.UnitId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<StudentCourse>()
                    .HasKey(c => new { c.StudentId, c.CourseId });
@@ -60,12 +64,21 @@ namespace DAL.Contexts
             builder.Entity<StudentCourse>()
                    .HasOne(c => c.Student)
                    .WithMany(c => c.StudentCourses)
-                   .HasForeignKey(c => c.StudentId);
+                   .HasForeignKey(c => c.StudentId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<StudentCourse>()
                    .HasOne(c => c.Course)
                    .WithMany(c => c.CourseStudents)
-                   .HasForeignKey(c => c.CourseId);
+                   .HasForeignKey(c => c.CourseId)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<DiscussionBoard>()
+                   .HasOne(d => d.Unit)
+                   .WithMany(d => d.Boards)
+                   .HasForeignKey(d => d.UnitId)
+                   .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

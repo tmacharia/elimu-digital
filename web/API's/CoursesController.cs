@@ -51,8 +51,16 @@ namespace web.API_s
             // upload backdrop image
             if (Request.Form.Files.Count > 0)
             {
-                IFile file = new FormFile(Request.Form.Files[0]);
-                course.BackdropUrl = await _uploader.Upload(file);
+                var uploadedFile = Request.Form.Files[0];
+
+                if(uploadedFile.Length > 0)
+                {
+                    IFile file = new FormFile(Request.Form.Files[0]);
+                    course.BackdropUrl = await _uploader.Upload(file);
+                }else
+                {
+                    course.BackdropUrl = "https://devtimmystorage.blob.core.windows.net/images/education_button2.jpg";
+                }
             }
 
             // get school
