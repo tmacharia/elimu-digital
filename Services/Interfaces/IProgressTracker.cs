@@ -14,6 +14,8 @@ namespace Services.Interfaces
 
         CourseworkProgress GetProgress(int contentId, int studentId);
         CourseworkProgress GetProgress(int progressId);
+        IList<CourseWrkPrgsVM> GetProgressByUnit(int unitId, int studentId, int count = 5000);
+
 
         IList<StudentProgressViewModel> TrackProgress(int contentId);
         IList<CourseworkProgress> TrackUnitProgress(int unitId);

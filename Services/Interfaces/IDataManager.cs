@@ -13,6 +13,7 @@ namespace Services
         IEnumerable<Lecturer> MyLecturers(int studentId, int count=5000);
         IEnumerable<Lecturer> MyColleagues(int lecturerId);
         MyCoursesViewModel MyCourses(int studentId);
+        ExamDetailsViewModel GetExam(int id);
 
         IEnumerable<Student> MyClassMates(int id);
         IEnumerable<Unit> MyUnits<T>(int id, int count=5000) where T : class;

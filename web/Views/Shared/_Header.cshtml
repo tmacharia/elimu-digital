@@ -27,7 +27,17 @@
         </svg>
     </a>
     <div class="navbar-text nav-title flex" id="pageTitle">
-        Dashboard <span class="text-muted h6"> <i class="ion ion-arrow-right-b"></i> Gobel Digital University</span>
+        @{
+            if (ViewBag.Title == "Exam Session")
+            {
+                <span><i class="fa fa-flask"></i> Exam Lab </span>
+            }
+            else
+            {
+                <span>@ViewBag.Action </span>
+            }
+        }
+        <span class="text-muted h6"> <i class="ion ion-arrow-right-b"></i> Gobel Digital University</span>
     </div>
     <ul class="nav flex-row order-lg-2">
         <li class="nav-item dropdown">

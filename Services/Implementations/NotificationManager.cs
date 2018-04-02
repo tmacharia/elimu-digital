@@ -30,7 +30,7 @@ namespace Services.Implementations
             }
 
             string subject = "New Content Uploaded.";
-            string message = $"Your lecturer has uploaded a {content.Type.ToString()} to '{content.Unit.Name}'" +
+            string message = $"Your lecturer has uploaded a {content.Type.ToString()} to '{content.Unit.Name}' " +
                              $"learning materials with the title <b>{content.Title}</b>.";
             
             // get all students for this unit
@@ -60,7 +60,7 @@ namespace Services.Implementations
             }
 
             string subject = "EXAM";
-            string message = $"Your lecturer has added an exam for '{exam.Unit.Name}'.<br/>" +
+            string message = $"Your lecturer has added an exam for '{exam.Unit.Name}' .<br/>" +
                              $"The exam is scheduled for <b>{exam.Start.ToString()}</b>.<br/>" +
                              $"Prepare & revise widely using unit materials.";
 

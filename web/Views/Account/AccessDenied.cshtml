@@ -1,8 +1,20 @@
-﻿@{
-    ViewData["Title"] = "Access Denied";
+﻿@using Services
+@{
+    Layout = null;
+    ViewBag.Title = "Access Denied";
+    ViewBag.Action = "Account";
 }
+<link href="~/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<title>@ViewBag.Title | @Extensions.Uni</title>
+<body>
+    <div class="container">
+        <div>
+            <h1 class="text-danger">Access Denied!</h1>
+            <p>You are not authorized to perform this action.</p>
 
-<header>
-    <h1 class="text-danger">Access Denied.</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+            <a class="btn btn-default" onclick="window.history.go(-1)">
+                <i class="fa fa-arrow-left"></i> Go back
+            </a>
+        </div>
+    </div>
+</body>

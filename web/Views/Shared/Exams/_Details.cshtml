@@ -163,6 +163,15 @@
                         if(User.Role() == "Lecturer" || User.Role() == "Administrator")
                         {
                             <div>
+                                <h5>Actions</h5>
+                                <div>
+                                    <a class="btn btn-default" href="/exams/{{selectedExam.id}}/scores">
+                                        Exam Results
+                                    </a>
+                                    <a class="btn btn-default" href="/exams/{{selectedExam.id}}/statistics">
+                                        <i class="ion ion-pie-graph"></i> Student Statistics
+                                    </a>
+                                </div>
                                 <br />
                                 <h5>
                                     <span>

@@ -5,6 +5,7 @@ using System.Text;
 using DAL.Models;
 using System.Reflection;
 using Common.ViewModels;
+using System.Collections;
 
 namespace Services
 {
@@ -337,6 +338,64 @@ namespace Services
 
             return exams.Take(count)
                         .ToList();
+        }
+
+        public ExamDetailsViewModel GetExam(int id)
+        {
+            Exam exam = _repos.Exams.GetWith(id, "Unit",
+                                     "Unit.Course",
+                                     "Unit.Lecturer",
+                                     "Unit.Lecturer.Profile",
+                                     "Questions",
+                                     "Questions.Answers",
+                                     "Likes",
+                                     "Comments");
+
+
+            if (exam == null)
+            {
+                throw new Exception("Exam with that id does not exist in records.");
+            }
+
+            var model = new ExamDetailsViewModel()
+            {
+                Code = exam.Code,
+                Comments = exam.Comments,
+                Date = exam.Date,
+                End = exam.End,
+                Id = exam.Id,
+                Instructor = exam.Unit.Lecturer.Profile,
+                Unit = new ExamUnit()
+                {
+                    Id = exam.Unit.Id,
+                    Name = exam.Unit.Name
+                },
+                Course = new ExamCourse()
+                {
+                    Id = exam.Unit.Course.Id,
+                    Code = exam.Unit.Course.Code,
+                    Name = exam.Unit.Course.Name,
+                    Type = exam.Unit.Course.Type
+                },
+                Name = exam.Name,
+                Likes = exam.Likes,
+                Start = exam.Start,
+                Moment = exam.Moment,
+                Questions = exam.Questions.Select(q => new ExamQuestion()
+                {
+                    Id = q.Id,
+                    Marks = q.Marks,
+                    Text = q.Text,
+                    Answers = q.Answers.Select(a => new QuestionAnswer()
+                    {
+                        Id = a.Id,
+                        Text = a.Text,
+                        IsCorrect = a.IsCorrect
+                    }).ToList()
+                }).ToList()
+            };
+
+            return model;
         }
     }
 }

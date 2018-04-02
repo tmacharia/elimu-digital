@@ -34,6 +34,13 @@
         $scope.onInitUnitExams = function (id) {
             fetchExamsByUnit(id);
         }
+        $scope.initExamSession = function (id) {
+            $scope.title = 'Session';
+            fetchExamSession(id);
+        }
+        $scope.initCourseWrkProgress = function (id) {
+            fetchCourseWrkProgress(id);
+        }
         $scope.onAddQuestion = function () {
             $scope.question = {
                 Answers: []
@@ -257,6 +264,77 @@
             });
 
             $scope.loader = false;
+        }
+        function fetchExamSession(id) {
+            $scope.loader = true;
+
+            $.ajax({
+                method: 'GET',
+                url: '/api/exams/' + id + '/session',
+                success: function (res) {
+                    onFetchSessionSuccess(res);
+                },
+                error: function (res) {
+                    if (res.responseText) {
+                        parseError(res.responseText);
+                    } else {
+                        error(res.statusText);
+                    }
+                }
+            });
+            $scope.loader = false;
+        }
+        function fetchCourseWrkProgress(id) {
+            $scope.courseWrkLoader = {};
+            $scope.courseWrkLoader.IsActive = true;
+            $scope.courseWrkLoader.Text = 'loading coursework progress...';
+
+            $.ajax({
+                method: 'GET',
+                url: '/api/progress/unit/' + id + '/my',
+                success: function (res) {
+                    if (res.data.length > 0) {
+                        $scope.$apply(function () {
+                            $scope.courseworkprogress = res.data;
+                            $scope.courseWrkLoader.IsActive = false;
+                            $scope.courseWrkLoader.Text = '';
+                        })
+                    } else {
+                        $scope.$apply(function () {
+                            $scope.courseWrkLoader.IsActive = false;
+                            info('This unit has not coursework materials uploaded.');
+                        })
+                    }
+                },
+                error: function (res) {
+                    $scope.courseWrkLoader.IsActive = false;
+                    $scope.courseWrkLoader.Text = '';
+
+                    if (res.responseText) {
+                        parseError(res.responseText);
+                    } else {
+                        error(res.statusText);
+                    }
+                }
+            });
+        }
+        function onFetchSessionSuccess(data) {
+            $scope.$apply(function () {
+                $scope.title = 'Exam Session, Id: ' + data.sessionId.substring(0, 6);
+                $scope.session = data;
+
+                $('#rootwizard').bootstrapWizard({
+                    onTabShow: function (tab, navigation, index) {
+                        if (index > 0) {
+                            var $total = navigation.find('li').length - 1;
+                            var $current = index + 1;
+                            var $percent = ($current / $total) * 100;
+                            $('#rootwizard .progress-bar').css({ width: $percent + '%' });
+                        }
+                    }
+                });
+            });
+            console.log(data);
         }
     }
 })();

@@ -22,7 +22,7 @@
         @Html.Partial("_ProdResources")
     </environment>
 </head>
-<body class="pace-done ">
+<body class="pace-done">
 
     <noscript>
         Javascript has to be enabled in browser settings for this application
@@ -33,6 +33,10 @@
         
             @{ 
                 if(ViewBag.Title == "Enrollments" || ViewBag.Title == "Course Enrollment Successful")
+                {
+
+                }
+                else if(ViewBag.Title == "Exam Session")
                 {
 
                 }
@@ -55,6 +59,11 @@
             
             @{ 
                 if(ViewBag.Title == "Enrollments" || ViewBag.Title == "Course Enrollment Successful")
+                {
+
+
+                }
+                else if(ViewBag.Title == "Exam Session")
                 {
 
 

@@ -2,6 +2,7 @@
 using Common.ViewModels;
 using DAL.Extensions;
 using DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services;
@@ -65,58 +66,7 @@ namespace web.API_s
                 return BadRequest("Invalid exam id.");
             }
 
-            Exam exam = _repos.Exams.GetWith(id, "Unit",
-                                     "Unit.Course",
-                                     "Unit.Lecturer",
-                                     "Unit.Lecturer.Profile",
-                                     "Questions",
-                                     "Questions.Answers",
-                                     "Likes",
-                                     "Comments");
-                                     
-
-            if(exam == null)
-            {
-                return NotFound("Exam with that id does not exist in records.");
-            }
-
-            var model = new ExamDetailsViewModel()
-            {
-                Code = exam.Code,
-                Comments = exam.Comments,
-                Date = exam.Date,
-                End = exam.End,
-                Id = exam.Id,
-                Instructor = exam.Unit.Lecturer.Profile,
-                Unit = new ExamUnit()
-                {
-                    Id = exam.Unit.Id,
-                    Name = exam.Unit.Name
-                },
-                Course = new ExamCourse()
-                {
-                    Id = exam.Unit.Course.Id,
-                    Code = exam.Unit.Course.Code,
-                    Name = exam.Unit.Course.Name,
-                    Type = exam.Unit.Course.Type
-                },
-                Name = exam.Name,
-                Likes = exam.Likes,
-                Start = exam.Start,
-                Moment = exam.Moment,
-                Questions = exam.Questions.Select(q => new ExamQuestion()
-                {
-                    Id = q.Id,
-                    Marks = q.Marks,
-                    Text = q.Text,
-                    Answers = q.Answers.Select(a => new QuestionAnswer()
-                    {
-                        Id = a.Id,
-                        Text = a.Text,
-                        IsCorrect = a.IsCorrect
-                    }).ToList()
-                }).ToList()
-            };
+            var model = _dataManager.GetExam(id);
 
             return Ok(model);
         }
@@ -138,9 +88,51 @@ namespace web.API_s
 
         [HttpGet]
         [Route("{id}/session")]
-        public IActionResult GetSession(int id)
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetSession(int id)
         {
-            return Ok();
+            if(id < 1)
+            {
+                return BadRequest("Invalid exam id.");
+            }
+
+            AppUser user = await _usermanager.GetUserAsync(User);
+
+            var exam = _repos.Exams.GetWith(id, "Sessions");
+
+            if(exam == null)
+            {
+                return NotFound("Exam record with that id does not exist.");
+            }
+
+            var session = exam.Sessions
+                              .FirstOrDefault(x => x.StudentId == user.AccountId);
+
+            if(session == null)
+            {
+                session = new ExamSession()
+                {
+                    ExamId = exam.Id,
+                    StudentId = user.AccountId
+                };
+
+                session = _repos.ExamSessions.Create(session);
+                exam.Sessions.Add(session);
+                exam = _repos.Exams.Update(exam);
+                _repos.Commit();
+            }
+
+            var examViewModel = _dataManager.GetExam(id);
+            var examSession = new ExamSessionViewModel()
+            {
+                Id = session.Id,
+                SessionId = session.SessionId,
+                TotalQuestions = examViewModel.Questions.Count,
+                TotalMarks = examViewModel.Questions.Sum(x => x.Marks),
+                Exam = examViewModel
+            };
+
+            return Ok(examSession);
         }
 
         [HttpPost]

@@ -20,6 +20,10 @@ html, body {
 .underline{
     text-decoration:underline !important;
 }
+.light{
+    font-weight:300;
+    background:none;
+}
 /*================================
      Text styles & overrides
  *===============================*/

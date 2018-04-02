@@ -3,6 +3,252 @@
 @model Exam
 @{
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
-    ViewBag.Title = "Exams Session";
+    ViewBag.Title = "Exam Session";
     ViewBag.Action = "Exams";
 }
+<style>
+    .panel{
+        background:#fff;
+    }
+    .panel-title{
+        padding:15px;
+        border:1px solid #f7f7f7;
+    }
+    .panel-body{
+        padding:15px;
+    }
+    .panel-footer{
+        padding:15px;
+        float:right;
+    }
+    #rootwizard .navbar{
+        opacity:0;
+        min-height:unset;
+        height:.5rem !important;
+    }
+    .progress{
+        height:.5rem;
+        margin-bottom:10px;
+    }
+    .origin-bg{
+        background-size:cover;
+        background-repeat:no-repeat;
+    }
+    .origin-panel{
+        background:rgba(0, 148, 255, 0.7);
+        padding:30px 50px;
+        color:#fff;
+    }
+    .origin-level p{
+        font-size:1rem;
+    }
+    .origin-level ul{
+        list-style-type:none;
+    }
+    .origin-level ul li{
+        display:inline-block;
+        text-align:center;
+        margin:0px 10px;
+    }
+    .origin-level ul li span {
+        font-size:3.5rem;
+        font-weight: 700;
+        line-height:1.2;
+        opacity:.5;
+    }
+    .exam-ref{
+        margin:0;
+        padding:0;
+        width:auto;
+        font-size:1.6rem;
+    }
+    .exam-ref span:first-child {
+        background: #fed200;
+        padding:5px 10px;
+        color: #000;
+    }
+    .exam-ref span:last-child {
+        background: #3c3d3f;
+        color: #fff;
+        padding: 5px 10px;
+        margin-left: -8px;
+    }
+    .box{
+        padding:15px;
+    }
+    .thin{
+        font-weight:300;
+    }
+    .reaction-btn{
+        font-size:1.2rem;
+        cursor:pointer;
+    }
+    .exam-time{
+        font-size:1.4rem;
+        font-weight:500;
+        color:rgb(0, 148, 255);
+    }
+    .exam-table td {
+        border-color: #dee2e6 !important;
+    }
+</style>
+<div class="origin-bg" style="background-image:url(@Model.Unit.Course.BackdropUrl)">
+    <div class="origin-panel">
+        <div class="row">
+            <div class="col-md-9 col-sm-6 col-xs-12">
+                 <h1 class="display-4">
+                    @Model.Unit.Name
+                </h1>
+                <h4>
+                    @switch (Model.Unit.Course.Type)
+                     {
+                         case CourseType.Certificate:
+                             <i class="fa fa-certificate"></i>
+                             break;
+                         case CourseType.Diploma:
+                             <i class="fa fa-certificate text-warning"></i>
+                             break;
+                         case CourseType.Degree:
+                             <i class="fa fa-certificate text-success"></i>
+                             break;
+                         case CourseType.Masters:
+                             <i class="fa fa-certificate text-info"></i>
+                             break;
+                         case CourseType.Phd:
+                             <i class="fa fa-certificate text-danger"></i>
+                             break;
+                         default:
+                             break;
+                     }
+                    <span> @Model.Unit.Course.Name</span>
+                </h4>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <span class="pull-right origin-level">
+                    <ul>
+                        <li>
+                            <p class="text-uppercase">Year</p>
+                            <span>@Model.Unit.Level</span>
+                        </li>
+                        <li>
+                            <p class="text-uppercase">Semester</p>
+                            <span>@Model.Unit.Semester</span>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="padding" ng-app="gobel-app">
+    <div ng-controller="examCtrl" ng-init="initExamSession('@Model.Id')">
+        <div class="row">
+            <div class="exam-ref">
+                <span>Exam-Ref</span>
+                <span class="text-uppercase">@Model.Code.ToString().Substring(0, 6)</span>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3 col-sm-4 col-xs-12">
+                <div class="box">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                            <img style="width:100%;height:100%;object-fit:cover;"
+                                 src="@Model.Unit.Lecturer.Profile.PhotoUrl" />
+                        </div>
+                        <div class="col-md-9 col-sm-6 col-xs-12">
+                            <h6>@Model.Unit.Lecturer.Profile.FullNames</h6>
+                            <h6>Instructor</h6>
+                        </div>
+                    </div>
+                    <hr />
+                    <h6>
+                        <b>Published: </b>@Model.Timestamp.ToString("MMMM d, yyyy")
+                    </h6>
+                </div>
+            </div>
+
+            <div class="col-md-7 col-sm-6 col-xs-12">
+                <div class="box">
+                    <h3 class="thin">
+                        @Model.Name
+
+                        <span class="pull-right">
+                            <span title="Like" class="reaction-btn">
+                                <i class="fa fa-thumbs-o-up"></i>
+                            </span>
+                        </span>
+                    </h3>
+                    <p class="exam-time">
+                        <span>
+                            @Model.Start.ToString("hh:mm tt")
+                        </span>
+                        <span> - </span>
+                        <span>
+                            @Model.End.ToString("hh:mm tt")
+                        </span>
+                    </p>
+                    <table class="table table-bordered exam-table">
+                        <tbody>
+                            <tr>
+                                <td>Questions: <b>@Model.Questions.Count</b></td>
+                                <td>Total marks: <b>@Model.Questions.Sum(x => x.Marks)</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div ng-init="initCourseWrkProgress('@Model.Unit.Id')">
+                        <p>Coursework Progress<span class="text-danger">*</span></p>
+                        <center ng-show="courseWrkLoader.IsActive">
+                            <br />
+                            <i class="fa fa-spinner fa-spin fa-2x" ></i>
+                            <br />
+                            <br />
+                            <p>
+                                {{courseWrkLoader.Text}}
+                            </p>
+                        </center>
+                        <div ng-repeat="prg in courseworkprogress">
+                            <span>
+                                {{prg.content}}
+                                <span class="pull-right">
+                                    {{prg.percentageComplete}}%
+                                </span>
+                            </span>
+                            <div class="progress" style="height:5px; margin-top:3px; margin-left:10px;">
+                                <div class="progress-bar bg-success"
+                                     role="progressbar"
+                                     style="width:{{prg.percentageComplete}}%">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-sm-2 col-xs-12">
+                <div class="box" style="text-align:center;">
+                    <h2>
+                        <i class="ion ion-ios-alarm ion-3x"></i>
+                        <span> 3:00:00</span>
+                    </h2>
+                </div>
+            </div>
+        </div>
+        <!--Loader Container-->
+        <div ng-show="loader">
+            <center>
+                <span>
+                    <i class="fa fa-spinner fa-spin fa-2x"></i>
+                </span>
+                <br />
+                <p>
+                    Initializing exam session...
+                </p>
+            </center>
+        </div>
+        <!--End-->
+
+    </div>
+</div>

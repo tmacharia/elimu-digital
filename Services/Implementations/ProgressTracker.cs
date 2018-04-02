@@ -150,5 +150,52 @@ namespace Services.Implementations
 
             return list;
         }
+        public IList<CourseWrkPrgsVM> GetProgressByUnit(int unitId, int studentId, int count = 5000)
+        {
+            List<CourseWrkPrgsVM> list = new List<CourseWrkPrgsVM>();
+            IEnumerable<Content> unitContents = new List<Content>();
+            IList<CourseworkProgress> _myprogress = _repos.CourseworkProgress
+                                                         .List
+                                                         .Where(x => x.StudentId == studentId)
+                                                         .ToList();
+
+            var unit = _repos.Units.GetWith(unitId, "Contents");
+
+            if (unit != null)
+            {
+                unitContents = unit.Contents;
+            }
+
+            foreach (var item in unitContents)
+            {
+                var prg = _myprogress.FirstOrDefault(x => x.ContentId == item.Id);
+
+                if (prg != null)
+                {
+                    list.Add(ContentToViewModel(item, prg));
+                }
+                else
+                {
+                    list.Add(ContentToViewModel(item));
+                }
+            }
+
+            return list.Take(count)
+                       .ToList();
+        }
+        private CourseWrkPrgsVM ContentToViewModel(Content item, CourseworkProgress prg = null)
+        {
+            var vm = new CourseWrkPrgsVM()
+            {
+                Id = (prg != null) ? prg.Id : 0,
+                Content = item.Title,
+                Current = (prg != null) ? prg.Current : 0,
+                IsComplete = (prg != null) ? prg.IsComplete : false,
+                Overall = (prg != null) ? prg.Overall : 0,
+                PercentageComplete = (prg != null) ? prg.PercentageComplete : 0
+            };
+
+            return vm;
+        }
     }
 }

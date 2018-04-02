@@ -63,7 +63,7 @@ namespace web.Controllers
         [HttpPost]
         [Route("api/exams/create")]
         [Authorize(Roles = "Lecturer")]
-        public IActionResult Create(int id, Exam model)
+        public async Task<IActionResult> Create(int id, Exam model)
         {
             if (!ModelState.IsValid)
             {
@@ -84,6 +84,8 @@ namespace web.Controllers
             model.Unit = unit;
             model = _repos.Exams.Create(model);
             _repos.Commit();
+
+            await _notify.OnNewExam(model);
 
             return Ok(model.Id);
         }
@@ -166,7 +168,31 @@ namespace web.Controllers
 
         [HttpGet]
         [Route("exams/{id}/session")]
+        [Authorize(Roles = "Student")]
         public IActionResult Session(int id)
+        {
+            if(id < 1)
+            {
+                return BadRequest("Invalid exam id.");
+            }
+
+            var exam = _repos.Exams.GetWith(id,
+                                    "Unit",
+                                    "Unit.Course",
+                                    "Unit.Lecturer.Profile",
+                                    "Questions");
+
+            if(exam == null)
+            {
+                return NotFound("Exam record with that id does not exist in records.");
+            }
+
+            return View(exam);
+        }
+
+        [HttpGet]
+        [Route("exams/{id}/statistics")]
+        public IActionResult Statistics(int id)
         {
             if(id < 1)
             {
@@ -177,7 +203,7 @@ namespace web.Controllers
 
             if(exam == null)
             {
-                return NotFound("Exam record with that id does not exist in records.");
+                return NotFound("Exam record with that id does not exist.");
             }
 
             return View(exam);

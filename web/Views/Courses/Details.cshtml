@@ -108,20 +108,24 @@
                                     <div>
                                         <span class="item-date text-xs">
                                             @{
-                                                if (item.Lecturer == null && User.Role() == "Administrator")
+                                                if (User.Role() == "Administrator")
                                                 {
                                                     <span class="item-action dropdown pull-right">
                                                         <a class="text-muted" data-toggle="dropdown" href="#">
                                                             <i class="fa fa-fw fa-ellipsis-v"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right text-color" role="menu">
-                                                            <a class="dropdown-item"
-                                                               data-toggle="modal"
-                                                               data-target="#assignLecModal"
-                                                               onclick="onAssignLecturer('@item.Name','@item.Id')">
-                                                                <i class="fa fa-tag"></i> Assign to Lecturer
-                                                            </a>
-
+                                                            @{ 
+                                                                if(item.Lecturer == null)
+                                                                {
+                                                                    <a class="dropdown-item"
+                                                                       data-toggle="modal"
+                                                                       data-target="#assignLecModal"
+                                                                       onclick="onAssignLecturer('@item.Name','@item.Id')">
+                                                                        <i class="fa fa-tag"></i> Assign to Lecturer
+                                                                    </a>
+                                                                }
+                                                            }
                                                             <a class="dropdown-item"
                                                                onclick="onDeleteUnit('@item.Id')">
                                                                 <i class="fa fa-trash"></i> Delete Unit

@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Common.ViewModels;
+using DAL.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using Services.Interfaces;
@@ -14,10 +17,12 @@ namespace web.API_s
     public class ProgressController : Controller
     {
         private readonly IProgressTracker _tracker;
+        private readonly UserManager<AppUser> _userManager;
 
-        public ProgressController(IProgressTracker tracker)
+        public ProgressController(IProgressTracker tracker, UserManager<AppUser> userManager)
         {
             _tracker = tracker;
+            _userManager = userManager;
         }
 
         [HttpPost]
@@ -59,6 +64,52 @@ namespace web.API_s
             _tracker.TrackDownload(id);
 
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("unit/{id}")]
+        public IActionResult UnitProgress(int id)
+        {
+            if(id < 1)
+            {
+                return BadRequest("Invalid unit id.");
+            }
+
+            var progress = _tracker.TrackUnitProgress(id);
+
+            if(progress == null)
+            {
+                return NotFound("Progress data not found.");
+            }
+
+            return Ok(progress);
+        }
+
+        [HttpGet]
+        [Route("unit/{id}/my")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> MyUnitProgress(int id)
+        {
+            if (id < 1)
+            {
+                return BadRequest("Invalid unit id.");
+            }
+
+            AppUser user = await _userManager.GetUserAsync(User);
+
+            var progress = _tracker.GetProgressByUnit(id, user.AccountId);
+
+            if(progress == null)
+            {
+                return NotFound("Coursework progress data for unit not found.");
+            }
+
+            var root = new RootCourseWorkPrgs()
+            {
+                Data = progress
+            };
+
+            return Ok(root);
         }
     }
 }
