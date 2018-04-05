@@ -4,7 +4,6 @@
     ViewBag.Title = "Examinations";
     ViewBag.Action = "Exams";
 }
-
 <div class="padding" ng-app="gobel-app">
     <div ng-controller="examCtrl" ng-init="onInitExamIndex()">
         <h3>
@@ -12,14 +11,14 @@
             <span class="ml-auto h6"><b class="badge danger">{{exams.length}}</b></span>
 
             @{
-            if (User.Role() == "Lecturer")
-            {
-                <span class="pull-right">
-                    <button class="btn btn-success" data-toggle="modal" data-target="#setExamUnitChooserModal" onclick="onSelectUnit4Exam()">
-                        <i class="fa fa-cube"></i> Set New Exam
-                    </button>
-                </span>
-        }
+                if (User.Role() == "Lecturer")
+                {
+                    <span class="pull-right">
+                        <button class="btn btn-success" data-toggle="modal" data-target="#setExamUnitChooserModal" onclick="onSelectUnit4Exam()">
+                            <i class="fa fa-cube"></i> Set New Exam
+                        </button>
+                    </span>
+                }
             }
         </h3>
         <br />
@@ -76,11 +75,11 @@
                     <span>No exams scheduled.</span>
                     <br />
                     @if (User.Role() == "Lecturer")
-                {
-                    <a class="underline" data-toggle="modal" data-target="#setExamUnitChooserModal" onclick="onSelectUnit4Exam()">
-                        <b>Schedule now!</b>
-                    </a>
-            }
+                    {
+                        <a class="underline" data-toggle="modal" data-target="#setExamUnitChooserModal" onclick="onSelectUnit4Exam()">
+                            <b>Schedule now!</b>
+                        </a>
+                    }
                 </p>
             </center>
         </div>

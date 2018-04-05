@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DAL.Contexts;
 using DAL.Models;
-using Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Services;
-using Swashbuckle.AspNetCore.Swagger;
 using Services.Interfaces;
 using Services.Implementations;
 
@@ -59,7 +54,8 @@ namespace web
                         options.SerializerSettings.Formatting = Formatting.Indented;
                     });
             services.AddSwagger();
-            
+            services.AddResponseCompression();
+            services.AddDistributedMemoryCache();
 
             // Add application services
             services.AddAutoMapper();
@@ -89,7 +85,8 @@ namespace web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            
+
+            app.UseResponseCompression();
             app.UseStaticFiles();
             
             app.UseIdentity();

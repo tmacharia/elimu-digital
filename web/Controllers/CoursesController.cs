@@ -14,6 +14,7 @@ using web.Extensions;
 namespace web.Controllers
 {
     [Authorize]
+    [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Any)]
     public class CoursesController : Controller
     {
         private readonly UserManager<AppUser> _userManager;

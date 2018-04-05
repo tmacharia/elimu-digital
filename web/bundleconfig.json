@@ -10,10 +10,8 @@
     "minify": {
       "gzip": true,
       "enabled": true,
-      "outputMode": "multipleLines",
-      "renameLocals": true
-    },
-    "sourceMap": true
+      "outputMode": "multipleLines"
+    }
   },
   {
     "outputFileName": "wwwroot/css/site.css",
@@ -22,6 +20,18 @@
       "Assets/css/*.css",
       "Assets/css/*/.css"
     ]
+  },
+  {
+    "inputFiles": [
+      "wwwroot/css/exam-session.css"
+    ],
+    "outputFileName": "wwwroot/css/exam-session.min.css",
+    "minify": {
+      "enabled": true,
+      "commentMode": "all",
+      "outputMode": "multipleLines",
+      "gzip": true
+    }
   },
   {
     "outputFileName": "wwwroot/js/site.js",
@@ -34,6 +44,19 @@
     "inputFiles": [
       "Assets/js/app/*.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/angular-site.min.js",
+    "inputFiles": [
+      "wwwroot/js/angular-site.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "gzip": true,
+      "outputMode": "singleLine",
+      "renameLocals": true
+    },
+    "sourceMap": true
   },
   {
     "outputFileName": "wwwroot/js/site.min.js",

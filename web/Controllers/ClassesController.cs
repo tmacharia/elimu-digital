@@ -15,6 +15,7 @@ namespace web.Controllers
 {
     [Authorize]
     [Route("classes")]
+    [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Any)]
     public class ClassesController : Controller
     {
         private readonly UserManager<AppUser> _userManager;

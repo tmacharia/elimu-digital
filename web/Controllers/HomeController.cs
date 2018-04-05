@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 namespace web.Controllers
 {
     [Authorize]
+    [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Any)]
     public class HomeController : Controller
     {
         private readonly UserManager<AppUser> _userManager;

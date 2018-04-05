@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 namespace web.Controllers
 {
     [Authorize]
+    [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Any)]
     public class UnitsController : Controller
     {
         private readonly INotificationManager _notify;

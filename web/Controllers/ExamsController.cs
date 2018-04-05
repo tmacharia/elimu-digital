@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 namespace web.Controllers
 {
     [Authorize]
+    [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Any)]
     public class ExamsController : Controller
     {
         private readonly INotificationManager _notify;
@@ -188,6 +189,13 @@ namespace web.Controllers
             }
 
             return View(exam);
+        }
+
+        [HttpGet]
+        [Route("exams/session-in-progress")]
+        public IActionResult ExamSession()
+        {
+            return View();
         }
 
         [HttpGet]

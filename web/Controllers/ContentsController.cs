@@ -17,6 +17,7 @@ namespace web.Controllers
 {
     [Authorize]
     [Route("contents")]
+    [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Any)]
     public class ContentsController : Controller
     {
         private readonly INotificationManager _notify;

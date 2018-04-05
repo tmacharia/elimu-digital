@@ -1,0 +1,128 @@
+﻿@using Services
+@{ 
+    Layout = null;
+}
+<!DOCTYPE lang="en" html public/>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="gobel-app">
+<head>
+    <title>Exam Session | @Extensions.Uni</title>
+    <meta charset="utf-8" />
+    <meta name="application-name" content="Elimu Digital" />
+    <meta name="author" content="Timothy Macharia" />
+    <meta name="description" content="Online exam session for students on Elimu Digital" />
+    <meta name="keywords" content="elimu, elearning, elimu digital, online exam, exam kenya" />
+    <meta name="theme-color" content="#1C81CC" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <environment names="Development">
+        <link href="~/libs/Ionicons/css/ionicons.min.css" rel="stylesheet" />
+        <link href="~/libs/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="~/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/css/exam-session.css" rel="stylesheet" />
+    </environment>
+    <environment names="Production">
+        <link href="https://cdn.jsdelivr.net/npm/ionicons@3.0.0/dist/css/ionicons.min.css"
+              asp-fallback-href="~/libs/Ionicons/css/ionicons.min.css"
+              integrity="sha256-a1xlQIKsVaHy9P1cEqQIBwKPNsbIVvHvpANTWOqKIXs="
+              rel="stylesheet"
+              crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+              asp-fallback-href="~/libs/font-awesome/css/font-awesome.min.css"
+              integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0="
+              rel="stylesheet"
+              crossorigin="anonymous">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position"
+              asp-fallback-test-value="absolute" />
+        <link href="~/css/exam-session.min.css" rel="stylesheet" />
+    </environment>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"/>
+
+
+</head>
+<body>
+    <noscript>
+        This page requires javascript in-order to run. If javascript is switched OFF in your browser, turn it on
+        then reload this page.
+    </noscript>
+    <!--Header-->
+    <header>
+        <div class="inner-header">
+            <div class="exam-title col-md-10 col-sm-9 col-xs-7">
+                <h4>
+                    <i class="ion ion-compose ion-2x" style="font-size:2.1rem;"></i> 4th Year 2017/2018 Mid-Sem Exam
+                    <span>
+                        Data Structures &amp; Algorithms
+                    </span>
+                </h4>
+            </div>
+            <div class="timer col-md-2 col-sm-3 col-xs-5">
+                <h3 class="pull-right">
+                    <i class="ion ion-android-alarm-clock"></i> <span class="remaining-time">00:00:00</span>
+                </h3>
+            </div>
+
+        </div>
+    </header>
+    <!--End Header-->
+    <!--Main Content Area-->
+    <section class="main-content" ng-controller="sessionCtrl">
+        <div class="inner-content">
+            <div class="question">
+                <h1>
+                    {{selectedQue.text}}
+                </h1>
+            </div>
+
+            <div class="answers">
+                <ol>
+                    <li>
+                        <input type="checkbox" id="opt" />
+                        <label for="opt">First President of the United States</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="opt1" />
+                        <label for="opt1">Husband to the Queen of England</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="opt2" />
+                        <label for="opt2">Farmer</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="opt3" />
+                        <label for="opt3">Political Analyst in Latin America</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="opt4" />
+                        <label for="opt4">None of the above</label>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </section>
+    <!--End of Main Content-->
+    <!--Footer-->
+    <footer>
+        <a class="nav-btns prev">
+            <i class="fa fa-chevron-left fa-1_5"></i>
+        </a>
+        <ul></ul>
+        <a class="nav-btns next">
+            <i class="fa fa-chevron-right fa-1_5"></i>
+        </a>
+    </footer>
+    <!--End Footer-->
+
+
+    <script src="~/libs/jquery/dist/jquery.min.js"></script>
+    <script src="~/libs/moment/moment.js"></script>
+    <script src="~/libs/angular/angular.js"></script>
+    <script src="~/libs/angular-aria/angular-aria.js"></script>
+    <script src="~/libs/angular-animate/angular-animate.js"></script>
+    <script src="~/libs/angular-touch/angular-touch.js"></script>
+    <script src="~/libs/angular-material/angular-material.js"></script>
+    <script src="~/libs/angular-material-datetimepicker/js/angular-material-datetimepicker.js"></script>
+    <script src="~/js/angular-site.js"></script>
+</body>
+</html>
