@@ -1,9 +1,9 @@
-# E-Learning Pad
+# ELIMU-DIGITAL
 
 [![Build Status](https://travis-ci.org/devTimmy/E-Learning-Pad.svg?branch=master)](https://travis-ci.org/devTimmy/E-Learning-Pad)
-[![GitHub license](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](https://github.com/devTimmy/learning-pad/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](https://github.com/devTimmy/elimu-digital/blob/master/LICENSE)
 
-An e-learning application for universities that strives to easen the workflow between lecturers & students in Units registrations, learning material aggregation by lecturers, exam taking and tracking of students progress in their exams and their whole entire journey at the university.
+An e-learning application for universities that strives to ease the workflow between lecturers & students in Units registrations, learning material aggregation by lecturers, exam taking and tracking of students progress in their exams and their whole entire journey at the university.
 
 
 ## Quickstart
@@ -11,7 +11,7 @@ An e-learning application for universities that strives to easen the workflow be
 To get started working or running this project in your local machine. Just clone this repository by pasting the command below in your `git bash console` or `command prompt` provided you have `git` installed on your machine.
 
 ```
-$ git clone https://github.com/devTimmy/learning-pad.git
+$ git clone https://github.com/devTimmy/elimu-digital.git
 ```
 
 
@@ -26,7 +26,7 @@ A campus can register all courses they offer at their university with its respec
 
 ### 2. Account Management 👥
 
-Lecturers & students can create accounts under which all their content & activities remain tied to ther feed.
+Lecturers & students can create accounts under which all their content & activities remain tied to their feed.
 
 
 
