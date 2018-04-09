@@ -79,6 +79,9 @@ namespace web.Controllers
                                .OrderByDescending(x => x.Timestamp)
                                .ToList();
 
+
+            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
+
             return View(model);
         }
 

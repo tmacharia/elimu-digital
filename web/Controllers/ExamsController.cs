@@ -32,8 +32,12 @@ namespace web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
+            AppUser user = await _userManager.GetUserAsync(User);
+
+            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
+
             return View();
         }
 

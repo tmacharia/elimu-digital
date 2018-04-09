@@ -52,6 +52,8 @@ namespace web.Controllers
 
             Result<Class> model = classes.ToPaged(page, itemsperpage);
 
+            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
+
             return View(model);
         }
 

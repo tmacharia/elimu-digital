@@ -43,12 +43,15 @@ namespace web.Controllers
         }
         
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var contents = _repos.Contents
                                  .ListWith("Unit", "Likes", "Comments")
                                  .OrderByDescending(x => x.Timestamp)
                                  .ToList();
+            AppUser user = await _userManager.GetUserAsync(User);
+
+            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
 
             return View(contents);
         }

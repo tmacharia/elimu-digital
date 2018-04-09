@@ -1,0 +1,72 @@
+﻿@using DAL.Extensions
+@model int
+@{
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    ViewBag.Title = "My Notifications";
+    ViewBag.Action = "Notifications";
+}
+<style>
+    .ntf{
+        margin-left:0px;
+    }
+    .mine {
+        background-color: rgba(23, 162, 184, 0.15);
+    }
+    .read {
+        background: #ededed;
+    }
+    .bottom-row{
+        margin-top:10px;
+        margin-bottom:5px;
+    }
+</style>
+<div ng-app="gobel-app">
+    <div class="padding" ng-controller="notificationsCtrl" ng-init="initNotifications()">
+        <h3>
+            <i class="fa fa-bell-o"></i> {{title}}
+            <span class="badge badge-danger">
+                {{notifications.length}}
+            </span>
+        </h3>
+        <br />
+        <div class="row">
+            <div class="col-12" ng-repeat="ntf in notifications">
+                <div class="box" ng-class="{ 'read': ntf.read, 'mine': ntf.accountId.toString() === '@Model' }">
+                    <div class="box-body">
+                        <span class="badge badge-success pull-right" ng-show="ntf.read === false">
+                            New
+                        </span>
+                        <span class="ntf" ng-bind-html="ntf.message"></span>
+                        <br />
+                        <p class="bottom-row">
+                            <span class="text-danger pointer" ng-click="onDelete(ntf)">
+                                <i class="fa fa-trash"></i> delete
+                            </span>
+                            <span class="pull-right">
+                                <i>{{normalizeDate(ntf)}}</i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-show="loader">
+            <center>
+                <br />
+                <i class="fa fa-spinner fa-spin fa-3x"></i>
+                <br />
+                <br />
+                <span>
+                    loading notifications...
+                </span>
+            </center>
+        </div>
+
+        <div ng-show="!loader && notifications.length < 1">
+            <br />
+            <center>
+                No notifications.
+            </center>
+        </div>
+    </div>
+</div>

@@ -3,7 +3,7 @@
 
     angular.module('gobel-app', [
         // Angular modules 
-        'ngMaterialDatePicker'
+        'ngMaterialDatePicker', 'ngSanitize'
         // Custom modules 
 
         // 3rd Party Modules

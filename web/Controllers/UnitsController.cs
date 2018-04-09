@@ -60,6 +60,8 @@ namespace web.Controllers
             result = units.OrderByDescending(x => x.Timestamp)
                           .ToPaged(page, itemsperpage);
 
+            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
+
             return View(result);
         }
 

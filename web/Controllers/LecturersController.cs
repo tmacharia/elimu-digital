@@ -60,6 +60,8 @@ namespace web.Controllers
 
             var model = lecturers.SkipWhile(x => x == null).ToList();
 
+            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
+
             return View(model);
         }
 

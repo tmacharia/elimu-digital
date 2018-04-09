@@ -22,10 +22,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\angular-site.min.js.gz" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Dockerfile" />
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\angular-site.min.js.gz" />
     <_ContentIncludedByDefault Remove="wwwroot\js\site.min.js" />
   </ItemGroup>
 
@@ -79,6 +84,10 @@
   <ItemGroup>
     <Folder Include="Views\Lecturers\" />
     <Folder Include="Views\Units\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\angular-site.min.js.gz" />
   </ItemGroup>
 
 </Project>
