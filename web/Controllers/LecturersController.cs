@@ -29,6 +29,7 @@ namespace web.Controllers
             _mapper = mapper;
         }
 
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Client)]
         public async Task<IActionResult> Index()
         {
             IList<Lecturer> lecturers = new List<Lecturer>();

@@ -87,7 +87,7 @@ namespace web.API_s
         }
 
         [HttpGet]
-        [Route("{id}/session")]
+        [Route("sessions/{id}")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetSession(int id)
         {

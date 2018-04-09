@@ -1,7 +1,7 @@
 ﻿.text-theme,
 .text-hover-theme a:hover,
 .text-hover-theme .active > a {
-    color: #53a6fa !important;
+    color: #462565 !important;
 }
 
 .nav-active-theme .nav-link.active,
@@ -12,13 +12,13 @@
 .pace .pace-progress,
 .theme {
     color: rgba(255, 255, 255, 0.85) !important;
-    background-color: #53a6fa !important;
+    background-color: #462565 !important;
 }
 
 .b-theme,
 .nav-border,
 nav.nav-border {
-    border-color: #53a6fa !important;
+    border-color: #462565 !important;
 }
 
 .btn.theme-accent,
@@ -35,13 +35,13 @@ nav.nav-border {
 
 .sidenav .nav-border .active > a,
 .sidenav .nav-active-text .active > a {
-    color: #53a6fa;
+    color: #462565;
 }
 
 .fill-theme {
-    fill: #53a6fa;
+    fill: #462565;
 }
 
 .stroke-theme {
-    stroke: #53a6fa;
+    stroke: #462565;
 }

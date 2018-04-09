@@ -168,7 +168,8 @@ namespace web.Controllers
 
                 await _notify.OnNewContent(content);
 
-                return RedirectPermanent($"/contents/{content.Id}/{Services.Extensions.GenerateSlug(content.Title)}");
+                return Redirect($"/contents/{content.Id}/{content.Title.GenerateSlug()}");
+                //return RedirectPermanent($"/contents/{content.Id}/{Services.Extensions.GenerateSlug(content.Title)}");
             }
             catch (Exception ex)
             {

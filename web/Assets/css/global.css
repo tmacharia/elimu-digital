@@ -105,7 +105,8 @@ table tbody tr:hover{
 
 .avatar img {
     height: 100% !important;
-    width: auto !important;
+    width: 100% !important;
+    vertical-align:middle;
 }
 
 .top-right {
@@ -117,4 +118,21 @@ table tbody tr:hover{
     font-size:15px !important;
     padding:0px 10px;
     float:right;
+}
+.w-40 {
+    line-height: 40px !important;
+    height: 40px !important;
+    width: 40px !important;
+}
+.w-50 {
+    line-height: 50px !important;
+    height: 50px !important;
+    width: 50px !important;
+    min-width:50px;
+}
+
+.avatar img {
+    vertical-align: middle;
+    width: 100% !important;
+    height: 100%;
 }

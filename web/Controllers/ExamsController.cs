@@ -192,10 +192,15 @@ namespace web.Controllers
         }
 
         [HttpGet]
-        [Route("exams/session-in-progress")]
-        public IActionResult ExamSession()
+        [Route("exams/session-in-progress/{id}")]
+        public IActionResult ExamSession(int id)
         {
-            return View();
+            if(id < 1)
+            {
+                return BadRequest("Invalid exam session id.");
+            }
+
+            return View(id);
         }
 
         [HttpGet]

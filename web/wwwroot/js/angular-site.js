@@ -282,7 +282,7 @@
 
             $.ajax({
                 method: 'GET',
-                url: '/api/exams/' + id + '/session',
+                url: '/api/exams/sessions/' + id,
                 success: function (res) {
                     onFetchSessionSuccess(res);
                 },
@@ -358,18 +358,21 @@
         .module('gobel-app')
         .controller('sessionCtrl', sessionCtrl);
 
-    sessionCtrl.$inject = ['$scope','$interval'];
+    sessionCtrl.$inject = ['$scope', '$interval'];
+    /*!
+     * Mock implementation of Threading
+    */
+    
 
     function sessionCtrl($scope,$interval) {
         $scope.title = 'Exam Session Controller';
+        $scope.session = {};
         $scope.questions = [];
         $scope.selectedQue = {};
         $scope.targetTime = null;
 
-        activate();
-
-        $scope.initQues = function () {
-            activate();
+        $scope.initSession = function (id) {
+            fetchExamSession(id);
         }
         $scope.getIndex = function (que) {
             return $scope.questions.indexOf(que) + 5;
@@ -381,20 +384,6 @@
             navigate(getCurrentIndex() - 1);
         }
         function activate() {
-            $scope.questions.push({ text: 'Who?' });
-            $scope.questions.push({ text: 'What?' });
-            $scope.questions.push({ text: 'Which?' });
-            $scope.questions.push({ text: 'Why?' });
-            $scope.questions.push({ text: 'When?' });
-
-            for (var i = 0; i < $scope.questions.length; i++) {
-                $('footer ul').append('<li>' + (i + 1) + '</li>');
-            }
-
-            activateCurrent(0);
-            $scope.selectedQue = $scope.questions[0];
-            $scope.targetTime = moment().add(150, 'seconds');
-
             $('footer ul li').on('click', function (e) {
                 var index = parseInt(e.target.innerText) - 1;
                 activateCurrent(index);
@@ -410,26 +399,10 @@
                 var i = getCurrentIndex() - 1;
                 navigate(i);
             });
-            //$interval(function () {
-            //    // subtract 1 second from moment time
-            //    var mt = moment($scope.targetTime).subtract(1, 'seconds');
-            //    // get new time
-            //    var now = new moment();
-            //    var duration = moment.duration(mt.diff(now));
-            //    console.log(duration);
-            //    var hrs, mins, secs;
-            //    hrs = duration.get('hours');
-            //    mins = duration.get('minutes');
-            //    secs = duration.get('seconds');
-
-            //    // display new time
-            //    $('.remaining-time').text(hrs + ':' + mins + ':' + secs);
-            //}, 1000);
         }
 
         function navigate(val) {
             var total = $scope.questions.length;
-            console.log(val);
             if (val < 0) {
                 
             }
@@ -454,6 +427,71 @@
                     $(this).addClass('active');
                 }
             })
+        }
+        function fetchExamSession(id) {
+            // loading active
+            $('#loadingModal').modal('show');
+            setTimeout(function () {
+                $.ajax({
+                    method: 'GET',
+                    url: '/api/exams/sessions/' + id,
+                    success: function (res) {
+                        console.log(res);
+                        onFetchSessionSuccess(res);
+                    },
+                    error: function (res) {
+                        if (res.responseText) {
+                            parseError(res.responseText);
+                        } else {
+                            error(res.statusText);
+                        }
+                    }
+                })
+                $('#loadingModal').modal('hide');
+            }, 2000);
+        }
+        function onFetchSessionSuccess(data) {
+            $scope.$apply(function () {
+                // refresh session data
+                $scope.session = data;
+                // refresh timer
+                $scope.targetTime = moment(data.exam.end);
+                $scope.questions = data.exam.questions;
+            });
+
+            // refresh questions navigator
+            $('footer ul').empty();
+            for (var i = 0; i < $scope.questions.length; i++) {
+                $('footer ul').append('<li>' + (i + 1) + '</li>');
+            }
+
+            // mark active-question
+            if ($scope.questions.length > 0) {
+                activateCurrent(0);
+                $scope.$apply(function () {
+                    $scope.selectedQue = $scope.questions[0];
+                });
+            }
+
+            // start timer
+            $interval(onTimerTick, 1000);
+
+            // re-activate event handlers
+            activate();
+        }
+        function onTimerTick() {
+            // subtract 1 second from moment time
+            var mt = moment($scope.targetTime).subtract(1, 'seconds');
+            // get current time
+            var now = new moment();
+            var duration = moment.duration(mt.diff(now));
+            var hrs, mins, secs;
+            hrs = duration.get('hours');
+            mins = duration.get('minutes');
+            secs = duration.get('seconds');
+
+            // display new time
+            $('.remaining-time').text(hrs + ':' + mins + ':' + secs);
         }
     }
 })();

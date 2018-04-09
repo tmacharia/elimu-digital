@@ -204,10 +204,7 @@ namespace Services.Implementations
                 emails.Add(item.Email);
             }
 
-            for (int i = 0; i < emails.Count; i++)
-            {
-                await _emailSender.SendEmailAsync(emails[i], subject, message);
-            }
+            await _emailSender.SendEmailAsync(subject, message, emails.ToArray());
         }
         #endregion
     }

@@ -52,7 +52,7 @@
         <div class="row">
             <input hidden="hidden" id="CourseId" value="@Model.Id" />
 
-            <div class="col col-lg-5 col-md-5 col-sm-6 col-xs-12">
+            <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
                 <div class="box">
                     <div class="box-header">
                         <h3>
@@ -157,125 +157,131 @@
                 </div>
             </div>
 
-            <div class="col col-lg-4 col-md-4 col-sm-5 col-xs-12">
-                <div class="box">
-                    <div class="box-header">
-                        <h3>
-                            Lecturers
-                        </h3>
-                    </div>
-                    <div class="list inset">
-                        @if (Model.Units != null && Model.Units.Count > 0)
-                        {
-                            foreach (var item in Model.Units.Where(x => x.Lecturer != null).Select(x => x.Lecturer).Distinct())
-                            {
-                                <div class="list-item" data-id="item-5">
-                                    <span class="w-40 avatar circle blue-grey">
-                                        @{ 
-                                            if (item.Profile != null)
-                                            {
-                                                if (!string.IsNullOrWhiteSpace(item.Profile.PhotoUrl))
-                                                {
-                                                    <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
-                                                }
-                                                else
-                                                {
-                                                    <img alt="." src="@Helpers.avatar">
-                                                }
+            <div class="col-lg-7 col-md-6 col-sm-12 col-xs-12">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3>
+                                    Lecturers
+                                </h3>
+                            </div>
+                            <div class="list inset">
+                                @if (Model.Units != null && Model.Units.Count > 0)
+                                {
+                                    foreach (var item in Model.Units.Where(x => x.Lecturer != null).Select(x => x.Lecturer).TakeWhile(x => x.Profile != null).Distinct())
+                                    {
+                                        <div class="list-item" data-id="item-5">
+                                            <span class="w-50 avatar img-circle img-thumbnail img-responsive">
+                                                @{ 
+                                                    if (item.Profile != null)
+                                                    {
+                                                        if (!string.IsNullOrWhiteSpace(item.Profile.PhotoUrl))
+                                                        {
+                                                            <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img alt="." src="@Helpers.avatar">
+                                                        }
 
-                                            }
-                                            else
-                                            {
-                                                <img alt="." src="~/images/avatar-1577909_960_720.png">
-                                            }
-                                        }
-                                    </span>
-                                    <div class="list-body">
-                                        <a class="item-title _500" href="#">@item.Profile.FullNames</a>
-                                        <div class="item-except text-sm text-muted h-1x">
-                                            Lecturer
+                                                    }
+                                                    else
+                                                    {
+                                                        <img alt="." src="~/images/avatar-1577909_960_720.png">
+                                                    }
+                                                }
+                                            </span>
+                                            <div class="list-body">
+                                                <a class="item-title _500" href="#">@item?.Profile?.FullNames</a>
+                                                <div class="item-except text-sm text-muted h-1x">
+                                                    Lecturer
+                                                </div>
+                                                <div class="item-tag tag hide"></div>
+                                            </div>
+                                            <div>
+                                                <span class="item-date text-xs text-muted">@item.Timestamp.ToMoment()</span>
+                                            </div>
                                         </div>
-                                        <div class="item-tag tag hide"></div>
-                                    </div>
-                                    <div>
-                                        <span class="item-date text-xs text-muted">@item.Timestamp.ToString()</span>
-                                    </div>
-                                </div>
-                            }
+                                    }
 
-                        }
-                        else
-                        {
-                            <br />
-                            <center>
-                                <i class="ion ion-e"></i> No lecturers assigned to this course
-                            </center>
-                            <br />
-                            <br />
-                        }
+                                 }
+                                 else
+                                 {
+                                     <br />
+                                     <center>
+                                         <i class="ion ion-e"></i> No lecturers assigned to this course
+                                     </center>
+                                     <br />
+                                     <br />
+                                 }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                         <div class="box">
+                            <div class="box-header">
+                                <h3>
+                                    Students
+                                </h3>
+                            </div>
+                            <div class="list inset">
+                                @if (Model.Students != null && Model.Students.Count > 0)
+                                {
+                                    foreach (var item in Model.Students.TakeWhile(x => x.Profile != null))
+                                    {
+                                        <div class="list-item" data-id="item-5">
+                                            <span class="w-50 avatar img-circle img-thumbnail img-responsive">
+                                                @{ 
+                                                    if (item.Profile != null)
+                                                    {
+                                                        if (!string.IsNullOrWhiteSpace(item.Profile.PhotoUrl))
+                                                        {
+                                                            <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img alt="." src="@Helpers.avatar">
+                                                        }
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <img alt="." src="~/images/avatar-1577909_960_720.png">
+                                                    }
+                                                }
+                                            </span>
+                                            <div class="list-body">
+                                                <a class="item-title _500" href="#">@item?.Profile.FullNames</a>
+                                                <div class="item-except text-sm text-muted h-1x">
+                                                    Student
+                                                </div>
+                                                <div class="item-tag tag hide"></div>
+                                            </div>
+                                            <div>
+                                                <span class="item-date text-xs text-muted">@item.Timestamp.ToMoment()</span>
+                                            </div>
+                                        </div>
+                                    }
+
+                                }
+                                else
+                                {
+                                    <br />
+                                    <center>
+                                        <i class="ion ion-e"></i> No students have enrolled to this course yet.
+                                    </center>
+                                    <br />
+                                    <br />
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
 
-            <div class="col col-lg-3 col-md-3 col-sm-5 col-xs-12">
-                <div class="box">
-                    <div class="box-header">
-                        <h3>
-                            Students
-                        </h3>
-                    </div>
-                    <div class="list inset">
-                        @if (Model.Students != null && Model.Students.Count > 0)
-                        {
-                            foreach (var item in Model.Students)
-                            {
-                                <div class="list-item" data-id="item-5">
-                                    <span class="w-40 avatar circle blue-grey">
-                                        @{ 
-                                            if (item.Profile != null)
-                                            {
-                                                if (!string.IsNullOrWhiteSpace(item.Profile.PhotoUrl))
-                                                {
-                                                    <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
-                                                }
-                                                else
-                                                {
-                                                    <img alt="." src="@Helpers.avatar">
-                                                }
-
-                                            }
-                                            else
-                                            {
-                                                <img alt="." src="~/images/avatar-1577909_960_720.png">
-                                            }
-                                        }
-                                    </span>
-                                    <div class="list-body">
-                                        <a class="item-title _500" href="#">@item?.Profile.FullNames</a>
-                                        <div class="item-except text-sm text-muted h-1x">
-                                            Student
-                                        </div>
-                                        <div class="item-tag tag hide"></div>
-                                    </div>
-                                    <div>
-                                        <span class="item-date text-xs text-muted">@item.Timestamp.ToString()</span>
-                                    </div>
-                                </div>
-                            }
-
-                        }
-                        else
-                        {
-                            <br />
-                            <center>
-                                <i class="ion ion-e"></i> No students have enrolled to this course yet.
-                            </center>
-                            <br />
-                            <br />
-                        }
-                    </div>
-                </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
             </div>
         </div>
     }

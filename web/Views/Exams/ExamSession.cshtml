@@ -1,4 +1,5 @@
 ﻿@using Services
+@model int
 @{ 
     Layout = null;
 }
@@ -13,6 +14,7 @@
     <meta name="keywords" content="elimu, elearning, elimu digital, online exam, exam kenya" />
     <meta name="theme-color" content="#1C81CC" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="~/images/Graduation_Hat-512.ico" rel="shortcut icon" sizes="196x196">
 
     <environment names="Development">
         <link href="~/libs/Ionicons/css/ionicons.min.css" rel="stylesheet" />
@@ -37,85 +39,86 @@
               asp-fallback-test-value="absolute" />
         <link href="~/css/exam-session.min.css" rel="stylesheet" />
     </environment>
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"/>
-
-
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
 </head>
 <body>
-    <noscript>
-        This page requires javascript in-order to run. If javascript is switched OFF in your browser, turn it on
-        then reload this page.
-    </noscript>
-    <!--Header-->
-    <header>
-        <div class="inner-header">
-            <div class="exam-title col-md-10 col-sm-9 col-xs-7">
-                <h4>
-                    <i class="ion ion-compose ion-2x" style="font-size:2.1rem;"></i> 4th Year 2017/2018 Mid-Sem Exam
-                    <span>
-                        Data Structures &amp; Algorithms
-                    </span>
-                </h4>
-            </div>
-            <div class="timer col-md-2 col-sm-3 col-xs-5">
-                <h3 class="pull-right">
-                    <i class="ion ion-android-alarm-clock"></i> <span class="remaining-time">00:00:00</span>
-                </h3>
-            </div>
+    <style>
+        .text-white {
+            color: #fff !important;
+        }
 
-        </div>
-    </header>
-    <!--End Header-->
-    <!--Main Content Area-->
-    <section class="main-content" ng-controller="sessionCtrl">
-        <div class="inner-content">
-            <div class="question">
-                <h1>
-                    {{selectedQue.text}}
-                </h1>
-            </div>
+        .text-danger {
+            color: #ea2e49 !important;
+        }
+    </style>
+    <section ng-controller="sessionCtrl" ng-init="initSession('@Model')">
+        <noscript>
+            This page requires javascript in-order to run. If javascript is switched OFF in your browser, turn it on
+            then reload this page.
+        </noscript>
 
-            <div class="answers">
-                <ol>
-                    <li>
-                        <input type="checkbox" id="opt" />
-                        <label for="opt">First President of the United States</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" id="opt1" />
-                        <label for="opt1">Husband to the Queen of England</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" id="opt2" />
-                        <label for="opt2">Farmer</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" id="opt3" />
-                        <label for="opt3">Political Analyst in Latin America</label>
-                    </li>
-                    <li>
-                        <input type="checkbox" id="opt4" />
-                        <label for="opt4">None of the above</label>
-                    </li>
-                </ol>
+        <!--Header-->
+        <header>
+            <div class="inner-header">
+                <div class="exam-title col-md-10 col-sm-9 col-xs-7">
+                    <h4>
+                        <i class="ion ion-compose ion-2x" style="font-size:2.1rem;"></i> {{session.exam.name}}
+                        <span>
+                            {{session.exam.unit.name}}
+                        </span>
+                    </h4>
+                </div>
+                <div class="timer col-md-2 col-sm-3 col-xs-5">
+                    <h3 class="pull-right">
+                        <i class="ion ion-android-alarm-clock"></i> <span class="remaining-time">00:00:00</span>
+                    </h3>
+                </div>
+
             </div>
-        </div>
+        </header>
+        <!--End Header-->
+        <!--Main Content Area-->
+        <section class="main-content">
+            <div class="inner-content">
+                <div class="question">
+                    <h1>
+                        {{selectedQue.text}}
+
+                        <span class="text-danger h3" ng-show="selectedQue.marks > 0">
+                            <i>{{selectedQue.marks}} mark(s)</i>
+                        </span>
+                    </h1>
+                </div>
+
+                <div class="answers">
+                    <ol>
+                        <li ng-repeat="ans in selectedQue.answers">
+                            <input type="checkbox" id="ans{{ans.id}}" ng-model="ans.isCorrect"/>
+                            <label for="ans{{ans.id}}">{{ans.text}}</label>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+        <!--End of Main Content-->
+        <!--Footer-->
+        <footer>
+            <a class="nav-btns prev">
+                <i class="fa fa-chevron-left fa-1_5"></i>
+            </a>
+            <ul></ul>
+            <a class="nav-btns next">
+                <i class="fa fa-chevron-right fa-1_5"></i>
+            </a>
+        </footer>
+        <!--End Footer-->
+
+        @Html.Partial("Exams/_Loader")
     </section>
-    <!--End of Main Content-->
-    <!--Footer-->
-    <footer>
-        <a class="nav-btns prev">
-            <i class="fa fa-chevron-left fa-1_5"></i>
-        </a>
-        <ul></ul>
-        <a class="nav-btns next">
-            <i class="fa fa-chevron-right fa-1_5"></i>
-        </a>
-    </footer>
-    <!--End Footer-->
 
 
     <script src="~/libs/jquery/dist/jquery.min.js"></script>
+    <script src="~/libs/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/libs/moment/moment.js"></script>
     <script src="~/libs/angular/angular.js"></script>
     <script src="~/libs/angular-aria/angular-aria.js"></script>
@@ -123,6 +126,8 @@
     <script src="~/libs/angular-touch/angular-touch.js"></script>
     <script src="~/libs/angular-material/angular-material.js"></script>
     <script src="~/libs/angular-material-datetimepicker/js/angular-material-datetimepicker.js"></script>
+    <script src="~/libs/toastr/toastr.js"></script>
+    <script src="~/js/site.js"></script>
     <script src="~/js/angular-site.js"></script>
 </body>
 </html>

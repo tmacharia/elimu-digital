@@ -270,7 +270,7 @@
 
             $.ajax({
                 method: 'GET',
-                url: '/api/exams/' + id + '/session',
+                url: '/api/exams/sessions/' + id,
                 success: function (res) {
                     onFetchSessionSuccess(res);
                 },

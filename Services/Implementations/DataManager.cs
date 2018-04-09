@@ -67,9 +67,9 @@ namespace Services
                                                       "Units.UnitStudents.Student.Profile")
                                             .Units
                                             .SelectMany(x => x.UnitStudents)
+                                            .TakeWhile(x => x.Student != null)
                                             .Select(x => x.Student)
                                             .Take(count)
-                                            .SkipWhile(x => x == null)
                                             .Distinct()
                                             .ToList();
             return students;
@@ -77,33 +77,62 @@ namespace Services
 
         public IEnumerable<Class> MyClasses<T>(int id, int count) where T : class
         {
-            IEnumerable<Class> classes = new List<Class>();
+            List<Class> classes = new List<Class>();
 
             if(typeof(T) == typeof(Student))
             {
-                classes = _repos.Students
-                                .GetWith(id,
+                var _cl = _repos.Students
+                                .ListWith(
                                         "StudentUnits",
                                         "StudentUnits.Unit",
                                         "StudentUnits.Unit.Class",
                                         "StudentUnits.Unit.Class.Units",
                                         "StudentUnits.Unit.Class.Likes")
+                                .First(x => x.Id == id)
                                 .StudentUnits
                                 .Select(x => x.Unit)
                                 .Select(x => x.Class)
                                 .TakeWhile(x => x == null);
+
+                if(_cl != null)
+                {
+                    classes.AddRange(_cl);
+                }
+
+                var _cls = _repos.Students
+                                 .ListWith(
+                                  "Course",
+                                  "Course.Units",
+                                  "Course.Units.Class",
+                                  "Course.Units.Class.Units",
+                                  "Course.Units.Class.Likes")
+                                  .First(x => x.Id == id)
+                                  ?.Course
+                                  ?.Units
+                                  .TakeWhile(x => x.Class != null)
+                                  .Select(x => x.Class);
+
+                if(_cls != null)
+                {
+                    classes.AddRange(_cls);
+                }
             }
             else if(typeof(T) == typeof(Lecturer))
             {
-                classes = _repos.Lecturers
+                var _cl = _repos.Lecturers
                                 .GetWith(id,
                                         "Units",
                                         "Units.Class",
                                         "Units.Class.Units",
                                         "Units.Class.Likes")
                                 .Units
-                                .Select(x => x.Class)
-                                .TakeWhile(x => x == null);
+                                .TakeWhile(x => x == null)
+                                .Select(x => x.Class);
+
+                if(_cl != null)
+                {
+                    classes.AddRange(_cl);
+                }
             }
 
             return classes.Take(count);
@@ -389,8 +418,7 @@ namespace Services
                     Answers = q.Answers.Select(a => new QuestionAnswer()
                     {
                         Id = a.Id,
-                        Text = a.Text,
-                        IsCorrect = a.IsCorrect
+                        Text = a.Text
                     }).ToList()
                 }).ToList()
             };

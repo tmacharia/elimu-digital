@@ -10,54 +10,58 @@
 
 <div class="py-5 text-center w-100">
     <span>
-        <i class="ion ion-university ion-5x"></i>
+        <img alt="logo" height="80"
+             class="img-responsive"
+             src="~/images/mobile_eduction_logo_fine_circle.png" />
     </span>
+    <br />
+    <br />
     <h3>Sign Up</h3>
     <br />
     <div class="mx-auto w-xxl w-auto-xs">
         <div class="px-3">
-                @if (!string.IsNullOrWhiteSpace(error))
-                {
-                    <div class="alert alert-danger">
-                        <span>@error</span>
-                    </div>
-                }
-                    <form id="form" name="form" asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-                        <div class="form-group">
-                            @Html.TextBoxFor(x => x.Email, new { @type = "email", @class = "form-control", required = true, @placeholder = "Email" })
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <select class="form-control" asp-for="AccountType" required>
-                                <option value="">Select account type</option>
-                                <option value="2">Student</option>
-                                <option value="1">Lecturer</option>
-                            </select>
-                            <span asp-validation-for="AccountType" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <input asp-for="Password" placeholder="password" type="password" required class="form-control" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <input asp-for="ConfirmPassword" placeholder="confirm password" type="password" required class="form-control" />
-                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3 text-sm">
-                            <span class="text-muted">By clicking Register, I agree to the</span>
-                            <a href="#">Terms of service</a>
-                            <span class="text-muted">and</span>
-                            <a href="#">Privacy Policy</a>
-                            <span class="text-muted">of</span>
-                            <a href="#" class="text-primary">Gobel University</a>
-                        </div>
-                        <button class="btn primary" type="submit">Register</button>
-                    </form>
-                <div class="py-4 text-center">
-                    <div>
-                        Already have an account? <a class="text-primary _600" href="/account/login">Sign in</a>
-                    </div>
+            @if (!string.IsNullOrWhiteSpace(error))
+            {
+                <div class="alert alert-danger">
+                    <span>@error</span>
                 </div>
+            }
+            <form id="form" name="form" asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Email, new { @type = "email", @class = "form-control", required = true, @placeholder = "Email" })
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <select class="form-control" asp-for="AccountType" required>
+                        <option value="">Select account type</option>
+                        <option value="2">Student</option>
+                        <option value="1">Lecturer</option>
+                    </select>
+                    <span asp-validation-for="AccountType" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Password" placeholder="password" type="password" required class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="ConfirmPassword" placeholder="confirm password" type="password" required class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="mb-3 text-sm">
+                    <span class="text-muted">By clicking Register, I agree to the</span>
+                    <a href="#">Terms of service</a>
+                    <span class="text-muted">and</span>
+                    <a href="#">Privacy Policy</a>
+                    <span class="text-muted">of</span>
+                    <a href="#" class="text-primary">Gobel University</a>
+                </div>
+                <button class="btn primary" type="submit">Register</button>
+            </form>
+            <div class="py-4 text-center">
+                <div>
+                    Already have an account? <a class="text-primary _600" href="/account/login">Sign in</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

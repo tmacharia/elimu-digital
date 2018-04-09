@@ -41,11 +41,13 @@ namespace web.Controllers
             }
             else if(User.Role() == "Lecturer")
             {
-                classes = _dataManager.MyClasses<Lecturer>(user.AccountId);
+                classes = _dataManager.MyClasses<Lecturer>(user.AccountId)
+                                      .TakeWhile(x => x != null);
             }
             else if(User.Role() == "Student")
             {
-                classes = _dataManager.MyClasses<Student>(user.AccountId);
+                classes = _dataManager.MyClasses<Student>(user.AccountId)
+                                      .TakeWhile(x => x != null);
             }
 
             Result<Class> model = classes.ToPaged(page, itemsperpage);

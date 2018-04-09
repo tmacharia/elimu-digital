@@ -8,166 +8,176 @@
         notifications = (int)ViewBag.Notifications;
     }
 }
-
-<div class="sidenav hv">
+<div aria-hidden="true" class="app-aside fade box-shadow-x nav-expand white" id="aside">
+    <div class="sidenav hv">
         <div class="navbar lt">
             <a class="navbar-brand" href="/">
                 <span>
-                    <i class="ion ion-university ion-3x"></i>
-                </span>                
+                    <img alt="logo" height="30" src="~/images/mobile_eduction_logo_fine_circle.png" />
+                </span>
                 <span class="hidden-folded d-inline">@Extensions.Uni</span>
+
+                <span class="pull-right">
+                    <a data-dismiss="modal" class="close-modal">
+                        <i class="ion ion-android-close"></i>
+                    </a>
+                </span>
             </a>
         </div>
         <div class="nav-fold px-2">
             <a class="avatar w-32" href="/account/profile/@Extensions.GenerateSlug(User.FullNames())">
-                @*<span class="avatar w-40 rounded grey hide">J</span>*@ 
+                @*<span class="avatar w-40 rounded grey hide">J</span>*@
                 <img alt="user avatar" class="w-40 circle" src="@Url.Content(User.PhotoUrl())">
             </a>
             <div class="hidden-folded flex p-2">
                 <div class="d-flex">
-                    <a class="mr-auto text-nowrap" href="/account/profile/@Extensions.GenerateSlug(User.FullNames())">@User.FullNames()
+                    <a class="mr-auto text-nowrap" href="/account/profile/@Extensions.GenerateSlug(User.FullNames())">
+                        @User.FullNames()
                     <small class="d-block text-muted">
                         @User.Role()
                     </small>
-                    </a>
-                    <div>
-                    @{ 
-                        if(notifications > 0)
+                </a>
+                <div>
+                    @{
+                        if (notifications > 0)
                         {
                             <span class="badge badge-pill up danger">@notifications</span>
                         }
-                    }                    
-                    </div>
+                    }
                 </div>
             </div>
-        </div>
-        <div class="flex hide-scroll">
-            <div class="scroll">
-                <div class="nav-active-text" data-nav="">
-                    <ul class="nav">
-                        <li class="nav-header"><span class="text-xs hidden-folded">Quick access</span></li>
-                        @if(ViewBag.Action == "Dashboard")
-                        {
-                            <li class="active">
-                                <a href="/"><span class="nav-icon"><i class="fa fa-home"></i></span> <span class="nav-text">Home</span></a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li>
-                                <a href="/"><span class="nav-icon"><i class="fa fa-home"></i></span> <span class="nav-text">Home</span></a>
-                            </li>                        
-                        }
-                        @if(ViewBag.Action == "Courses")
-                        {
-                            <li class="active">
-                                <a href="/courses"><span class="nav-icon"><i class="fa fa-leaf"></i></span> <span class="nav-text">Courses</span></a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li>
-                                <a href="/courses"><span class="nav-icon"><i class="fa fa-leaf"></i></span> <span class="nav-text">Courses</span></a>
-                            </li>                        
-                        }
-
-                        @if(ViewBag.Action == "Units")
-                        {
-                            <li class="active">
-                                <a href="/units"><span class="nav-icon"><i class="fa fa-umbrella"></i></span> <span class="nav-text">Units</span></a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li>
-                                <a href="/units"><span class="nav-icon"><i class="fa fa-umbrella"></i></span> <span class="nav-text">Units</span></a>
-                            </li>
-                        }
-
-                        @{ 
-                            if(User.Role() != "Lecturer")
-                            {
-                                if(ViewBag.Action == "Lecturers")
-                                {
-                                    <li class="active">
-                                        <a href="/lecturers"><span class="nav-icon"><i class="fa fa-user-secret"></i></span> <span class="nav-text">Lecturers</span></a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li>
-                                        <a href="/lecturers"><span class="nav-icon"><i class="fa fa-user-secret"></i></span> <span class="nav-text">Lecturers</span></a>
-                                    </li>
-                                }
-                            }
-                        }
-
-                        @if(ViewBag.Action == "Students")
-                        {
-                            <li class="active">
-                                <a href="/students"><span class="nav-icon"><i class="fa fa-users"></i></span> <span class="nav-text">Students</span></a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li>
-                                <a href="/students"><span class="nav-icon"><i class="fa fa-users"></i></span> <span class="nav-text">Students</span></a>
-                            </li>
-                        }
-
-                        @if(ViewBag.Action == "Classes")
-                        {
-                            <li class="active">
-                                <a href="/classes"><span class="nav-icon"><i class="fa fa-building"></i></span> <span class="nav-text">Classes</span></a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li>
-                                <a href="/classes"><span class="nav-icon"><i class="fa fa-building"></i></span> <span class="nav-text">Classes</span></a>
-                            </li>
-                        }
-
-                        @if(ViewBag.Action == "Exams")
-                        {
-                            <li class="active">
-                                <a href="/exams"><span class="nav-icon"><i class="fa fa-cubes"></i></span> <span class="nav-text">Exams</span></a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li>
-                                <a href="/exams"><span class="nav-icon"><i class="fa fa-cubes"></i></span> <span class="nav-text">Exams</span></a>
-                            </li>
-                        }
-
-                        @if(User.IsInRole("Student"))
-                        {
-                            <li class="nav-header hidden-folded"><span class="text-xs">Your collection</span></li>
-                            <li>
-                                <a href="#"><span class="nav-icon"><i class="fa fa-history"></i></span> <span class="nav-text">Tasks</span></a>
-                            </li>
-                            <li>
-                                <a href="#"><span class="nav-icon"><i class="fa fa-calendar"></i></span> <span class="nav-text">Calendar</span></a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="py-2 mt-2 b-t no-shrink">
-            <ul class="nav no-border">
-                <li>
-                    <form role="form" method="post" action="/account/logout">
-                        <button class="dropdown-item pointer" type="submit" value="Sign out">
-                            <span class="nav-icon">
-                                <i class="fa fa-power-off"></i>
-                            </span>
-                            <span class="nav-text">Logout</span>
-                        </button>
-                    </form>
-                </li>
-            </ul>
         </div>
     </div>
+    <div class="flex hide-scroll">
+        <div class="scroll">
+            <div class="nav-active-text" data-nav="">
+                <ul class="nav">
+                    <li class="nav-header"><span class="text-xs hidden-folded">Quick access</span></li>
+                    @if (ViewBag.Action == "Dashboard")
+                    {
+                        <li class="active">
+                            <a href="/"><span class="nav-icon"><i class="fa fa-home"></i></span> <span class="nav-text">Home</span></a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="/"><span class="nav-icon"><i class="fa fa-home"></i></span> <span class="nav-text">Home</span></a>
+                        </li>
+                    }
+                    @if (ViewBag.Action == "Courses")
+                    {
+                        <li class="active">
+                            <a href="/courses"><span class="nav-icon"><i class="fa fa-leaf"></i></span> <span class="nav-text">Courses</span></a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="/courses"><span class="nav-icon"><i class="fa fa-leaf"></i></span> <span class="nav-text">Courses</span></a>
+                        </li>
+                    }
 
+                    @if (ViewBag.Action == "Units")
+                    {
+                        <li class="active">
+                            <a href="/units"><span class="nav-icon"><i class="fa fa-umbrella"></i></span> <span class="nav-text">Units</span></a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="/units"><span class="nav-icon"><i class="fa fa-umbrella"></i></span> <span class="nav-text">Units</span></a>
+                        </li>
+                    }
+
+                    @{
+                        if (User.Role() != "Lecturer")
+                        {
+                            if (ViewBag.Action == "Lecturers")
+                            {
+                                <li class="active">
+                                    <a href="/lecturers"><span class="nav-icon"><i class="fa fa-user-secret"></i></span> <span class="nav-text">Lecturers</span></a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a href="/lecturers"><span class="nav-icon"><i class="fa fa-user-secret"></i></span> <span class="nav-text">Lecturers</span></a>
+                                </li>
+                            }
+                        }
+                    }
+
+                    @if (ViewBag.Action == "Students")
+                    {
+                        <li class="active">
+                            <a href="/students"><span class="nav-icon"><i class="fa fa-users"></i></span> <span class="nav-text">Students</span></a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="/students"><span class="nav-icon"><i class="fa fa-users"></i></span> <span class="nav-text">Students</span></a>
+                        </li>
+                    }
+
+                    @if (ViewBag.Action == "Classes")
+                    {
+                        <li class="active">
+                            <a href="/classes"><span class="nav-icon"><i class="fa fa-building"></i></span> <span class="nav-text">Classes</span></a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="/classes"><span class="nav-icon"><i class="fa fa-building"></i></span> <span class="nav-text">Classes</span></a>
+                        </li>
+                    }
+
+                    @if (ViewBag.Action == "Exams")
+                    {
+                        <li class="active">
+                            <a href="/exams"><span class="nav-icon"><i class="fa fa-cubes"></i></span> <span class="nav-text">Exams</span></a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="/exams"><span class="nav-icon"><i class="fa fa-cubes"></i></span> <span class="nav-text">Exams</span></a>
+                        </li>
+                    }
+
+                    @if (User.IsInRole("Student"))
+                    {
+                        <li class="nav-header hidden-folded"><span class="text-xs">Your collection</span></li>
+                        <li>
+                            <a href="#"><span class="nav-icon"><i class="fa fa-history"></i></span> <span class="nav-text">Tasks</span></a>
+                        </li>
+                        <li>
+                            <a href="#"><span class="nav-icon"><i class="fa fa-calendar"></i></span> <span class="nav-text">Calendar</span></a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="py-2 mt-2 b-t no-shrink">
+        <ul class="nav no-border">
+            <li>
+                <form role="form" method="post" action="/account/logout">
+                    <button class="dropdown-item pointer" type="submit" value="Sign out">
+                        <span class="nav-icon">
+                            <i class="fa fa-power-off"></i>
+                        </span>
+                        <span class="nav-text">Logout</span>
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+
+</script>

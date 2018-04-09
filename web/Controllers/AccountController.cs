@@ -127,6 +127,7 @@ namespace web.Controllers
             {
                 var student = _repos.Students
                                         .ListWith("StudentUnits","StudentUnits.Unit.Class","StudentUnits.Unit.Course", "Course", "Scores", "Profile")
+                                        .TakeWhile(x => x.Profile != null)
                                         .Where(x => x.Profile.Id == profile.Id)
                                         .FirstOrDefault();
 
@@ -413,12 +414,14 @@ namespace web.Controllers
                     // Send an email with this link
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
+                    await _emailSender.SendEmailAsync("Confirm your account",
                         $"<h3 style='color:#53a6fa;'>Welcome to Gobel Digital University,</h3>\n\n" +
-                        $"Please confirm your account by clicking this <a href='{callbackUrl}'>link</a>");
+                        $"Please confirm your account by clicking this <a href='{callbackUrl}'>link</a>", model.Email)
+                        .ConfigureAwait(false);
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+
+                    return RedirectToAction("EmailSent");
                 }
 
                 ViewBag.error = result.Errors.First().Description;
@@ -426,6 +429,13 @@ namespace web.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult EmailSent()
+        {
+            return View();
         }
 
         //
@@ -574,10 +584,10 @@ namespace web.Controllers
                 // Send an email with this link
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Action(nameof(ResetPassword), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                await _emailSender.SendEmailAsync(model.Email, "Reset Password",
+                await _emailSender.SendEmailAsync("Reset Password",
                    $"<h3 style='color:#53a6fa;'>You requested a password reset,</h3>/n/n" +
                    $"Please reset your password by clicking this <a href='{callbackUrl}'>link</a>\n\n" +
-                   $"If this wasn't you, please reset your password to secure your account.");
+                   $"If this wasn't you, please reset your password to secure your account.", model.Email);
                 return View("ForgotPasswordConfirmation");
             }
 

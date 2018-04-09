@@ -1,0 +1,27 @@
+﻿@{
+    Layout = "~/Views/Shared/_LoginPartial.cshtml";
+    ViewBag.Title = "Confirmation Email Sent";
+    string error = (string)ViewBag.error;
+}
+
+<div class="py-5 text-center w-100">
+    <span>
+        <i class="ion ion-university ion-5x"></i>
+    </span>
+    <h3>
+        <i class="ion ion-email-unread ion-3x text-success"></i>
+        Email Sent!
+    </h3>
+    <br />
+
+    <div class="mx-auto w-xxl w-auto-xs">
+        <div class="px-3">
+            <div>
+                <h5> <span class="my-3">Check your inbox for a confirmation link.</span></h5>
+            </div>
+            <div class="py-4">
+                <a class="btn primary" asp-controller="Account" asp-action="Login">Proceed to login</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,6 +11,9 @@
   .box{
     padding:15px 20px !important;
   }
+  .nm{
+      line-height:20px !important;
+  }
 </style>
 <div class="padding">
     <h4>
@@ -49,11 +52,11 @@
         <ul class="list-inline row">
             @foreach (var item in Model)
             {
-                <li class="col-sm-4 col-12 col-md-3">
+                <li class="col-lg-4 col-md-4 col-sm-6">
                     <div class="p-3 box pointer">
                         <a class="d-block" >
-                            <a href="/courses/@item.Id/@item.GenerateSlug()">
-                                @item.Name.Trancate()
+                            <a href="/courses/@item.Id/@item.GenerateSlug()" class="nm">
+                                @item.Name
                             </a>
 
                             @{ 

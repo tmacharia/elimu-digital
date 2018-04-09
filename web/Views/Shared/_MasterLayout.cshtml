@@ -13,7 +13,7 @@
     <meta content="Elimu Digital" name="apple-mobile-web-app-title">
     <meta content="yes" name="mobile-web-app-capable">
     <meta name="author" content="Timothy Macharia" />
-    <link href="~/images/Graduation_Hat-512.ico" rel="shortcut icon" sizes="196x196">
+    <link href="~/images/mobile_eduction_logo_fine_circle.png" rel="shortcut icon" sizes="196x196">
     
     <environment names="Development">
         @Html.Partial("_DevResources")
@@ -22,7 +22,7 @@
         @Html.Partial("_ProdResources")
     </environment>
 </head>
-<body class="pace-done">
+<body class="pace-done" ui-class>
 
     <noscript>
         Javascript has to be enabled in browser settings for this application
@@ -42,9 +42,7 @@
                 }
                 else
                 {
-                    <div aria-hidden="true" class="app-aside fade box-shadow-x nav-expand white" id="aside">
-                        @Html.Partial("_Sidebar")
-                    </div>
+                    @Html.Partial("_Sidebar")
                 }
             }
         <div class="app-content box-shadow-4 box-radius-4" id="content" role="main">

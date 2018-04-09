@@ -24,6 +24,7 @@ namespace ConsoleTest
         private static IRepositoryFactory _repos = new RepositoryFactory(_context);
         private static Stopwatch _syswatch = new Stopwatch();
         private static Stopwatch _sqlwatch = new Stopwatch();
+        private static IEmailSender _emailer = new AuthMessageSender("Elimu Digital - Zoho", "noreply@elimu-digital.com", "P@55w0rd");
 
         static void Main(string[] args)
         {
@@ -36,14 +37,18 @@ namespace ConsoleTest
             //Entry();
             //ConfirmDate();
             //DayHandler();
-            SeedProfileIdClaims();
+            //SeedProfileIdClaims();
+            SendEmail("timothy.macharia@outlook.com", "Test Subject", "Hey there.");
             //InitializeGet<School>();
             //SeedSchool("Online");
             //Get<School>(1, "Location");
 
             Console.ReadKey();
         }
-
+        static async void SendEmail(string to,string sbj,string msg)
+        {
+            await _emailer.SendEmailAsync(sbj, msg,to);
+        }
         static void SeedRoles()
         {
             

@@ -29,14 +29,19 @@ namespace Services
             _password = password;
         }
 
-        public async Task SendEmailAsync(string email, string subject, string message)
+        public async Task SendEmailAsync(string subject, string message, params string[] emails)
         {
             try
             {
                 var mime = new MimeMessage();
 
                 mime.From.Add(new MailboxAddress(Title, mail));
-                mime.To.Add(new MailboxAddress(email, email));
+
+                for (int i = 0; i < emails.Length; i++)
+                {
+                    mime.To.Add(new MailboxAddress(emails[i]));
+                }
+
                 mime.Subject = subject;
                 mime.Body = new TextPart(TextFormat.Html) { Text = message };
 
@@ -48,16 +53,16 @@ namespace Services
 
                     await client.ConnectAsync(smtp.Host, smtp.Port, SecureSocketOptions.SslOnConnect).ConfigureAwait(false);
 
-                    //client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    client.Authenticate(smtp.UserName, _password);
+                    client.AuthenticationMechanisms.Remove("XOAUTH2");
+                    client.Authenticate(mail, _password);
 
                     await client.SendAsync(mime).ConfigureAwait(false);
                     await client.DisconnectAsync(true).ConfigureAwait(false);
                 }
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-
+                throw ex;
             }
         }
 

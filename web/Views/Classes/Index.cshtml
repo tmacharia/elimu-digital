@@ -44,7 +44,7 @@
         @{ 
             if(Model != null && Model.TotalItems > 0)
             {
-                foreach (var item in Model.List)
+                foreach (var item in Model.List.TakeWhile(x => x != null))
                 {
                     <div class="col-md-3 col-sm-6">
                         <div class="box p-3">
