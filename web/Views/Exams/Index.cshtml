@@ -56,7 +56,7 @@
                 </div>
             </div>
         </div>
-        <div ng-show="loader">
+        <div ng-show="loader === true">
             <center>
                 <i class="fa fa-spinner fa-3x fa-spin"></i>
                 <br />
@@ -66,7 +66,7 @@
                 </p>
             </center>
         </div>
-        <div ng-show="!loader && exams.length < 1">
+        <div ng-show="exams.length < 1 && loader === true">
             <center>
                 <i class="fa fa-frown-o fa-3x"></i>
                 <br />

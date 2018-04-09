@@ -27,6 +27,7 @@ namespace web.Controllers
                                IMapper mapper)
         {
             _notify = notificationManager;
+            _userManager = userManager;
             _repos = factory;
             _mapper = mapper;
         }

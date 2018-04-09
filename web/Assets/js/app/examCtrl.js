@@ -149,8 +149,10 @@
             $scope.loader = false;
         }
         function fetchExams() {
-            $scope.loader = true;
-            $scope.exams = [];
+            $scope.$apply(function () {
+                $scope.loader = true;
+                $scope.exams = [];
+            })
             $.ajax({
                 method: 'GET',
                 url: '/api/exams',
