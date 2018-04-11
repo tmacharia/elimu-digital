@@ -117,12 +117,6 @@
                 });
             })
         }
-
-        $('.close-modal').on('click', function () {
-            console.log('closing modal..');
-            $('#aside').modal('hide');
-        });
-        
     });
 
     function checkPristineUser()
@@ -132,25 +126,5 @@
         if (val === 'True') {
             $('#profRegModal').modal('show');
         }
-    }
-    
-    function openSidenav() {
-        //$('body').addClass('modal-open');
-        //$('#aside').modal('show');
-        //.on('shown', function () {
-        //    //setTimeout(function () {
-        //    //    $('#aside').modal('hide');
-        //    //}, 2000);
-        //})
-        //document.getElementById('aside').style.display = 'block';
-    }
-    function closeSidenav() {
-        console.log('Closing sidenav...');
-
-        //$("#aside").removeClass("in");
-        //$(".modal-backdrop").remove();
-        //$('body').removeClass('modal-open');
-        //$('body').css('padding-right', '');
-        //$("#aside.in").hide();
     }
 </script>

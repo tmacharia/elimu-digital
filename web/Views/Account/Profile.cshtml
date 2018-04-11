@@ -14,7 +14,7 @@
 <div class="content-main" id="content-main">
     <div>
         <div class="item">
-            <div class="item-bg"><img alt="." class="blur opacity-3" src="../assets/images/a0.jpg"></div>
+            <div class="item-bg"></div>
             <div class="p-4">
                 <div class="row mt-3">
                     <div class="col-sm-7">
@@ -108,7 +108,9 @@
                                     else
                                     {
                                         <span><i class="fa fa-shield text-danger"></i> Profile not set.</span>
-
+                                        <span>Not enrolled to any course yet.</span>
+                                            <br />
+                                        <a class="btn btn-danger" href="/courses/enrollment">Enroll today</a>
                                     }
                                 }
                                 else
@@ -157,8 +159,8 @@
                                             </a>
                                             <div class="list-body">
                                                 <div class="text-ellipsis">
-                                                    <a href="/units/@item.Id/@item.GenerateSlug()">@item.Name.Trancate(35)</a>
-                                                </div><small class="text-muted text-ellipsis">@item.Course.Name</small>
+                                                    <a href="/units/@item.Id/@item.GenerateSlug()">@item.Name.Trancate(25)</a>
+                                                </div><small class="text-muted text-ellipsis">@item.Course.Name.Trancate(30)</small>
                                             </div>
                                         </div>
                                     </div>
@@ -168,7 +170,7 @@
                                     if(_units.Count >= 10)
                                     {
                                         <div class="col-sm-1">
-                                            <a href="#" class="btn btn-warning">see more...</a>
+                                            <a href="/units" class="btn btn-warning">go to units...</a>
                                         </div>
 
                                     }

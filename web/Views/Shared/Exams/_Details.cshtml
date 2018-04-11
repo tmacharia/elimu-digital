@@ -1,29 +1,35 @@
 ﻿@using DAL.Extensions
 <style>
-    .modal-title{
-        width:100%;
+    .modal-title {
+        width: 100%;
     }
-    .modal-title .pull-right{
-        font-size:.9rem;
-        padding-top:5px;
+
+        .modal-title .pull-right {
+            font-size: .9rem;
+            padding-top: 5px;
+        }
+
+    .modal-body {
+        padding: 0 1rem;
     }
-    .modal-body{
-        padding:0 1rem;
+
+    .card {
+        padding: 10px;
     }
-    .card{
-        padding:10px;
-    }
+
     .exam-instructor {
         margin-top: -20px;
-        text-align:center;
+        text-align: center;
     }
-    .exam-instructor .w-32{
-        height:80px;
-        width:80px;
-    }
-    .top-right{
-        font-size:.7rem !important;
-        float:right;
+
+        .exam-instructor .w-32 {
+            height: 80px;
+            width: 80px;
+        }
+
+    .top-right {
+        font-size: .7rem !important;
+        float: right;
     }
     /*----- Accordion -----*/
     .accordion, .accordion * {
@@ -36,7 +42,7 @@
         overflow: hidden;
         border-radius: 3px;
         background: #ffffff;
-        margin-bottom:5px;
+        margin-bottom: 5px;
     }
 
     /*----- Section Titles -----*/
@@ -50,11 +56,11 @@
         color: #444;
     }
 
-    .accordion-section-title.active, .accordion-section-title:hover {
-        background: #f2f2f2;
-        /* Type */
-        text-decoration: none;
-    }
+        .accordion-section-title.active, .accordion-section-title:hover {
+            background: #f2f2f2;
+            /* Type */
+            text-decoration: none;
+        }
 
     .accordion-section:last-child .accordion-section-title {
         border-bottom: none;
@@ -65,8 +71,9 @@
         padding: 15px;
         display: none;
     }
-    .btn-block{
-        font-weight:400;
+
+    .btn-block {
+        font-weight: 400;
     }
 </style>
 <div class="modal fade" data-backdrop="true" id="examDetailsModal">
@@ -84,7 +91,7 @@
 
                             <span ng-show="minutesToExam(selectedExam.moment) < 0"
                                   title="Exam Completed!">
-                                    <i class="ion ion-checkmark-circled text-success"></i> Completed!
+                                <i class="ion ion-checkmark-circled text-success"></i> Completed!
                                 <br />
                                 <span class="top-right">
                                     <i>{{calendarDate(selectedExam.moment)}}</i>
@@ -112,7 +119,6 @@
                     </center>
                 </div>
                 <!--End-->
-
                 <!--Content-->
                 <div ng-hide="detailsLoader">
                     <p>
@@ -159,8 +165,8 @@
                         </a>
                     </div>
 
-                    @{ 
-                        if(User.Role() == "Lecturer" || User.Role() == "Administrator")
+                    @{
+                        if (User.Role() == "Lecturer" || User.Role() == "Administrator")
                         {
                             <div>
                                 <h5>Actions</h5>

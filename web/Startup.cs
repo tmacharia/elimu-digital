@@ -42,20 +42,21 @@ namespace web
                     options.UseSqlServer(DbConnection));
 
             services.AddIdentity<AppUser, AppRole>(config => 
-                {
-                    config.SignIn.RequireConfirmedEmail = true;
-                    config.SecurityStampValidationInterval = TimeSpan.Zero;
-                })
+            {
+                config.SignIn.RequireConfirmedEmail = true;
+                config.SecurityStampValidationInterval = TimeSpan.Zero;
+            })
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
             services.AddMvc()
-                    .AddJsonOptions(options =>
-                    {
-                        options.SerializerSettings.Formatting = Formatting.Indented;
-                    });
+            .AddJsonOptions(options =>
+            {
+                options.SerializerSettings.Formatting = Formatting.Indented;
+            });
             services.AddSwagger();
+
             services.AddResponseCompression();
-            services.AddDistributedMemoryCache();
+            services.AddMemoryCache();
 
             // Add application services
             services.AddAutoMapper();
@@ -86,8 +87,6 @@ namespace web
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseResponseCompression();
-            app.UseStaticFiles();
             
             app.UseIdentity();
 
@@ -106,6 +105,9 @@ namespace web
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger UI for E-Learning Pad");
             });
+
+            app.UseResponseCompression();
+            app.UseStaticFiles();
         }
 
         #region Private Section

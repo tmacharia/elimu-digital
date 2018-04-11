@@ -17,9 +17,9 @@
         .module('gobel-app')
         .controller('examCtrl', examCtrl);
 
-    examCtrl.$inject = ['$scope','$timeout','$interval'];
+    examCtrl.$inject = ['$scope','$interval'];
 
-    function examCtrl($scope, $timeout,$interval) {
+    function examCtrl($scope, $interval) {
         $scope.title = '';
         $scope.exams = [];
         $scope.questions = [];
@@ -127,8 +127,9 @@
         }
         $scope.onSelectExam = function (exam) {
             $scope.selectedExam = exam;
-            $('#examDetailsModal').modal('show');
+            
             fetchExamDetails(exam.id);
+            $('#examDetailsModal').modal('show');
         }
 
         function postExam() {
@@ -161,10 +162,9 @@
             $scope.loader = false;
         }
         function fetchExams() {
-            $scope.$apply(function () {
-                $scope.loader = true;
-                $scope.exams = [];
-            })
+            $scope.loader = true;
+            $scope.exams = [];
+
             $.ajax({
                 method: 'GET',
                 url: '/api/exams',
@@ -174,11 +174,9 @@
                             info('You have no exams scheduled yet!');
                         }
                         else {
-                            for (var i = 0; i < res.length; i++) {
-                                $scope.$apply(function () {
-                                    $scope.exams.push(res[i]);
-                                })
-                            }
+                            $scope.$apply(function () {
+                                $scope.exams = res;
+                            })
                         }
                     }
                 },
@@ -200,9 +198,9 @@
                 method: 'GET',
                 url: '/api/exams/' + id,
                 success: function (res) {
+                    console.log(res);
                     $scope.$apply(function () {
                         $scope.selectedExam = res;
-                        
                     })
                     onDetailsSuccess();
                 },

@@ -1,6 +1,6 @@
 ﻿@using Services
 
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="~/css/primary.css">
@@ -8,55 +8,36 @@
     <title>@ViewBag.Title | @Extensions.Uni</title>
     <meta content="e-learning, university" name="description">
     <meta content="width=device-width,initial-scale=1,maximum-scale=1,minimal-ui" name="viewport">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="black-translucent" name="apple-mobile-web-app-status-barstyle">
     <link href="~/images/Graduation_Hat-512.ico" rel="apple-touch-icon">
-    <meta content="E-Learning pad" name="apple-mobile-web-app-title">
+    <meta content="Elimu Digital" name="apple-mobile-web-app-title">
     <meta content="yes" name="mobile-web-app-capable">
+    <meta name="author" content="Timothy Macharia" />
     <link href="~/images/mobile_eduction_logo_fine_circle.png" rel="shortcut icon" sizes="196x196">
-    <link rel="stylesheet" href="~/css/app.min.css" />
-    <link href="~/libs/Ionicons/css/ionicons.min.css" rel="stylesheet" />
-    <link href="~/css/site.min.css" rel="stylesheet">
-
+    
     <environment names="Development">
-        <script src="~/libs/jquery/dist/jquery.js"></script>
-        <script src="~/libs/jquery-validation/dist/jquery.validate.js"></script>
-        <script src="~/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        @Html.Partial("Resources/_devstyles")
     </environment>
     <environment names="Staging,Production">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-                asp-fallback-src="~/libs/jquery/dist/jquery.min.js"
-                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-                crossorigin="anonymous">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"
-                asp-fallback-src="~/libs/jquery-validation/dist/jquery.validate.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.validator"
-                crossorigin="anonymous"
-                integrity="sha384-Fnqn3nxp3506LP/7Y3j/25BlWeA3PXTyT1l78LjECcPaKCV12TsZP7yyMxOe/G/k">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"
-                asp-fallback-src="~/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.validator && window.jQuery.validator.unobtrusive"
-                crossorigin="anonymous"
-                integrity="sha384-JrXK+k53HACyavUKOsL+NkmSesD2P+73eDMrbTtTk0h4RmOF8hF8apPlkp26JlyH">
-        </script>
+        @Html.Partial("Resources/_prodstyles")
     </environment>
+
 </head>
 <body>
     <style>
-        body{
-            background-color:transparent;
+        body {
+            background-color: transparent;
         }
+
         .bg {
             top: 0;
             left: 0;
             right: 0;
             position: absolute;
             height: 100%;
-            z-index:-1;
-            
+            z-index: -1;
             background: url('../../images/library_2.jpg') no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
@@ -79,9 +60,17 @@
             margin-right: auto;
             padding: 5px 30px;
             border-radius: 10px;
-            margin-top: 6rem;
+            margin-top: 2rem;
         }
     </style>
+
+    <environment names="Development">
+        @Html.Partial("Resources/_devscripts")
+    </environment>
+    <environment names="Staging,Production">
+        @Html.Partial("Resources/_prodscripts")
+    </environment>
+
     <noscript>
         Javascript has to be enabled in browser settings for this application
         to run properly.
@@ -101,8 +90,6 @@
         </div>
     </div>
     <div class="bg"></div>
-    <script src="~/js/site.js"></script>
-    <script src="~/js/app.min.js"></script>
 </body>
 </html>
 

@@ -1,12 +1,13 @@
 ﻿@using Services
 
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <title>@ViewBag.Title | @Extensions.Uni</title>
     <meta content="e-learning, university" name="description">
     <meta content="width=device-width,initial-scale=1,maximum-scale=1,minimal-ui" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="black-translucent" name="apple-mobile-web-app-status-barstyle">
     <link href="~/images/Graduation_Hat-512.ico" rel="apple-touch-icon">
@@ -16,13 +17,19 @@
     <link href="~/images/mobile_eduction_logo_fine_circle.png" rel="shortcut icon" sizes="196x196">
     
     <environment names="Development">
-        @Html.Partial("_DevResources")
+        @Html.Partial("Resources/_devstyles")
     </environment>
     <environment names="Staging,Production">
-        @Html.Partial("_ProdResources")
+        @Html.Partial("Resources/_prodstyles")
     </environment>
 </head>
 <body class="pace-done" ui-class>
+    <environment names="Development">
+        @Html.Partial("Resources/_devscripts")
+    </environment>
+    <environment names="Staging,Production">
+        @Html.Partial("Resources/_prodscripts")
+    </environment>
 
     <noscript>
         Javascript has to be enabled in browser settings for this application
@@ -30,21 +37,21 @@
     </noscript>
 
     <div class="app" id="app">
-        
-            @{ 
-                if(ViewBag.Title == "Enrollments" || ViewBag.Title == "Course Enrollment Successful")
-                {
 
-                }
-                else if(ViewBag.Title == "Exam Session")
-                {
+        @{
+            if (ViewBag.Title == "Enrollments" || ViewBag.Title == "Course Enrollment Successful")
+            {
 
-                }
-                else
-                {
-                    @Html.Partial("_Sidebar")
-                }
             }
+            else if (ViewBag.Title == "Exam Session")
+            {
+
+            }
+            else
+            {
+                @Html.Partial("_Sidebar")
+            }
+        }
         <div class="app-content box-shadow-4 box-radius-4" id="content" role="main">
             <div class="content-header white box-shadow-4" id="content-header">
                 @Html.Partial("_Header")
@@ -54,14 +61,14 @@
             <div class="content-main" id="content-main">
                 @RenderBody()
             </div>
-            
-            @{ 
-                if(ViewBag.Title == "Enrollments" || ViewBag.Title == "Course Enrollment Successful")
+
+            @{
+                if (ViewBag.Title == "Enrollments" || ViewBag.Title == "Course Enrollment Successful")
                 {
 
 
                 }
-                else if(ViewBag.Title == "Exam Session")
+                else if (ViewBag.Title == "Exam Session")
                 {
 
 

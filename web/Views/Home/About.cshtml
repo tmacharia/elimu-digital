@@ -1,7 +1,178 @@
-﻿@{
-    ViewData["Title"] = "About";
+﻿@using Services
+@{
+    Layout = null;
+    ViewBag.Title = "About Us";
+    ViewBag.Action = "Home";
 }
-<h2>@ViewData["Title"].</h2>
-<h3>@ViewData["Message"]</h3>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title | @Extensions.Uni</title>
+    <meta content="e-learning, university" name="description">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,minimal-ui" name="viewport">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black-translucent" name="apple-mobile-web-app-status-barstyle">
+    <link href="~/images/Graduation_Hat-512.ico" rel="apple-touch-icon">
+    <meta content="Elimu Digital" name="apple-mobile-web-app-title">
+    <meta content="yes" name="mobile-web-app-capable">
+    <meta name="author" content="Timothy Macharia" />
+    <link href="~/images/mobile_eduction_logo_fine_circle.png" rel="shortcut icon" sizes="196x196">
 
-<p>Use this area to provide additional information.</p>
+    <environment names="Development">
+        @Html.Partial("Resources/_devstyles")
+    </environment>
+    <environment names="Staging,Production">
+        @Html.Partial("Resources/_prodstyles")
+    </environment>
+</head>
+<body class="pace-done" ui-class>
+    <style>
+        .wrapper {
+            margin-top: 50px;
+        }
+        .container{
+            text-align:center;
+        }
+        h1{
+            margin-bottom:10px;
+        }
+        p{
+            font-size:1.3em;
+        }
+        .fb{
+            font-size:1.2em;
+        }
+        .tweet {
+            font-size: 1.2em;
+        }
+        .insta {
+            font-size: 1.2em;
+        }
+        .fb i{
+            font-size:2em;
+            color:#3b5998 !important;
+        }
+        .tweet i{
+            font-size: 2em;
+            color: #1da1f2 !important;
+        }
+        .insta i{
+            font-size: 2em;
+            color: #e23f60 !important;
+        }
+        .contact-us{
+            font-size:2em;
+            font-weight:400;
+        }
+        .display-4{
+            font-weight:700;
+        }
+        ul li{
+            margin-bottom:5px;
+        }
+        ul li:last-child{
+            margin-bottom:0px;
+        }
+        .details{
+            text-align:left;
+        }
+        ul li a{
+            width:170px;
+            min-width:170px;
+        }
+        @@media(max-width:768px){
+            .details{
+                text-align:center;
+            }
+            .details div:first-child{
+                margin-bottom:20px;
+            }
+        }
+
+        html{
+            background:unset;
+        }
+    </style>
+
+    <div class="wrapper">
+        <div class="row">
+            <div class="container">
+                <h1 class="display-4">About Us</h1>
+                <p>
+                    We are an E-Learning initiative that brings maternal healthcare services nearer to
+                    the people through access via their mobile mobile devices. <a href="/"><b>Elimu Digital</b></a> members
+                    can access course material, fees statements, online discussions with lecturers and
+                    fellow students via this platform. This platform enables you to access flexible learning
+                    from wherever you are. It is only but a mouse click away! Happy Learning!
+                </p>
+
+                <br />
+                <br />
+                <br />
+                <div class="row details">
+                    <div class="col-md-6">
+                        <h1 class="text-uppercase display-4 contact-us">Contact Us</h1>
+                        <p>
+                            Would you like to know more about Elimu Digital?
+                            <br />
+                            Contact Us Today!
+                            <br />
+                            <a href="tel:254718697521">
+                                <i class="fa fa-phone"></i> +254 718 69 75 21
+                            </a>
+                            <br />
+                            <a href="mailto:info@elimu-digital.com">
+                                <i class="ion ion-android-mail"></i>
+                                <span style="text-decoration:underline; color:#0094ff;"> info@elimu-digital.com</span>
+                            </a>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h1 class="text-uppercase display-4 contact-us">Social Media</h1>
+                        <ul class="list-inline">
+                            <li>
+                                <a class="fb"
+                                   title="Facebook: Elimu Digital Kenya"
+                                   target="_blank"
+                                   href="https://facebook.com/Elimu%Digital%Kenya">
+                                    <i class="fa fa-facebook-official"></i> Elimu Digital Kenya
+                                </a>
+                            </li>
+                            <li>
+                                <a class="tweet"
+                                   title="Twitter: Elimu_digitalke"
+                                   target="_blank"
+                                   href="https://twitter.com/Elimu_digitalke">
+                                    <i class="fa fa-twitter"></i> Elimu_digitalke
+                                </a>
+                            </li>
+                            <li>
+                                <a class="insta"
+                                   href="https://instagram.com/Elimu_digitalke"
+                                   target="_blank"
+                                   title="Instagram: Elimu_digitalke">
+                                    <i class="fa fa-instagram"></i> Elimu_digitalke
+                                </a>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+                <br />
+                <br />
+                @*<br />
+        <br />
+        <img alt="logo" src="~/images/mobile_eduction_logo_fine_circle.png" height="80" />*@
+                <br />
+                <br />
+                <span>
+                    &copy; All Rights Reserved | Elimu Digital - @DateTime.Now.Year
+                </span>
+            </div>
+        </div>
+    </div>
+    <script src="~/js/app.min.js"></script>
+</body>
+</html>

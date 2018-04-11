@@ -34,24 +34,26 @@ namespace Services
 
             // get lecturers by course
 
-            var crs = _repos.Students
-                             .GetWith(studentId,
-                                       "Course",
-                                       "Course.Units",
-                                       "Course.Units.Lecturer",
-                                       "Course.Units.Lecturer.Profile",
-                                       "Course.Units.Lecturer.Likes")
-                              .Course;
+            var student = _repos.Students
+                                .GetWith(studentId,
+                                          "Course",
+                                          "Course.Units",
+                                          "Course.Units.Lecturer",
+                                          "Course.Units.Lecturer.Profile",
+                                          "Course.Units.Lecturer.Likes");
                               
-            if(crs != null)
+            if(student != null)
             {
-                var lecs = crs.Units
-                              .SkipWhile(x => x.Lecturer == null)
-                              .Select(x => x.Lecturer)
-                              .Distinct()
-                              .ToList();
+                if(student.Course != null)
+                {
+                    var lecs = student.Course.Units
+                                      .SkipWhile(x => x.Lecturer == null)
+                                      .Select(x => x.Lecturer)
+                                      .Distinct()
+                                      .ToList();
 
-                lecturers.AddRange(lecs);
+                    lecturers.AddRange(lecs);
+                }
             }
 
             return lecturers.Distinct();
@@ -79,60 +81,72 @@ namespace Services
         {
             List<Class> classes = new List<Class>();
 
-            if(typeof(T) == typeof(Student))
+            if(id > 0)
             {
-                var _cl = _repos.Students
-                                .ListWith(
-                                        "StudentUnits",
-                                        "StudentUnits.Unit",
-                                        "StudentUnits.Unit.Class",
-                                        "StudentUnits.Unit.Class.Units",
-                                        "StudentUnits.Unit.Class.Likes")
-                                .First(x => x.Id == id)
-                                .StudentUnits
-                                .Select(x => x.Unit)
-                                .Select(x => x.Class)
-                                .TakeWhile(x => x == null);
-
-                if(_cl != null)
+                if (typeof(T) == typeof(Student))
                 {
-                    classes.AddRange(_cl);
+                    var student = _repos.Students
+                                    .ListWith(
+                                            "StudentUnits",
+                                            "StudentUnits.Unit",
+                                            "StudentUnits.Unit.Class",
+                                            "StudentUnits.Unit.Class.Units",
+                                            "StudentUnits.Unit.Class.Likes")
+                                    .FirstOrDefault(x => x.Id == id);
+                                    
+
+                    if (student != null)
+                    {
+                        if(student.StudentUnits != null)
+                        {
+                            var _cl = student.StudentUnits
+                                             .Select(x => x.Unit)
+                                             .Select(x => x.Class)
+                                             .TakeWhile(x => x == null);
+
+                            classes.AddRange(_cl);
+                        }
+                    }
+
+                    var _cls = _repos.Students
+                                     .ListWith(
+                                      "Course",
+                                      "Course.Units",
+                                      "Course.Units.Class",
+                                      "Course.Units.Class.Units",
+                                      "Course.Units.Class.Likes")
+                                      .FirstOrDefault(x => x.Id == id)
+                                      ?.Course
+                                      ?.Units
+                                      .TakeWhile(x => x.Class != null)
+                                      .Select(x => x.Class);
+
+                    if (_cls != null)
+                    {
+                        classes.AddRange(_cls);
+                    }
                 }
-
-                var _cls = _repos.Students
-                                 .ListWith(
-                                  "Course",
-                                  "Course.Units",
-                                  "Course.Units.Class",
-                                  "Course.Units.Class.Units",
-                                  "Course.Units.Class.Likes")
-                                  .First(x => x.Id == id)
-                                  ?.Course
-                                  ?.Units
-                                  .TakeWhile(x => x.Class != null)
-                                  .Select(x => x.Class);
-
-                if(_cls != null)
+                else if (typeof(T) == typeof(Lecturer))
                 {
-                    classes.AddRange(_cls);
+                    var _cl = _repos.Lecturers
+                                    .GetWith(id,
+                                            "Units",
+                                            "Units.Class",
+                                            "Units.Class.Units",
+                                            "Units.Class.Likes")
+                                    .Units
+                                    .TakeWhile(x => x == null)
+                                    .Select(x => x.Class);
+
+                    if (_cl != null)
+                    {
+                        classes.AddRange(_cl);
+                    }
                 }
             }
-            else if(typeof(T) == typeof(Lecturer))
+            else
             {
-                var _cl = _repos.Lecturers
-                                .GetWith(id,
-                                        "Units",
-                                        "Units.Class",
-                                        "Units.Class.Units",
-                                        "Units.Class.Likes")
-                                .Units
-                                .TakeWhile(x => x == null)
-                                .Select(x => x.Class);
-
-                if(_cl != null)
-                {
-                    classes.AddRange(_cl);
-                }
+                return classes;
             }
 
             return classes.Take(count);
@@ -141,16 +155,23 @@ namespace Services
         {
             MyCoursesViewModel model = new MyCoursesViewModel
             {
-                Main = _repos.Students
-                               .GetWith(studentId, "Course", "Course.Units")
-                               .Course,
-
                 Others = _repos.StudentCourses
                                  .ListWith("Course","Course.Units")
                                  .Where(x => x.StudentId == studentId)
                                  .Select(x => x.Course)
                                  .ToList()
             };
+
+            var student = _repos.Students
+                             .GetWith(studentId, "Course", "Course.Units");
+
+            if(student != null)
+            {
+                if(student.Course != null)
+                {
+                    model.Main = student.Course;
+                }
+            }
 
             return model;
         }
@@ -161,14 +182,14 @@ namespace Services
             if (typeof(T) == typeof(Student))
             {
                 var std = _repos.Students
-                              .GetWith(id,
-                                       "Course",
-                                       "Course.Units",
-                                       "Course.Units.Lecturer",
-                                       "Course.Units.Lecturer.Profile",
-                                       "Course.Units.Class",
-                                       "Course.Units.UnitStudents",
-                                       "Course.Units.Likes");
+                                .GetWith(id,
+                                         "Course",
+                                         "Course.Units",
+                                         "Course.Units.Lecturer",
+                                         "Course.Units.Lecturer.Profile",
+                                         "Course.Units.Class",
+                                         "Course.Units.UnitStudents",
+                                         "Course.Units.Likes");
 
                 if(std != null)
                 {

@@ -64,11 +64,11 @@ namespace web.Controllers
                 ViewBag.classes = _dashManager.MyClasses<Student>(user.AccountId, 10).ToList();
             }
 
-            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId);
+            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
 
             return View();
         }
-
+        [AllowAnonymous]
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";

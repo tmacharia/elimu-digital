@@ -22,19 +22,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\angular-site.min.js.gz" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Dockerfile" />
   </ItemGroup>
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\js\angular-site.min.js.gz" />
     <_ContentIncludedByDefault Remove="wwwroot\js\site.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\site.min.js.gz" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BuildBundlerMinifier" Version="2.6.375" />
     <PackageReference Include="LinqPaginator" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.3" />
@@ -84,10 +82,6 @@
   <ItemGroup>
     <Folder Include="Views\Lecturers\" />
     <Folder Include="Views\Units\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\js\angular-site.min.js.gz" />
   </ItemGroup>
 
 </Project>

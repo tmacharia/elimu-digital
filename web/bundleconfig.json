@@ -54,9 +54,8 @@
       "enabled": true,
       "gzip": true,
       "outputMode": "singleLine",
-      "renameLocals": true
-    },
-    "sourceMap": true
+      "renameLocals": false
+    }
   },
   {
     "outputFileName": "wwwroot/js/site.min.js",
@@ -67,7 +66,7 @@
     "minify": {
       "gzip": true,
       "enabled": true,
-      "outputMode": "multipleLines",
+      "outputMode": "singleLine",
       "renameLocals": true
     },
     // Optionally generate .map file
