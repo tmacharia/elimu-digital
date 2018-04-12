@@ -36,9 +36,9 @@ namespace web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 1, int itemsperpage = 10)
+        public IActionResult Index(int page = 1, int itemsperpage = 10)
         {
-            AppUser user = await _userManager.GetUserAsync(User);
+            int account = this.GetAccountId();
             IEnumerable<Unit> units = new List<Unit>();
 
             if(User.Role() == "Administrator")
@@ -48,11 +48,11 @@ namespace web.Controllers
             }
             else if(User.Role() == "Lecturer")
             {
-                units = _dataManager.MyUnits<Lecturer>(user.AccountId);
+                units = _dataManager.MyUnits<Lecturer>(account);
             }
             else if(User.Role() == "Student")
             {
-                units = _dataManager.MyUnits<Student>(user.AccountId);
+                units = _dataManager.MyUnits<Student>(account);
             }
 
             Result<Unit> result = new Result<Unit>();
@@ -60,7 +60,7 @@ namespace web.Controllers
             result = units.OrderByDescending(x => x.Timestamp)
                           .ToPaged(page, itemsperpage);
 
-            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
+            ViewBag.Notifications = this.GetNotifications();
 
             return View(result);
         }
@@ -95,26 +95,28 @@ namespace web.Controllers
                 error = "No record of units with that id exist.";
             }
 
+            ViewBag.boards = this.GetMyBoards();
+            ViewBag.Notifications = this.GetNotifications();
             ViewBag.error = error;
 
             return View("~/Views/Units/Details.cshtml", unit);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Search(string q, int page = 1, int itemsperpage = 10)
+        public IActionResult Search(string q, int page = 1, int itemsperpage = 10)
         {
             ViewBag.Action = "Units";
 
             IEnumerable<Unit> units = new List<Unit>();
-            AppUser user = await _userManager.GetUserAsync(User);
+            int account = this.GetAccountId();
 
             if(User.Role() == "Student")
             {
-                units = _dataManager.MyUnits<Student>(user.AccountId);
+                units = _dataManager.MyUnits<Student>(account);
             }
             else if(User.Role() == "Lecturer")
             {
-                units = _dataManager.MyUnits<Lecturer>(user.AccountId);
+                units = _dataManager.MyUnits<Lecturer>(account);
             }
             else
             {
@@ -123,6 +125,7 @@ namespace web.Controllers
             }
 
             ViewBag.Query = q;
+            ViewBag.Notifications = this.GetNotifications();
 
             string pattern = "(" + q + ")";
 

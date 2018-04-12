@@ -148,9 +148,24 @@
                         </li>
                     }
 
+                        <li class="nav-header hidden-folded"><span class="text-xs">Collection</span></li>
+                    
+                    @if(ViewBag.Action == "Discussions")
+                    {
+                        <li class="active">
+                            <a href="/discussionboards"><span class="nav-icon"><i class="ion ion-chatboxes"></i></span> <span class="nav-text">Discussion Boards</span></a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="/discussionboards"><span class="nav-icon"><i class="ion ion-chatboxes"></i></span> <span class="nav-text">Discussion Boards</span></a>
+                        </li>
+                    }
+
+
                     @if (User.IsInRole("Student"))
                     {
-                        <li class="nav-header hidden-folded"><span class="text-xs">Your collection</span></li>
                         <li>
                             <a href="#"><span class="nav-icon"><i class="fa fa-history"></i></span> <span class="nav-text">Tasks</span></a>
                         </li>
@@ -163,7 +178,6 @@
                     }
                     else
                     {
-                        <li class="nav-header hidden-folded"><span class="text-xs">Collection</span></li>
                         <li>
                             <a href="/home/about"><span class="nav-icon"><i class="fa fa-info-circle"></i></span> <span class="nav-text">About Us</span></a>
                         </li>

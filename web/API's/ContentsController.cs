@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using Services.Interfaces;
-using Services.Security;
+using Services.Middlewares;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -317,7 +317,7 @@ namespace web.API_s
 
             try
             {
-                //comment = _repos.Comments.Create(comment);
+                comment = _repos.Comments.Create(comment);
                 content.Comments.Add(comment);
                 _repos.Contents.Update(content);
                 _repos.Commit();

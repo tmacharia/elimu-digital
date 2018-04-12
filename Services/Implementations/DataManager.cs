@@ -189,7 +189,10 @@ namespace Services
                                          "Course.Units.Lecturer.Profile",
                                          "Course.Units.Class",
                                          "Course.Units.UnitStudents",
-                                         "Course.Units.Likes");
+                                         "Course.Units.Likes",
+                                         "Course.Units.Boards",
+                                         "Course.Units.Boards.Unit",
+                                         "Course.Units.Boards.Posts");
 
                 if(std != null)
                 {
@@ -206,7 +209,10 @@ namespace Services
                                                           "Course.Units.Lecturer.Profile",
                                                           "Course.Units.Class",
                                                           "Course.Units.UnitStudents",
-                                                          "Course.Units.Likes")
+                                                          "Course.Units.Likes",
+                                                          "Course.Units.Boards",
+                                                          "Course.Units.Boards.Unit",
+                                                          "Course.Units.Boards.Posts")
                                                 .Where(x => x.StudentId == id)
                                                 .TakeWhile(x => x.Course != null)
                                                 .Select(x => x.Course)
@@ -228,7 +234,10 @@ namespace Services
                                        "Units.Lecturer",
                                        "Units.Lecturer.Profile",
                                        "Units.UnitStudents",
-                                       "Units.Likes");
+                                       "Units.Likes",
+                                       "Units.Boards",
+                                       "Units.Boards.Unit",
+                                       "Units.Boards.Posts");
 
                 if(lec.Units != null)
                 {
@@ -261,7 +270,7 @@ namespace Services
 
         public IEnumerable<Student> MyClassMates(int id)
         {
-            IEnumerable<Student> students = new List<Student>();
+            IList<Student> students = new List<Student>();
 
             students = _repos.Students
                              .GetWith(id,
@@ -272,15 +281,27 @@ namespace Services
                              ?.StudentUnits
                              .Select(x => x.Student)
                              .SkipWhile(x => x == null || x.Id == id)
-                             .Distinct();
+                             .Distinct()
+                             .ToList();
 
-            if(students == null)
+            var courseStudents = _repos.StudentCourses
+                                       .ListWith("Student", "Student.Profile")
+                                       .Where(x => x.CourseId == id)
+                                       .Select(x => x.Student)
+                                       .ToList();
+
+            foreach (var item in courseStudents)
+            {
+                students.Add(item);
+            }
+
+            if (students == null)
             {
                 return new List<Student>();
             }
             else
             {
-                return students;
+                return students.Distinct();
             }
         }
 
@@ -445,6 +466,58 @@ namespace Services
             };
 
             return model;
+        }
+
+        public IList<DiscussionBoard> MyBoards<T>(int id, int count = 5000) where T : class
+        {
+            return MyUnits<T>(id, count).SelectMany(x => x.Boards)
+                                        .ToList();
+        }
+
+        public IList<ParticipantViewModel> GetBoardParticipant(int id, int count = 5000)
+        {
+            List<ParticipantViewModel> list = new List<ParticipantViewModel>();
+
+            var board = _repos.DiscussionBoards
+                              .GetWith(id,
+                              "Unit",
+                              "Unit.Lecturer",
+                              "Unit.Lecturer.Profile",
+                              "Unit.UnitStudents",
+                              "Unit.UnitStudents.Student",
+                              "Unit.UnitStudents.Student.Profile");
+
+            if(board == null)
+            {
+                return list;
+            }
+            else
+            {
+                if(board.Unit.Lecturer != null)
+                {
+                    var lec = new ParticipantViewModel(AccountType.Lecturer)
+                    {
+                        AccountId = board.Unit.Lecturer.Id,
+                        Names = board.Unit.Lecturer.Profile.FullNames,
+                        Photo = board.Unit.Lecturer.Profile.PhotoUrl
+                    };
+
+                    list.Add(lec);
+                }
+
+                var others = board.Unit
+                                  .UnitStudents
+                                  .Select(x => new ParticipantViewModel(AccountType.Student)
+                                  {
+                                      AccountId = x.StudentId,
+                                      Names = x.Student.Profile.FullNames,
+                                      Photo = x.Student.Profile.PhotoUrl
+                                  }).ToList();
+
+                list.AddRange(others);
+            }
+
+            return list.Take(count).ToList();
         }
     }
 }

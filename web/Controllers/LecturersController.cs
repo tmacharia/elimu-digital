@@ -30,10 +30,9 @@ namespace web.Controllers
         }
 
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Client)]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             IList<Lecturer> lecturers = new List<Lecturer>();
-            AppUser user = await _userManager.GetUserAsync(User);
 
             if(User.Role() == "Administrator")
             {
@@ -49,7 +48,7 @@ namespace web.Controllers
             }
             else if(User.Role() == "Student")
             {
-                lecturers = _dataManager.MyLecturers(user.AccountId)
+                lecturers = _dataManager.MyLecturers(this.GetAccountId())
                                         .ToList();
             }
 
@@ -60,7 +59,7 @@ namespace web.Controllers
 
             var model = lecturers.SkipWhile(x => x == null).ToList();
 
-            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
+            ViewBag.Notifications = this.GetNotifications();
 
             return View(model);
         }

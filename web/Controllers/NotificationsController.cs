@@ -23,21 +23,18 @@ namespace web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var user = await this._userManager.GetUserAsync(User);
-            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
-            return View(user.AccountId);
+            ViewBag.Notifications = this.GetNotifications();
+            return View(this.GetAccountId());
         }
         [HttpGet]
         [Route("api/notifications")]
-        public async Task<IActionResult> My()
+        public IActionResult My()
         {
-            var user = await _userManager.GetUserAsync(User);
-
             var notifications = _repos.Notifications
                                       .List
-                                      .Where(x => x.AccountId == user.AccountId)
+                                      .Where(x => x.AccountId == this.GetAccountId())
                                       .ToList();
 
             return Ok(notifications);
@@ -63,7 +60,7 @@ namespace web.Controllers
 
         [HttpPost]
         [Route("api/notifications/markasread")]
-        public async Task<IActionResult> MarkAsRead(IList<Notification> notifications)
+        public IActionResult MarkAsRead(IList<Notification> notifications)
         {
             if(notifications.Count < 1)
             {
@@ -72,16 +69,16 @@ namespace web.Controllers
 
             foreach (var item in notifications)
             {
-                item.Read = true;
+                var ntf = _repos.Notifications.Get(item.Id);
+                ntf.Read = true;
+                ntf = _repos.Notifications.Update(ntf);
             }
 
-            _repos.Notifications.UpdateMany(notifications.ToArray());
+            //_repos.Notifications.UpdateMany(notifications.ToArray());
             _repos.Commit();
 
-            AppUser user = await _userManager.GetUserAsync(User);
-
             var items = _repos.Notifications.List
-                              .Where(x => x.AccountId == user.AccountId)
+                              .Where(x => x.AccountId == this.GetAccountId())
                               .ToList();
 
             return Ok(items);

@@ -5,6 +5,7 @@
 @{ 
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
     ViewBag.Title = "Dashboard";
+    ViewBag.Action = "Dashboard";
 
     var lecturers = (IList<Lecturer>)ViewBag.lecturers;
     var students = (IList<Student>)ViewBag.students;

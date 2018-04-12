@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Services;
 using Services.Interfaces;
 using Services.Implementations;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace web
 {
@@ -35,12 +36,12 @@ namespace web
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            #region DbContext & Identity Configurations
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(DbConnection));
 
             services.AddDbContext<LePadContext>(options =>
                     options.UseSqlServer(DbConnection));
-
             services.AddIdentity<AppUser, AppRole>(config => 
             {
                 config.SignIn.RequireConfirmedEmail = true;
@@ -48,17 +49,26 @@ namespace web
             })
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+            #endregion
+
+            #region Mvc configuration
             services.AddMvc()
             .AddJsonOptions(options =>
             {
                 options.SerializerSettings.Formatting = Formatting.Indented;
             });
-            services.AddSwagger();
+            #endregion
 
+            #region Site optimizations config
             services.AddResponseCompression();
-            services.AddMemoryCache();
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+            });
+            #endregion
 
-            // Add application services
+            #region Services to add to DI Container
             services.AddAutoMapper();
             services.AddTransient<ISettingsManager>(s => new SettingsManager(Configuration.GetSection("Settings")));
             services.AddTransient<IEmailSender>(e => new AuthMessageSender(SystemName,AdminEmail,MailPassword));
@@ -68,10 +78,15 @@ namespace web
             services.AddTransient<IDataManager, DataManager>();
             services.AddTransient<INotificationManager, NotificationManager>();
             services.AddTransient<IProgressTracker, ProgressTracker>();
+            #endregion
+            
+            services.AddSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, 
+                              IHostingEnvironment env, 
+                              ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -87,12 +102,11 @@ namespace web
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            
             app.UseIdentity();
-
-
+            
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
-            //app.UseSecurity();
+            app.UseSession();
+            app.UseOptimizations();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -13,6 +13,7 @@ using Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using DAL.Extensions;
 
 namespace web.API_s
 {
@@ -48,12 +49,14 @@ namespace web.API_s
 
         [HttpGet]
         [Route("my")]
-        public async Task<IActionResult> MyUnits()
+        public IActionResult MyUnits()
         {
-            AppUser user = await _userManager.GetUserAsync(User);
+            int account = this.GetAccountId();
             List<UnitViewModel> list = new List<UnitViewModel>();
 
-            var myUnits = _dataManager.MyUnits<Lecturer>(user.AccountId, 100)
+            if(User.Role() != "Administrator")
+            {
+                var myUnits = _dataManager.MyUnits<Lecturer>(account, 100)
                                       .Select(x => new
                                       {
                                           x.Id,
@@ -61,8 +64,21 @@ namespace web.API_s
                                           Course = x.Course.Name
                                       });
 
+                return Ok(myUnits);
+            }
+            else
+            {
+                var units = _repos.Units
+                                  .ListWith("Course")
+                                  .Select(x => new
+                                  {
+                                      x.Id,
+                                      x.Name,
+                                      Course = x.Course.Name
+                                  });
 
-            return Ok(myUnits);
+                return Ok(units);
+            }
         }
 
         // Create

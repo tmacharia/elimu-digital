@@ -1,0 +1,113 @@
+﻿@using DAL.Models
+@using DAL.Extensions
+@using Services
+@model IList<DiscussionBoard>
+@{
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    string s = (string)ViewBag.Title;
+
+    if (string.IsNullOrWhiteSpace(s))
+    {
+        if(User.Role() == "Administrator")
+        {
+            ViewBag.Title = "Discussion Boards";
+        }
+        else
+        {
+            ViewBag.Title = "My Discussion Boards";
+        }
+    }
+
+    ViewBag.Action = "Discussions";
+}
+<style>
+    .box {
+        border-top: 2px solid rgba(23, 162, 184, 0.36);
+    }
+    .moment{
+        font-size:.9em;
+    }
+    .box-body h6:first-child{
+        font-weight:400;
+        color:#3e3e3e;
+    }
+    .posts {
+        margin-top: 10px;
+    }
+    .btn{
+        color:#fff !important;
+    }
+</style>
+<div class="padding">
+    <h4>
+        @ViewBag.Title
+        <span class="ml-auto h6"><b class="badge danger">@Model.Count</b></span>
+
+        @{ 
+            if(User.Role() != "Student")
+            {
+                <span class="pull-right">
+                    <a data-toggle="modal" data-target="#newBoardModal" class="btn btn-success" onclick="onNewBoard()">
+                        <i class="fa fa-plus"></i> New Discussion Board
+                    </a>
+                </span>
+            }
+        }
+    </h4>
+    <br />
+    <div class="row">
+        @{ 
+            if(Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <div class="col-md-3 col-sm-4 col-xs-12">
+                        <div class="box">
+                            <div class="box-body">
+                                <h6>@item?.Unit.Name.Trancate(25)</h6>
+                                <span>@item.Name</span>
+                                <p class="moment"><i>@item.Timestamp.ToMoment()</i></p>
+                                
+                                <span>
+                                    <a href="/discussionboards/@item.Id/@item.GenerateSlug()" class="btn btn-info">Go to board 
+                                    <i class="ion ion-ios-arrow-thin-right"></i></a>
+
+                                    @{ 
+                                        if(item.Posts != null)
+                                        {
+                                            if(item.Posts.Count > 0)
+                                            {
+                                                <span class="pull-right moment posts">
+                                                    <i class="fa fa-comment-o"></i>
+                                                    @{ 
+                                                        if(item.Posts.Count == 1)
+                                                        {
+                                                            <span> @item.Posts.Count post</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span> @item.Posts.Count posts</span>
+                                                        }
+                                                    }
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="pull-right moment posts" title="No posts yet">
+                                                    <i class="fa fa-clock-o"></i>
+                                                </span>
+                                            }
+                                        }
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            }
+        }
+    </div>
+</div>
+
+@Html.Partial("Boards/_Create")

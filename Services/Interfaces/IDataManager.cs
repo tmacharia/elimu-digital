@@ -19,5 +19,7 @@ namespace Services
         IEnumerable<Unit> MyUnits<T>(int id, int count=5000) where T : class;
         IEnumerable<Class> MyClasses<T>(int id, int count=5000) where T : class;
         IList<ExamViewModel> MyExams<T>(int id, int count = 5000) where T : class;
+        IList<DiscussionBoard> MyBoards<T>(int id, int count = 5000) where T : class;
+        IList<ParticipantViewModel> GetBoardParticipant(int id, int count = 5000);
     }
 }

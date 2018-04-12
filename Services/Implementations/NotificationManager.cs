@@ -137,7 +137,7 @@ namespace Services.Implementations
             {
                 board = new DiscussionBoard()
                 {
-                    Name = "Welcome Discussion Board",
+                    Name = "Default Board",
                     Unit = content.Unit
                 };
 
@@ -165,7 +165,7 @@ namespace Services.Implementations
             {
                 board = new DiscussionBoard()
                 {
-                    Name = "Welcome Discussion Board",
+                    Name = "Default Board",
                     Unit = exam.Unit
                 };
 

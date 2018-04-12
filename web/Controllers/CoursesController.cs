@@ -31,12 +31,12 @@ namespace web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             ViewBag.Action = "Courses";
 
             List<Course> courses = new List<Course>();
-            AppUser user = await _userManager.GetUserAsync(User);
+            int account = this.GetAccountId();
 
             if(User.Role() == "Administrator")
             {
@@ -47,7 +47,7 @@ namespace web.Controllers
             else if(User.Role() == "Lecturer")
             {
                 courses = _repos.Lecturers
-                                .GetWith(user.AccountId,
+                                .GetWith(account,
                                         "Units",
                                         "Units.Course",
                                         "Units.Course.Units",
@@ -59,7 +59,7 @@ namespace web.Controllers
             }
             else if(User.Role() == "Student")
             {
-                var mycourses = _dataManager.MyCourses(user.AccountId);
+                var mycourses = _dataManager.MyCourses(account);
 
                 if(mycourses.Main != null)
                 {
@@ -80,7 +80,7 @@ namespace web.Controllers
                                .ToList();
 
 
-            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
+            ViewBag.Notifications = this.GetNotifications();
 
             return View(model);
         }
@@ -88,12 +88,12 @@ namespace web.Controllers
         [HttpGet]
         [Route("courses/enrollment")]
         [Authorize(Roles = "Student, Administrator")]
-        public async Task<IActionResult> Enrollment()
+        public IActionResult Enrollment()
         {
             List<Course> courses = new List<Course>();
-            AppUser user = await _userManager.GetUserAsync(User);
+            int account = this.GetAccountId();
 
-            var mycourses = _dataManager.MyCourses(user.AccountId);
+            var mycourses = _dataManager.MyCourses(account);
 
             courses = _repos.Courses
                             .ListWith("Units", "Students", "Likes")
@@ -111,7 +111,7 @@ namespace web.Controllers
                     courses.Remove(item);
                 }
             }
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(courses);
         }
 
@@ -134,21 +134,21 @@ namespace web.Controllers
                 ViewBag.error = "Details for course chosen were not found in records.";
                 return View();
             }
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(course);
         }
 
         [HttpGet]
         [Route("courses/enrollment/{id}/accept")]
         [Authorize(Roles = "Student")]
-        public async Task<IActionResult> Enroll(int id)
+        public IActionResult Enroll(int id)
         {
-            AppUser user = await _userManager.GetUserAsync(User);
+            int account = this.GetAccountId();
             Course course = _repos.Courses
                                   .GetWith(id,"Units");
 
             Student student = _repos.Students
-                                    .GetWith(user.AccountId, "Course");
+                                    .GetWith(account, "Course");
 
             if(student.Course == null)
             {
@@ -160,7 +160,7 @@ namespace web.Controllers
                 StudentCourse studentCourse = new StudentCourse()
                 {
                     CourseId = course.Id,
-                    StudentId = user.AccountId,
+                    StudentId = account,
                     Course = course,
                     Student = student
                 };
@@ -231,7 +231,7 @@ namespace web.Controllers
             }
 
             ViewBag.error = error;
-
+            ViewBag.Notifications = this.GetNotifications();
             return View("~/Views/Courses/Details.cshtml", course);
         }
 
@@ -247,7 +247,7 @@ namespace web.Controllers
                                           .ListWith("Units")
                                           .Where(SearchFuncs.Course(q))
                                           .ToList();
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(courses);
         }
 

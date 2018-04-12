@@ -29,9 +29,9 @@ namespace web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 1, int itemsperpage = 10)
+        public IActionResult Index(int page = 1, int itemsperpage = 10)
         {
-            AppUser user = await _userManager.GetUserAsync(User);
+            int account = this.GetAccountId();
             IEnumerable<Class> classes = new List<Class>();
 
             if(User.Role() == "Administrator")
@@ -41,18 +41,18 @@ namespace web.Controllers
             }
             else if(User.Role() == "Lecturer")
             {
-                classes = _dataManager.MyClasses<Lecturer>(user.AccountId)
+                classes = _dataManager.MyClasses<Lecturer>(account)
                                       .TakeWhile(x => x != null);
             }
             else if(User.Role() == "Student")
             {
-                classes = _dataManager.MyClasses<Student>(user.AccountId)
+                classes = _dataManager.MyClasses<Student>(account)
                                       .TakeWhile(x => x != null);
             }
 
             Result<Class> model = classes.ToPaged(page, itemsperpage);
 
-            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
+            ViewBag.Notifications = this.GetNotifications();
 
             return View(model);
         }
@@ -77,7 +77,7 @@ namespace web.Controllers
             {
                 return NotFound("Class record with that id does not exist.");
             }
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(_class);
         }
 
@@ -88,7 +88,7 @@ namespace web.Controllers
         public IActionResult Create()
         {
             Class @class = new Class();
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(@class);
         }
 

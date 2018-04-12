@@ -30,18 +30,17 @@ namespace web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             IEnumerable<Student> students = new List<Student>();
-            AppUser user = await _userManager.GetUserAsync(User);
 
             if(User.Role() == "Student")
             {
-                students = _dataManager.MyClassMates(user.AccountId);
+                students = _dataManager.MyClassMates(this.GetAccountId());
             }
             else if(User.Role() == "Lecturer")
             {
-                students = _dataManager.MyStudents(user.AccountId, 50);
+                students = _dataManager.MyStudents(this.GetAccountId(), 50);
             }
             else
             {
@@ -52,7 +51,7 @@ namespace web.Controllers
             var model = students.OrderByDescending(x => x.Timestamp)
                                 .ToList();
 
-            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
+            ViewBag.Notifications = this.GetNotifications();
 
             return View(model);
         }

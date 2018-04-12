@@ -10,7 +10,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Microsoft.AspNetCore.Builder;
-using Services.Security;
+using Services.Middlewares;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using DAL.Models;
@@ -70,6 +70,10 @@ namespace Services
                     }
                 });
             });
+        }
+        public static void UseOptimizations(this IApplicationBuilder builder)
+        {
+            builder.UseMiddleware<OptimizationMiddleware>();
         }
         public static UpdateResult<TEntity> UpdateReflector<TEntity, TModel>(this TEntity entity, TModel model)
             where TEntity : class
@@ -182,19 +186,47 @@ namespace Services
 
             if(timeSpan.Days > 0)
             {
-                return timeSpan.Days + " day(s) ago";
+                if(timeSpan.Days > 1)
+                {
+                    return timeSpan.Days + " days ago";
+                }
+                else
+                {
+                    return timeSpan.Days + " day ago";
+                }
             }
             else if(timeSpan.Hours > 0)
             {
-                return timeSpan.Hours + " hr(s) ago";
+                if(timeSpan.Hours > 1)
+                {
+                    return timeSpan.Hours + " hrs ago";
+                }
+                else
+                {
+                    return timeSpan.Hours + " hr ago";
+                }
             }
             else if(timeSpan.Minutes > 0)
             {
-                return timeSpan.Minutes + " min(s) ago";
+                if(timeSpan.Minutes > 1)
+                {
+                    return timeSpan.Minutes + " mins ago";
+                }
+                else
+                {
+                    return timeSpan.Minutes + " min ago";
+                }
             }
             else if(timeSpan.Seconds > 0)
             {
-                return timeSpan.Seconds + " secs ago";
+                if(timeSpan.Seconds > 1)
+                {
+                    return timeSpan.Seconds + " secs ago";
+                }
+                else
+                {
+                    return timeSpan.Seconds + " sec ago";
+                }
             }
 
             return " ago";

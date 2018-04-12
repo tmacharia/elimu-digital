@@ -33,11 +33,9 @@ namespace web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index()
+        public IActionResult Index()
         {
-            AppUser user = await _userManager.GetUserAsync(User);
-
-            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
+            ViewBag.Notifications = this.GetNotifications();
 
             return View();
         }
@@ -62,7 +60,7 @@ namespace web.Controllers
             }
 
             model.Unit = unit;
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(model);
         }
 
@@ -111,7 +109,7 @@ namespace web.Controllers
             {
                 return NotFound("Unit with that id does not exist in records.");
             }
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(unit);
         }
 
@@ -149,7 +147,7 @@ namespace web.Controllers
             {
                 return NotFound("Exam not found.");
             }
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(exam);
         }
 
@@ -168,7 +166,7 @@ namespace web.Controllers
             {
                 return NotFound("Exam not found.");
             }
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(exam);
         }
 
@@ -192,7 +190,7 @@ namespace web.Controllers
             {
                 return NotFound("Exam record with that id does not exist in records.");
             }
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(exam);
         }
 
@@ -204,7 +202,7 @@ namespace web.Controllers
             {
                 return BadRequest("Invalid exam session id.");
             }
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(id);
         }
 
@@ -223,7 +221,7 @@ namespace web.Controllers
             {
                 return NotFound("Exam record with that id does not exist.");
             }
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(exam);
         }
     }

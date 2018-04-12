@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.Security
+namespace Services.Middlewares
 {
     public class SecurityMiddleware
     {

@@ -1,0 +1,189 @@
+﻿@using DAL.Models
+@using DAL.Extensions
+@using Services
+@model DiscussionBoard
+@{
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    
+    ViewBag.Action = "Discussions";
+    ViewBag.Title = $"{Model.Name} - Discussion board";
+}
+<style>
+    #CommentBox {
+        padding-top:10px;
+        min-height: 69px;
+    }
+    .box{
+        border:1px solid #ededed;
+    }
+    
+    .box-footer {
+        margin-top: -53px;
+        float: right;
+    }
+    [contentEditable=true]:empty:not(:focus):before {
+        content: attr(data-text);
+        color:#d4d4d4;
+    }
+   .publisher{
+       border-bottom:none;
+   }
+   .post{
+       color:#646464;
+       font-weight:400;
+       line-height:1.3;
+   }
+    .reactions {
+        font-size: 1em;
+        margin-top: 1px;
+    }
+
+    .reactions li {
+        display: inline-block;
+        margin: 0px 5px;
+    }
+    .pubComm{
+        padding-left:0px;
+        margin-left:-10px;
+    }
+    .sl-item{
+        margin-left:30px;
+        padding-bottom:10px;
+    }
+</style>
+
+<div ng-app="gobel-app">
+    <div class="padding" ng-controller="boardsCtrl" ng-init="initBoard('@Model.Id')">
+        <h4>
+            <span>
+                <i class="fa fa-users"></i> @Model.Name
+            </span>
+
+            <span class="pull-right" style="font-size:.5em;">
+                <span><i class="fa fa-umbrella"></i> @Model.Unit.Name</span>
+                <br />
+                <span><i class="fa fa-calendar"></i> @Model.Timestamp.ToString("dd MMMM yyyy")</span>
+            </span>
+        </h4>
+        <br />
+        <div class="row">
+            <div class="col-md-8">
+                <div class="box collapse show m-0" id="reply-1">
+                    <form role="form" id="commentForm" ng-submit="onNewPost('@Model.Id')">
+                        <div contenteditable="true" class="form-control no-border"
+                             required id="CommentBox"
+                             data-text="Share an idea, opinion or article..."></div>
+                        <div class="box-footer clearfix">
+                            <button type="submit" id="postSubmitBtn" class="btn info float-right btn-sm">Publish Post</button>
+                        </div>
+                    </form>
+                </div>
+                <br />
+                <div class="box" ng-repeat="post in posts">
+                    <div class="list-item publisher">
+                        <a href="#">
+                            <span class="w-40 avatar">
+                                <img alt="..." src="{{post.by.photoUrl}}">
+                            </span>
+                        </a>
+                        <div class="list-body">
+                            <div>
+                                <a href="#" class="bold">{{post.by.fullNames}}</a>
+                            </div><small class="text-muted text-ellipsis">{{post.timestamp | date:'medium'}}</small>
+                        </div>
+                    </div>
+                    <div class="box-body" style="padding-top:0px">
+                        <h6 class="post" ng-bind-html="post.message"></h6>
+                        <hr />
+                        <ul class="list-inline reactions">
+                            <li>
+                                <button class="pointer no-btn" id="like-btn" title="Like Content"
+                                        ng-click="onLike(post)">
+                                    <span class="likes-count"> {{post.likes.length}} </span>
+                                    <i class="fa fa-thumbs-o-up" title="Like Content"></i>
+                                    Like
+                                </button>
+                            </li>
+                        </ul>
+                        <a class="">View Comments</a>
+                        <div class="list-item publisher pubComm">
+                            <a href="#">
+                                <span class="w-30 avatar">
+                                    <img alt="..." src="@User.PhotoUrl()">
+                                    <i class="on bottom"></i>
+                                </span>
+                            </a>
+                            <div class="list-body">
+                                <form id="postCommentForm"
+                                      ng-submit="onNewComment(post)">
+                                    <input type="text" class="form-control"
+                                           ng-model="post.comment"
+                                           required
+                                           placeholder="Write a comment..." />
+                                </form>
+                            </div>
+                        </div>
+                        <div class="streamline mb-2">
+                            <div class="sl-item" ng-repeat="comment in post.comments">
+                                <div class="sl-left">
+                                    <img alt="." class="circle" src="{{comment.by.photoUrl}}" />
+                                </div>
+                                <div class="sl-content">
+                                    <div class="sl-date text-muted">
+                                        {{comment.timestamp | date:'medium'}}
+                                    </div>
+                                    <div class="sl-author">
+                                        <a href="#" class="bold">{{comment.by.fullNames}}</a>
+                                    </div>
+                                    <div class="mb-3">
+                                        <p ng-bind-html="comment.message">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-md-4">
+                <div class="box">
+                    <div class="box-header">
+                        <h5>Participants</h5>
+                    </div>
+                    <div class="box-body">
+                        <ul class="list no-border">
+                            <li class="list-item" ng-repeat="user in participants">
+                                <a href="#">
+                                    <span class="w-40 avatar">
+                                        <img alt="..." src="{{user.photo}}">
+                                        <i class="on bottom"></i>
+                                    </span>
+                                </a>
+                                <div class="list-body">
+                                    <div>
+                                        <a href="#">{{user.names}}</a>
+                                    </div><small class="text-muted text-ellipsis">{{user.role}}</small>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div ng-show="participantsLoader">
+                            <center>
+                                <br />
+                                <span>
+                                    <i class="fa fa-spinner fa-spin fa-2x"></i>
+                                    <br />
+                                    loading...
+                                </span>
+                                <br />
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

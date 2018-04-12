@@ -38,12 +38,25 @@ namespace ConsoleTest
             //ConfirmDate();
             //DayHandler();
             //SeedProfileIdClaims();
-            SendEmail("timothy.macharia@outlook.com", "Test Subject", "Hey there.");
+            //SendEmail("timothy.macharia@outlook.com", "Test Subject", "Hey there.");
+            RenameDiscussionBoards();
             //InitializeGet<School>();
             //SeedSchool("Online");
             //Get<School>(1, "Location");
 
             Console.ReadKey();
+        }
+        static void RenameDiscussionBoards()
+        {
+            foreach (var item in _context.DiscussionBoards)
+            {
+                Console.WriteLine($"Updating board Id: {item.Id}");
+                item.Name = "Default Board";
+            }
+
+            Console.WriteLine("Saving changes to db...");
+            _context.SaveChanges();
+            Console.WriteLine("DONE!!");
         }
         static async void SendEmail(string to,string sbj,string msg)
         {

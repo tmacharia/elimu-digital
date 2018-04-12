@@ -119,6 +119,11 @@ table tbody tr:hover{
     padding:0px 10px;
     float:right;
 }
+.w-30 {
+    line-height: 30px !important;
+    height: 30px !important;
+    width: 30px !important;
+}
 .w-40 {
     line-height: 40px !important;
     height: 40px !important;

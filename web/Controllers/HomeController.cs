@@ -30,13 +30,13 @@ namespace web.Controllers
             _repos = factory;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             ViewBag.Action = "Dashboard";
 
-            AppUser user = await _userManager.GetUserAsync(User);
+            int account = this.GetAccountId();
 
-            if(user.AccountId < 1 || user.AccountType == AccountType.None)
+            if(account < 1)
                 ViewBag.IsNew = true;
             else
                 ViewBag.IsNew = false;
@@ -47,24 +47,24 @@ namespace web.Controllers
                 ViewBag.lecturers = _repos.Lecturers.ListWith("Profile").Take(10).ToList();
                 ViewBag.students = _repos.Students.ListWith("Profile").Take(10).ToList();
             }
-            else if(User.Role() == "Lecturer" && user.AccountId > 0)
+            else if(User.Role() == "Lecturer" && account > 0)
             {
-                ViewBag.students = _dashManager.MyStudents(user.AccountId,10);
-                ViewBag.units = _dashManager.MyUnits<Lecturer>(user.AccountId, 10).ToList();
-                ViewBag.classes = _dashManager.MyClasses<Lecturer>(user.AccountId, 10).ToList();
-                ViewBag.lecturers = _dashManager.MyColleagues(user.AccountId).Take(10).ToList();
+                ViewBag.students = _dashManager.MyStudents(account,10);
+                ViewBag.units = _dashManager.MyUnits<Lecturer>(account, 10).ToList();
+                ViewBag.classes = _dashManager.MyClasses<Lecturer>(account, 10).ToList();
+                ViewBag.lecturers = _dashManager.MyColleagues(account).Take(10).ToList();
             }
-            else if(User.Role() == "Student" && user.AccountId > 0)
+            else if(User.Role() == "Student" && account > 0)
             {
                 ViewBag.myprofile = _repos.Students
-                                          .GetWith(user.AccountId, "Course");
-                ViewBag.mycourses = _dashManager.MyCourses(user.AccountId);
-                ViewBag.lecturers = _dashManager.MyLecturers(user.AccountId, 10).ToList();
-                ViewBag.units = _dashManager.MyUnits<Student>(user.AccountId, 10).ToList();
-                ViewBag.classes = _dashManager.MyClasses<Student>(user.AccountId, 10).ToList();
+                                          .GetWith(account, "Course");
+                ViewBag.mycourses = _dashManager.MyCourses(account);
+                ViewBag.lecturers = _dashManager.MyLecturers(account, 10).ToList();
+                ViewBag.units = _dashManager.MyUnits<Student>(account, 10).ToList();
+                ViewBag.classes = _dashManager.MyClasses<Student>(account, 10).ToList();
             }
 
-            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
+            ViewBag.Notifications = this.GetNotifications();
 
             return View();
         }

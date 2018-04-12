@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Services;
@@ -32,6 +33,7 @@ namespace web.Controllers
         private readonly IUploader _uploader;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly IDistributedCache _cache;
         private readonly string _externalCookieScheme;
 
         public AccountController(
@@ -45,7 +47,8 @@ namespace web.Controllers
             IEmailSender emailSender,
             IUploader uploader,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IDistributedCache cache)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -58,6 +61,7 @@ namespace web.Controllers
             _uploader = uploader;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _cache = cache;
         }
 
         [HttpGet]
@@ -444,6 +448,11 @@ namespace web.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
+
+            // clear cache
+            _cache.Remove("AccountId");
+            _cache.Remove("Notifications");
+
             _logger.LogInformation(4, "User logged out.");
 
             return RedirectPermanent("/");

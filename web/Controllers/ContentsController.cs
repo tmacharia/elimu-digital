@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Common.Models;
 using Common.ViewModels;
+using DAL.Extensions;
 using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -43,15 +44,16 @@ namespace web.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var contents = _repos.Contents
                                  .ListWith("Unit", "Likes", "Comments")
                                  .OrderByDescending(x => x.Timestamp)
                                  .ToList();
-            AppUser user = await _userManager.GetUserAsync(User);
 
-            ViewBag.Notifications = _repos.Notifications.List.Count(x => x.AccountId == user.AccountId && x.Read == false);
+            int account = this.GetAccountId();
+
+            ViewBag.Notifications = this.GetNotifications();
 
             return View(contents);
         }
@@ -73,7 +75,7 @@ namespace web.Controllers
             }
 
             ViewBag.unit = unit;
-
+            ViewBag.Notifications = this.GetNotifications();
             return View();
         }
 
@@ -107,10 +109,10 @@ namespace web.Controllers
             }
 
             // get current user account
-            var user = await _userManager.GetUserAsync(User);
+            int account = this.GetAccountId();
 
             // get lecturer account
-            var lec = _repos.Lecturers.Get(user.AccountId);
+            var lec = _repos.Lecturers.Get(account);
 
             if(lec == null)
             {
@@ -158,7 +160,7 @@ namespace web.Controllers
                 {
                     content.Url = await _uploader.Upload(file);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return this.Error(HttpStatusCode.InternalServerError, "Uploading file failed! Please try again.");
                 }
@@ -205,7 +207,7 @@ namespace web.Controllers
 
         [HttpGet]
         [Route("{id}/{title}")]
-        public async Task<IActionResult> Details(int id, string title)
+        public IActionResult Details(int id, string title)
         {
             if(id < 1)
             {
@@ -226,17 +228,17 @@ namespace web.Controllers
                 return NotFound("Content record with that id does not exist.");
             }
 
-            AppUser user = await _userManager.GetUserAsync(User);
+            int account = this.GetAccountId();
 
-            if(user.AccountType == AccountType.Student)
+            if(User.Role() == "Student")
             {
-                ViewBag.progress = _progressTracker.GetProgress(content.Id, user.AccountId);
+                ViewBag.progress = _progressTracker.GetProgress(content.Id, account);
             }
-            else if(user.AccountType == AccountType.Lecturer)
+            else if(User.Role() == "Lecturer")
             {
                 ViewBag.studentsProgress = _progressTracker.TrackProgress(content.Id);
             }
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(content);
         }
     }

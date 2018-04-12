@@ -6,6 +6,8 @@
     ViewBag.Title = Model.Name;
     ViewBag.Action = "Units";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
+
+    IList<DiscussionBoard> boards = (IList<DiscussionBoard>)ViewBag.boards;
 }
 <style>
     h2 span {
@@ -153,7 +155,7 @@
                     {
                         <br />
                         <center class="text-muted">
-                            <i class="fa fa-building-o"></i> No ClassRoom
+                            <i class="fa fa-building-o"></i> No classroom yet!
                         </center>
                         <br />
                     }
@@ -161,29 +163,39 @@
             </div>
         </div>
         <div class="col-md-3 col-sm-6">
-            @{ 
-                if(User.Role() == "Lecturer" && User.ProfileId() == Model?.Lecturer?.Profile.Id)
-                {
-                    <ol class="lec-exam-buttons">
+            <ol class="lec-exam-buttons">
+                @{ 
+
+                    if(User.Role() == "Lecturer" && User.ProfileId() == Model?.Lecturer?.Profile.Id)
+                    {
                         <li>
                             <a class="btn btn-info text-white" href="/exams/set-for/@Model.GenerateSlug()/@Model.Id">
                                 <i class="fa fa-cube"></i> Prepare Exam
                             </a>
                         </li>
+                    }
+                    else
+                    {
                         <li>
-                            <a class="btn btn-default">
-                                <i class="fa fa-cubes"></i> Past Exams
+                            <a class="btn btn-info text-white" href="/units/@Model.Id/@Model.GenerateSlug()/exams">
+                                <i class="fa fa-cubes"></i> Exams
                             </a>
                         </li>
-                    </ol>
+                    }
+
+                    if(boards != null)
+                    {
+                        if(boards.Count > 0)
+                        {
+                            <li>
+                                <a class="btn btn-info" href="/discussionboards/unit/@Model.Id/@Model.GenerateSlug()">
+                                    <i class="ion ion-chatboxes"></i> Discussion boards
+                                </a>
+                            </li>
+                        }
+                    }
                 }
-                else
-                {
-                    <a class="btn btn-info text-white" href="/units/@Model.Id/@Model.GenerateSlug()/exams">
-                        <i class="fa fa-cubes"></i> Exams
-                    </a>
-                }
-            }
+            </ol>
         </div>
     </div>
 
