@@ -112,7 +112,7 @@ namespace web.Controllers
             int account = this.GetAccountId();
 
             // get lecturer account
-            var lec = _repos.Lecturers.Get(account);
+            var lec = _repos.Lecturers.GetWith(account,"Profile");
 
             if(lec == null)
             {
@@ -173,12 +173,12 @@ namespace web.Controllers
 
                 await _notify.OnNewContent(content);
 
-                return Redirect($"/contents/{content.Id}/{content.Title.GenerateSlug()}");
+                return RedirectPermanent("/contents/" + content.Id + "/" + content.Title.GenerateSlug());
                 //return RedirectPermanent($"/contents/{content.Id}/{Services.Extensions.GenerateSlug(content.Title)}");
             }
             catch (Exception ex)
             {
-                throw ex;
+                return RedirectPermanent($"/units/{unitId}/complete");
             }
         }
 
