@@ -1,5 +1,8 @@
-﻿using System;
+﻿using DAL.Models.Enums;
+using DAL.Models.Fees;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
@@ -38,11 +41,14 @@ namespace DAL.Models
         [Required]
         [MaxLength(10)]
         public string AcademicYear { get; set; }
+        [DefaultValue(0)]
+        public SelectionType Selection { get; set; }
 
         public virtual Profile Profile { get; set; }
         public virtual Course Course { get; set; }
         public virtual ICollection<StudentCourse> StudentCourses { get; set; }
         public virtual ICollection<StudentUnit> StudentUnits { get; set; }
         public virtual ICollection<Score> Scores { get; set; }
+        public virtual ICollection<FeePayment> Payments { get; set; }
     }
 }

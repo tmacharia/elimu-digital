@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -82,6 +83,16 @@ namespace Common
             {
                 return $"in {num} days";
             }
+        }
+        /// <summary>
+        /// Formats a decimal number into currency mode using <see cref="CultureInfo"/>
+        /// settings for culture specific formatting.
+        /// </summary>
+        /// <param name="d">Decimal value to format</param>
+        /// <returns>Formatted string representing currency amount.</returns>
+        public static string ToMoney(this decimal d)
+        {
+            return $"KES {d.ToString("N2")}";
         }
     }
 }

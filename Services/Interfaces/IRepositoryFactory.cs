@@ -1,5 +1,6 @@
 ﻿using Common;
 using DAL.Models;
+using DAL.Models.Fees;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,6 +32,9 @@ namespace Services
         IRepository<CourseworkProgress> CourseworkProgress { get; }
         IRepository<StudentCourse> StudentCourses { get; }
         IRepository<ExamSession> ExamSessions { get; }
+        IRepository<FeeStructure> FeeStructures { get; }
+        IRepository<FeePayment> FeePayments { get; }
+        IRepository<BaseFeeStructure> BaseFeeStructures { get; }
 
         void Commit();
     }

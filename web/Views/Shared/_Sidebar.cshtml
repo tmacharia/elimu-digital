@@ -162,6 +162,33 @@
                             <a href="/discussionboards"><span class="nav-icon"><i class="ion ion-chatboxes"></i></span> <span class="nav-text">Discussion Boards</span></a>
                         </li>
                     }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        if(ViewBag.Action == "Base Fees")
+                        {
+                            <li class="active">
+                                <a href="/fees/basestructure"><span class="nav-icon"><i class="fa fa-table"></i></span> <span class="nav-text">Base Fees</span></a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="/fees/basestructure"><span class="nav-icon"><i class="fa fa-table"></i></span> <span class="nav-text">Base Fees</span></a>
+                            </li>
+                        }
+                    }
+                    @if(ViewBag.Action == "Fees")
+                    {
+                        <li class="active">
+                            <a href="/fees"><span class="nav-icon"><i class="ion ion-pricetags"></i></span> <span class="nav-text">Fee Structures</span></a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="/fees"><span class="nav-icon"><i class="ion ion-pricetags"></i></span> <span class="nav-text">Fee Structures</span></a>
+                        </li>
+                    }
 
 
                     @if (User.IsInRole("Student"))

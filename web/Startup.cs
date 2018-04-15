@@ -61,7 +61,7 @@ namespace web
 
             #region Site optimizations config
             services.AddResponseCompression();
-            services.AddDistributedMemoryCache();
+            services.AddMemoryCache();
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromSeconds(10);
@@ -78,6 +78,7 @@ namespace web
             services.AddTransient<IDataManager, DataManager>();
             services.AddTransient<INotificationManager, NotificationManager>();
             services.AddTransient<IProgressTracker, ProgressTracker>();
+            services.AddTransient<IFeesManager, FeesManager>();
             #endregion
             
             services.AddSwagger();

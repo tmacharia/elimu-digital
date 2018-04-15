@@ -17,6 +17,7 @@ using DAL.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Services
 {
@@ -310,6 +311,11 @@ namespace Services
             {
                 return "https://content.invisioncic.com/Mevernote/monthly_2016_12/pdfs-512.png.6032017addac747c4360d6a0f5e572a0.png";
             }
+        }
+        public static string Serialize<TModel>(this TModel model)
+            where TModel : class
+        {
+            return JsonConvert.SerializeObject(model);
         }
     }
 }

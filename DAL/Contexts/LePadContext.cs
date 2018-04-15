@@ -1,4 +1,5 @@
 ﻿using DAL.Models;
+using DAL.Models.Fees;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
@@ -38,6 +39,9 @@ namespace DAL.Contexts
         public virtual DbSet<CourseworkProgress> CourseworkProgress { get; set; }
         public virtual DbSet<StudentCourse> StudentCourses { get; set; }
         public virtual DbSet<ExamSession> ExamSessions { get; set; }
+        public virtual DbSet<FeeStructure> FeeStructures { get; set; }
+        public virtual DbSet<FeePayment> FeePayments { get; set; }
+        public virtual DbSet<BaseFeeStructure> BaseFeeStructure { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -77,6 +81,12 @@ namespace DAL.Contexts
                    .HasOne(d => d.Unit)
                    .WithMany(d => d.Boards)
                    .HasForeignKey(d => d.UnitId)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Student>()
+                   .HasMany(s => s.Payments)
+                   .WithOne(x => x.Student)
+                   .HasForeignKey(x => x.StudentId)
                    .OnDelete(DeleteBehavior.Cascade);
 
         }

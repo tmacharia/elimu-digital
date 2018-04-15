@@ -1,6 +1,7 @@
 ﻿using Common;
 using DAL.Contexts;
 using DAL.Models;
+using DAL.Models.Fees;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,9 @@ namespace Services
         private readonly IRepository<CourseworkProgress> _progress;
         private readonly IRepository<StudentCourse> _studentCourses;
         private readonly IRepository<ExamSession> _examSessions;
+        private readonly IRepository<FeeStructure> _feeStructures;
+        private readonly IRepository<FeePayment> _feePayments;
+        private readonly IRepository<BaseFeeStructure> _baseFeeStructures;
         #endregion
 
         public RepositoryFactory(LePadContext context)
@@ -64,6 +68,9 @@ namespace Services
             _progress = new Repository<CourseworkProgress>(_context);
             _studentCourses = new Repository<StudentCourse>(_context);
             _examSessions = new Repository<ExamSession>(_context);
+            _feeStructures = new Repository<FeeStructure>(_context);
+            _feePayments = new Repository<FeePayment>(_context);
+            _baseFeeStructures = new Repository<BaseFeeStructure>(_context);
         }
 
         public IRepository<Answer> Answers => _answers;
@@ -110,6 +117,12 @@ namespace Services
         public IRepository<StudentCourse> StudentCourses => _studentCourses;
 
         public IRepository<ExamSession> ExamSessions => _examSessions;
+
+        public IRepository<FeeStructure> FeeStructures => _feeStructures;
+
+        public IRepository<FeePayment> FeePayments => _feePayments;
+
+        public IRepository<BaseFeeStructure> BaseFeeStructures => _baseFeeStructures;
 
         public void Commit()
         {

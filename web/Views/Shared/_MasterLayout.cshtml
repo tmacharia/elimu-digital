@@ -1,7 +1,7 @@
 ﻿@using Services
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en">
+<html lang="en" ng-app="gobel-app">
 <head>
     <meta charset="utf-8">
     <title>@ViewBag.Title | @Extensions.Uni</title>
@@ -23,7 +23,7 @@
         @Html.Partial("Resources/_prodstyles")
     </environment>
 </head>
-<body class="pace-done" ui-class>
+<body class="pace-done" ui-class ng-controller="mainCtrl">
     <environment names="Development">
         @Html.Partial("Resources/_devscripts")
     </environment>
@@ -89,9 +89,8 @@
     </div>
 
     <!--New User Create Profile Modal-->
-    @{
-        Html.RenderPartial("~/Views/Shared/Profiles/_Create.cshtml");
-    }
+    @Html.Partial("Profiles/_Create");
+    @Html.Partial("Profiles/_View");
     <!--End-->
 
 </body>

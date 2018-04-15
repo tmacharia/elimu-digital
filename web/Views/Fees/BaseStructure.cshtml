@@ -1,0 +1,285 @@
+@using DAL.Models.Fees
+@using Common
+@using Services
+@model BaseFeeStructure
+
+@{
+    ViewBag.Title = "Base Fee Structure";
+    ViewBag.Action = "Base Fees";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+<style>
+    .top-right{
+        font-size:.4em !important;
+        font-weight:400;
+    }
+    .tip{
+        font-size:.6em !important;
+        font-weight:400;
+    }
+    .fee-by{
+        font-size:1.2em !important;
+    }
+    .by{
+        text-decoration:underline;
+    }
+    .panel{
+        background:#fff;
+    }
+    .panel-title {
+        background: #462565;
+        color:#fff;
+        padding:5px;
+        padding-left:10px;
+    }
+
+    .panel-body{
+        padding:15px;
+    }
+    .calendar {
+        background: #eeeeee;
+        padding:2px 8px;
+        border-radius:5px;
+    }
+</style>
+<div class="padding">
+    <h3>
+        <span>
+            <i class="fa fa-table"></i> @ViewBag.Title
+        </span>
+
+        <span class="pull-right top-right">
+            <i class="fa fa-info-circle"></i>
+            Base values are used across all courses that do not have
+            <br />
+            course specific fee structures defined.
+        </span>
+    </h3>
+
+    <br />
+    <div class="">
+        <div class="">
+            <div class="row">
+                <div class="col-lg-6 col-md-7 col-sm-12">
+                    <div class="panel">
+                        <div class="panel-title">
+                            <h3><i class="fa fa-barcode"></i> Fee Summary</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    @Html.LabelFor(x => x.Library)
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="pull-right">
+                                        <b>@Model.Library.ToMoney()</b>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    @Html.LabelFor(x => x.Internet)
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="pull-right">
+                                        <b>@Model.Internet.ToMoney()</b>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    @Html.LabelFor(x => x.Medical)
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="pull-right">
+                                        <b>@Model.Medical.ToMoney()</b>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    @Html.LabelFor(x => x.Project)
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="pull-right">
+                                        <b>@Model.Project.ToMoney()</b>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    @Html.LabelFor(x => x.Trip)
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="pull-right">
+                                        <b>@Model.Trip.ToMoney()</b>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    @Html.LabelFor(x => x.Accomodation)
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="pull-right">
+                                        <b>@Model.Accomodation.ToMoney()</b>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    @Html.LabelFor(x => x.PerUnit)
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="pull-right">
+                                        <b>@Model.PerUnit.ToMoney()</b>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    @Html.LabelFor(x => x.ParallelPerUnit)
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="pull-right">
+                                        <b>@Model.ParallelPerUnit.ToMoney()</b>
+                                    </span>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Regular Total</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="pull-right">
+                                        <h4>@Model.TotalGovt.ToMoney()</h4>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Parallel Total</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="pull-right">
+                                        <h4>@Model.TotalParallel.ToMoney()</h4>
+                                    </span>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-12">
+                                    <span class="pull-right">
+                                        
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="panel fee-by">
+                        <div class="panel-body">
+                            @if (Model.EditDate.HasValue)
+                             {
+                                 <span>
+                                     <i class="fa fa-calendar-check-o"></i> Edited on <a class="calendar" href="outlookcal:@Model.EditDate.Value">@Model.EditDate.Value.ToString("dd MMMM yyyy hh:mm tt")</a>
+                                 </span>
+                             }
+                             else
+                             {
+                                 <span>
+                                     <i class="fa fa-calendar"></i> Created on <a class="calendar" href="outlookcal:@Model.Timestamp">@Model.Timestamp.ToString("dd MMMM yyyy")</a>
+                                 </span>
+                             }
+                              <span>
+                                by <a data-toggle="modal" data-target="#profViewModal" 
+                                      class="pointer by"
+                                      ng-click="onViewProfile('@Model.PreparedBy.Serialize()','Administrator')"
+                                      >@Model.PreparedBy.Profile.FullNames</a> <i>(Admin)</i>
+                              </span>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <form asp-action="BaseStructure" class="col-lg-6 col-md-5 col-sm-12">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <h4>
+                                Edit Base Fees
+                                <span class="pull-right">
+                                    <input type="submit" value="Save changes" class="btn btn-success" />
+                                </span>
+                            </h4>
+                            <br />
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Library" class="control-label"></label>
+                                <div>
+                                    <input asp-for="Library" class="form-control" />
+                                    <span asp-validation-for="Library" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Internet" class="control-label"></label>
+                                <div>
+                                    <input asp-for="Internet" class="form-control" />
+                                    <span asp-validation-for="Internet" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Accomodation" class="control-label"></label>
+                                <div>
+                                    <input asp-for="Accomodation" class="form-control" />
+                                    <span asp-validation-for="Accomodation" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Medical" class="control-label"></label>
+                                <div>
+                                    <input asp-for="Medical" class="form-control" />
+                                    <span asp-validation-for="Medical" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Trip" class="control-label"></label>
+                                <div>
+                                    <input asp-for="Trip" class="form-control" />
+                                    <span asp-validation-for="Trip" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Project" class="control-label"></label>
+                                <div>
+                                    <input asp-for="Project" class="form-control" />
+                                    <span asp-validation-for="Project" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="PerUnit" class="control-label"></label>
+                                <div>
+                                    <input asp-for="PerUnit" class="form-control" />
+                                    <span asp-validation-for="PerUnit" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ParallelPerUnit" class="control-label"></label>
+                                <div>
+                                    <input asp-for="ParallelPerUnit" class="form-control" />
+                                    <span asp-validation-for="ParallelPerUnit" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="AdminId" />
+                            <div class="form-group">
+                                <div>
+                                    <input type="submit" value="Save changes" class="btn btn-success" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

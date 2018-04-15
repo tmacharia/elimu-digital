@@ -1,0 +1,70 @@
+﻿@using DAL.Extensions
+<style>
+    .modal-header {
+        background: #260B5E !important;
+        min-height: 155px;
+        color: rgba(70, 37, 101, 0.97)
+    }
+    .profile-card{
+        font-family:Roboto, sans-serif;
+        width:auto;
+        height:100%;
+        margin-bottom:50px;
+        margin-top:-70px;
+        margin-left:auto;
+        margin-right:auto;
+        text-align:center;
+    }
+    .profile-card img{
+        height:120px;
+        width:120px;
+        margin-bottom:10px;
+    }
+    .profile-card h3 {
+        font-size:2rem;
+        -webkit-margin-after:0em;
+        color: #260B5E !important;
+    }
+    .profile-card h6{
+        font-weight:400 !important;
+    }
+    
+    .social a{
+        margin-right:7px;
+        font-size:1.5em;
+    }
+</style>
+<div class="modal fade" data-backdrop="true" id="profViewModal">
+    <div class="modal-dialog animate" id="animate">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span style="width:100%">
+                    <span class="pull-right text-white">
+                        <a data-dismiss="modal">
+                            <i class="ion ion-android-close"></i>
+                        </a>
+                    </span>
+                </span>
+            </div>
+            <div class="modal-body">
+                <div class="profile-card">
+                    <img alt=".." src="{{profile.PhotoUrl}}"
+                         class="img-circle img-thumbnail img-responsive"/>
+                    <h3>{{profile.FullNames}}</h3>
+                    <h6>{{profile.Role}}</h6>
+                    <span class="social">
+                        <a href="https://facebook.com/{{profile.Facebook}}"><i class="fa fa-facebook-official"></i></a>
+                        <a href="https://twitter.com/{{profile.Twitter}}"><i class="fa fa-twitter-square"></i></a>
+                        <a href="https://instagram.com/{{profile.Instagram}}"><i class="fa fa-instagram"></i></a>
+                    </span>
+                    <div class="load-container load8" ng-show="profileLoader">
+                        <div class="loader"></div>
+                        <p>
+                            Please wait...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
