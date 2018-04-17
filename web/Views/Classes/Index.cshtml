@@ -1,8 +1,7 @@
-﻿@using Services
+﻿@using Common.ViewModels
 @using Paginator.Models
-@using DAL.Models
 @using DAL.Extensions
-@model Result<Class>
+@model Result<ClassUnitViewModel>
 @{
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
     if(User.Role() == "Administrator")
@@ -44,7 +43,7 @@
         @{ 
             if(Model != null && Model.TotalItems > 0)
             {
-                foreach (var item in Model.List.TakeWhile(x => x != null))
+                foreach (var item in Model.List)
                 {
                     <div class="col-md-3 col-sm-6">
                         <div class="box p-3">

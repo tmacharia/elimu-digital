@@ -245,7 +245,7 @@ namespace web.Controllers
 
             IList<Course> courses = _repos.Courses
                                           .ListWith("Units")
-                                          .Where(SearchFuncs.Course(q))
+                                          .Where(Predicates.Course(q))
                                           .ToList();
             ViewBag.Notifications = this.GetNotifications();
             return View(courses);

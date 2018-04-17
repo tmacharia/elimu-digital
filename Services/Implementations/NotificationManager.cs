@@ -60,8 +60,8 @@ namespace Services.Implementations
             }
 
             string subject = "EXAM";
-            string message = $"Your lecturer has added an exam for '{exam.Unit.Name}' .<br/>" +
-                             $"The exam is scheduled for <b>{exam.Start.ToString()}</b>.<br/>" +
+            string message = $"Your lecturer has added an exam for '{exam.Unit.Name}' .<br/><br/>" +
+                             $"The exam is scheduled for <b>{exam.Start.ToString()}</b>." +
                              $"Prepare & revise widely using unit materials.";
 
 
@@ -170,6 +170,11 @@ namespace Services.Implementations
                 };
 
                 board = _repos.DiscussionBoards.Create(board);
+            }
+
+            if(board.Posts == null)
+            {
+                board.Posts = new List<Post>();
             }
 
             board.Posts.Add(post);

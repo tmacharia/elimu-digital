@@ -193,7 +193,10 @@
                                                 }
                                             </span>
                                             <div class="list-body">
-                                                <a class="item-title _500" href="#">@item?.Profile?.FullNames</a>
+                                                <a class="item-title _500"
+                                                   data-toggle="modal" data-target="#profViewModal" 
+                                                   ng-click="onViewProfile('@item.Profile.Serialize()','Lecturer','@item.AccountId')"
+                                                   >@item?.Profile?.FullNames</a>
                                                 <div class="item-except text-sm text-muted h-1x">
                                                     Lecturer
                                                 </div>
@@ -252,7 +255,10 @@
                                                 }
                                             </span>
                                             <div class="list-body">
-                                                <a class="item-title _500" href="#">@item?.Profile.FullNames</a>
+                                                <a class="item-title _500"
+                                                   data-toggle="modal" data-target="#profViewModal" 
+                                                   ng-click="onViewProfile('@item.Profile.Serialize()','Student','@item.AccountId')"
+                                                   >@item?.Profile.FullNames</a>
                                                 <div class="item-except text-sm text-muted h-1x">
                                                     Student
                                                 </div>

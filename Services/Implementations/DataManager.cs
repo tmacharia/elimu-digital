@@ -6,6 +6,7 @@ using DAL.Models;
 using System.Reflection;
 using Common.ViewModels;
 using System.Collections;
+using Services.Comparers;
 
 namespace Services
 {
@@ -18,7 +19,7 @@ namespace Services
             _repos = factory;
         }
 
-        public IEnumerable<Lecturer> MyLecturers(int studentId, int count)
+        public IEnumerable<Lecturer> MyLecturers(int studentId, int count=5000)
         {
             // get all my units
             List<Lecturer> lecturers = _repos.StudentUnits
@@ -59,7 +60,7 @@ namespace Services
             return lecturers.Distinct();
         }
 
-        public IList<Student> MyStudents(int lecturerId, int count)
+        public IList<Student> MyStudents(int lecturerId, int count=5000)
         {
             IList<Student> students = _repos.Lecturers
                                             .GetWith(lecturerId, "Units",
@@ -77,22 +78,21 @@ namespace Services
             return students;
         }
 
-        public IEnumerable<Class> MyClasses<T>(int id, int count) where T : class
+        public IEnumerable<ClassUnitViewModel> MyClasses<T>(int id, int count=5000) where T : class
         {
-            List<Class> classes = new List<Class>();
+            List<ClassUnitViewModel> classes = new List<ClassUnitViewModel>();
 
             if(id > 0)
             {
                 if (typeof(T) == typeof(Student))
                 {
                     var student = _repos.Students
-                                    .ListWith(
-                                            "StudentUnits",
-                                            "StudentUnits.Unit",
-                                            "StudentUnits.Unit.Class",
-                                            "StudentUnits.Unit.Class.Units",
-                                            "StudentUnits.Unit.Class.Likes")
-                                    .FirstOrDefault(x => x.Id == id);
+                                        .GetWith(id,
+                                                "StudentUnits",
+                                                "StudentUnits.Unit",
+                                                "StudentUnits.Unit.Class",
+                                                "StudentUnits.Unit.Class.Units",
+                                                "StudentUnits.Unit.Class.Likes");
                                     
 
                     if (student != null)
@@ -100,30 +100,26 @@ namespace Services
                         if(student.StudentUnits != null)
                         {
                             var _cl = student.StudentUnits
-                                             .Select(x => x.Unit)
-                                             .Select(x => x.Class)
-                                             .TakeWhile(x => x == null);
+                                             .Select(x => x.Unit);
 
-                            classes.AddRange(_cl);
+                            classes.AddRange(_cl.Select(Predicates.UnitToClass()));
                         }
                     }
 
                     var _cls = _repos.Students
-                                     .ListWith(
+                                     .GetWith(id,
                                       "Course",
                                       "Course.Units",
                                       "Course.Units.Class",
                                       "Course.Units.Class.Units",
-                                      "Course.Units.Class.Likes")
-                                      .FirstOrDefault(x => x.Id == id)
-                                      ?.Course
-                                      ?.Units
-                                      .TakeWhile(x => x.Class != null)
-                                      .Select(x => x.Class);
+                                      "Course.Units.Class.Likes");
 
                     if (_cls != null)
                     {
-                        classes.AddRange(_cls);
+                        if(_cls.Course != null)
+                        {
+                            classes.AddRange(_cls.Course.Units.Select(Predicates.UnitToClass()));
+                        }
                     }
                 }
                 else if (typeof(T) == typeof(Lecturer))
@@ -133,14 +129,11 @@ namespace Services
                                             "Units",
                                             "Units.Class",
                                             "Units.Class.Units",
-                                            "Units.Class.Likes")
-                                    .Units
-                                    .TakeWhile(x => x == null)
-                                    .Select(x => x.Class);
+                                            "Units.Class.Likes");
 
                     if (_cl != null)
                     {
-                        classes.AddRange(_cl);
+                        classes.AddRange(_cl.Units.Select(Predicates.UnitToClass()));
                     }
                 }
             }
@@ -149,7 +142,9 @@ namespace Services
                 return classes;
             }
 
-            return classes.Take(count);
+            return classes.Where(x => x != null)
+                          .Distinct(new ClassUnitEqualityComparer())
+                          .Take(count);
         }
         public MyCoursesViewModel MyCourses(int studentId)
         {
@@ -175,7 +170,7 @@ namespace Services
 
             return model;
         }
-        public IEnumerable<Unit> MyUnits<T>(int id, int count) where T : class
+        public IEnumerable<Unit> MyUnits<T>(int id, int count=5000) where T : class
         {
             List<Unit> units = new List<Unit>();
 
@@ -241,11 +236,11 @@ namespace Services
 
                 if(lec.Units != null)
                 {
-                    units.AddRange(lec.Units.TakeWhile(x => x != null));
+                    units.AddRange(lec.Units);
                 }
             }
 
-            return units.Take(count);
+            return units.Distinct().Take(count);
         }
 
         public SummaryViewModel GetSummary()
@@ -519,5 +514,7 @@ namespace Services
 
             return list.Take(count).ToList();
         }
+
+        
     }
 }

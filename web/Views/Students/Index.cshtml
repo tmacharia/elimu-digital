@@ -1,5 +1,6 @@
 @using DAL.Models
 @using DAL.Extensions
+@using Services
 @model IList<Student>
 @{
     if(User.Role() == "Lecturer")
@@ -56,7 +57,10 @@
                          }
                     </span>
                     <div class="list-body">
-                        <a class="item-title _500" href="#">
+                        <a class="item-title _500"
+                           data-toggle="modal" data-target="#profViewModal" 
+                           ng-click="onViewProfile('@item.Profile.Serialize()','Student','@item.AccountId')"
+                           >
                             @{ 
                                 if(item.Profile == null)
                                 {

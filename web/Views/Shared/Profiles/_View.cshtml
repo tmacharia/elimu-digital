@@ -1,29 +1,60 @@
 ﻿@using DAL.Extensions
 <style>
-    .modal-header {
-        background: #260B5E !important;
+    .modal-header1 {
         min-height: 155px;
-        color: rgba(70, 37, 101, 0.97)
+        max-height: 155px;
+        color: rgba(70, 37, 101, 0.97);
+        width: 100%;
+        overflow: hidden;
+        padding: 0px;
     }
-    .profile-card{
-        font-family:Roboto, sans-serif;
-        width:auto;
-        height:100%;
-        margin-bottom:50px;
-        margin-top:-70px;
-        margin-left:auto;
-        margin-right:auto;
-        text-align:center;
+    .modal-bg {
+        height:155px;
+        width:100%;
+        background-position: bottom;
+        background-size: cover;
+        -webkit-filter: blur(20px);
+        -moz-filter: blur(20px);
+        -o-filter: blur(20px);
+        -ms-filter: blur(20px);
+        filter: blur(20px);
     }
-    .profile-card img{
-        height:120px;
-        width:120px;
-        margin-bottom:10px;
+    .modal-header1 img{
+        width:100%;
+        margin-top:-20%;
+        -webkit-filter: blur(20px);
+        -moz-filter: blur(20px);
+        -o-filter: blur(20px);
+        -ms-filter: blur(20px);
+        filter: blur(20px);
+    }
+    .profile-card {
+        font-family: Roboto, sans-serif;
+        width: auto;
+        height: 100%;
+        margin-bottom: 20px;
+        margin-top: -70px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+    .image-holder {
+        height: 120px;
+        width: 120px;
+        min-height: 120px;
+        min-width: 120px;
+        max-width: 120px;
+        margin: 0 auto;
+        margin-bottom: 10px;
+        overflow: hidden;
+
+    }
+    .profile-card img {
     }
     .profile-card h3 {
         font-size:2rem;
         -webkit-margin-after:0em;
-        color: #260B5E !important;
+        color: #444444 !important;
     }
     .profile-card h6{
         font-weight:400 !important;
@@ -33,13 +64,24 @@
         margin-right:7px;
         font-size:1.5em;
     }
+    .close-modal {
+        position: absolute;
+        margin-top:-155px;
+        width: 100%;
+        padding: 15px;
+        z-index: 9;
+        color: #989898 !important;
+    }
 </style>
 <div class="modal fade" data-backdrop="true" id="profViewModal">
     <div class="modal-dialog animate" id="animate">
         <div class="modal-content">
-            <div class="modal-header">
-                <span style="width:100%">
-                    <span class="pull-right text-white">
+            <div class="modal-header1">
+                <div class="modal-bg">
+
+                </div>
+                <span class="close-modal">
+                    <span class="pull-right">
                         <a data-dismiss="modal">
                             <i class="ion ion-android-close"></i>
                         </a>
@@ -48,8 +90,10 @@
             </div>
             <div class="modal-body">
                 <div class="profile-card">
-                    <img alt=".." src="{{profile.PhotoUrl}}"
-                         class="img-circle img-thumbnail img-responsive"/>
+                    <div class="image-holder">
+                        <img alt=".." src="{{profile.PhotoUrl}}"
+                             class="img-circle img-thumbnail img-responsive" />
+                    </div>
                     <h3>{{profile.FullNames}}</h3>
                     <h6>{{profile.Role}}</h6>
                     <span class="social">
@@ -57,7 +101,15 @@
                         <a href="https://twitter.com/{{profile.Twitter}}"><i class="fa fa-twitter-square"></i></a>
                         <a href="https://instagram.com/{{profile.Instagram}}"><i class="fa fa-instagram"></i></a>
                     </span>
+                    <br />
+                    <a href="mailto:{{profile.Email}}" style="color:#0094ff; text-decoration:underline;">
+                        {{profile.Email}}
+                    </a>
+                    <p style="margin-top:5px;" ng-show="profile.RegNo.length > 0">
+                        Registration No: <b>{{profile.RegNo}}</b>
+                    </p>
                     <div class="load-container load8" ng-show="profileLoader">
+                        <br />
                         <div class="loader"></div>
                         <p>
                             Please wait...

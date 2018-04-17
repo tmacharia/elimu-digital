@@ -1,8 +1,6 @@
 ﻿@using DAL.Models
 @using DAL.Extensions
-@{
-
-}
+@using Services
 
 @{
     if (User.Role() == "Lecturer")
@@ -18,7 +16,9 @@
                 @foreach (var item in colleagues)
                 {
                     <li class="list-item">
-                        <a href="#">
+                        <a data-toggle="modal" data-target="#profViewModal" 
+                           ng-click="onViewProfile('@item.Profile.Serialize()','Lecturer','@item.AccountId')"
+                           >
                             <span class="w-40 avatar">
                                 <img alt="..." src="@Url.Content(item.Profile.PhotoUrl)">
                                 <i class="on bottom"></i>
@@ -26,7 +26,10 @@
                         </a>
                         <div class="list-body">
                             <div>
-                                <a href="#">@item.Profile.FullNames</a>
+                                <a data-toggle="modal" data-target="#profViewModal" 
+                                   ng-click="onViewProfile('@item.Profile.Serialize()','Lecturer','@item.AccountId')">
+                                    @item.Profile.FullNames
+                                </a>
                             </div><small class="text-muted text-ellipsis">Lecturer</small>
                         </div>
                     </li>
@@ -48,15 +51,19 @@
                         @foreach (var item in mates)
                         {
                             <li class="list-item">
-                                <a href="#">
-                                <span class="w-40 avatar">
-                                    <img alt="..." src="@Url.Content(item.Profile.PhotoUrl)"> 
-                                    <i class="on bottom"></i>
+                                <a data-toggle="modal" data-target="#profViewModal" 
+                                   ng-click="onViewProfile('@item.Profile.Serialize()','Student','@item.AccountId')">
+                                    <span class="w-40 avatar">
+                                        <img alt="..." src="@Url.Content(item.Profile.PhotoUrl)"> 
+                                        <i class="on bottom"></i>
                                     </span>
                                 </a>
                                 <div class="list-body">
                                     <div>
-                                        <a href="#">@item.Profile.FullNames</a>
+                                        <a data-toggle="modal" data-target="#profViewModal" 
+                                           ng-click="onViewProfile('@item.Profile.Serialize()','Student','@item.AccountId')">
+                                            @item.Profile.FullNames
+                                        </a>
                                     </div><small class="text-muted text-ellipsis">@item.Course.Name</small>
                                 </div>
                             </li>

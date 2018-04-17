@@ -27,9 +27,12 @@
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" ng-repeat="exam in exams">
                 <div class="box p-3">
                     <h6>
-                        <span ng-click="onSelectExam(exam)" class="pointer">
+                        <a ng-click="onSelectExam(exam)" 
+                           data-toggle="modal"
+                           data-target="#examDetailsModal"
+                           class="pointer">
                             <i class="ion ion-ribbon-b"></i> <span> {{exam.name}}</span>
-                        </span>
+                        </a>
 
                         <span class="pull-right">
                             <i class="ion ion-record text-danger blink"
@@ -76,11 +79,11 @@
                     <span>No exams scheduled.</span>
                     <br />
                     @if (User.Role() == "Lecturer")
-                {
-                    <a class="underline" data-toggle="modal" data-target="#setExamUnitChooserModal" onclick="onSelectUnit4Exam()">
-                        <b>Schedule now!</b>
-                    </a>
-            }
+                    {
+                        <a class="underline" data-toggle="modal" data-target="#setExamUnitChooserModal" onclick="onSelectUnit4Exam()">
+                            <b>Schedule now!</b>
+                        </a>
+                    }
                 </p>
             </center>
         </div>

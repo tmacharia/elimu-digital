@@ -284,7 +284,7 @@ namespace web.API_s
 
             IList<Unit> units = _repos.Units
                                        .ListWith("Course", "Lecturer")
-                                       .Where(SearchFuncs.Unit(query))
+                                       .Where(Predicates.Unit(query))
                                        .ToList();
 
             return Ok(units);

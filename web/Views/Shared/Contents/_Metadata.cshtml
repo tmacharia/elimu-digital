@@ -62,7 +62,8 @@
     </h5>
     <hr />
     <div class="list-item publisher">
-        <a href="#">
+        <a data-toggle="modal" data-target="#profViewModal" 
+           ng-click="onViewProfile('@Model.UploadedBy.Profile.Serialize()','Lecturer')">
             <span class="w-40 avatar">
                 <img alt="..." src="@Model.UploadedBy.Profile.PhotoUrl">
                 <i class="on bottom"></i>

@@ -124,7 +124,7 @@ namespace web.API_s
 
             IList<School> schools = _repos.Schools
                                           .ListWith("Location", "Courses")
-                                          .Where(SearchFuncs.School(query))
+                                          .Where(Predicates.School(query))
                                           .ToList();
 
             return Ok(schools);

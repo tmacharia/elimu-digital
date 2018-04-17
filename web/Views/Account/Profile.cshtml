@@ -1,6 +1,7 @@
 ﻿@using DAL.Models
 @using DAL.Extensions
 @using Services
+@using Common.ViewModels
 @model Profile
 @{
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
@@ -9,8 +10,16 @@
     ViewBag.Action = "Account";
 
     IList<Unit> _units = (List<Unit>)ViewBag.units;
+    IList<ClassUnitViewModel> _classes = (List<ClassUnitViewModel>)ViewBag.classes;
 }
-
+<style>
+    .list-item{
+        overflow:hidden;
+    }
+    .list-body{
+        margin-right:0px;
+    }
+</style>
 <div class="content-main" id="content-main">
     <div>
         <div class="item">
@@ -132,13 +141,12 @@
         </div>
 
 
-        <div class="padding">
+        <div class="padding" style="padding:1rem;">
             <div class="row">
-                <div class="col-sm-8 col-lg-9">
+                <div class="col-md-8">
                     @{ 
                         if(User.Role() == "Administrator")
                         {
-
 
                         }
                         else
@@ -148,7 +156,7 @@
                             <div class="row row-sm">
                                 @foreach (var item in _units)
                                 {
-                                    <div class="col-6 col-lg-4">
+                                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                                         <div class="list-item box r mb-2">
                                             <a href="/units/@item.Id/@item.GenerateSlug()">
                                                 <span class="w-40 avatar amber">
@@ -158,8 +166,15 @@
                                             </a>
                                             <div class="list-body">
                                                 <div class="text-ellipsis">
-                                                    <a href="/units/@item.Id/@item.GenerateSlug()">@item.Name.Trancate(25)</a>
-                                                </div><small class="text-muted text-ellipsis">@item.Course.Name.Trancate(30)</small>
+                                                    <a href="/units/@item.Id/@item.GenerateSlug()"
+                                                       title="Go to unit: @item.Name"
+                                                       >@item.Name</a>
+                                                </div>
+                                                <a class="text-muted text-ellipsis" 
+                                                   title="Go to course: @item.Course.Name"
+                                                   href="/courses/@item.Course.Id/@item.Course.GenerateSlug()">
+                                                    @item.Course.Name
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -178,15 +193,19 @@
                         </div>
                         <div class="tab-pane fade" id="tab_2">
                             <div class="streamline">
-                                @foreach (var item in _units.Where(x => x.Class != null))
+                                @foreach (var item in _classes.Where(x => x != null))
                                 {
                                     <div class="sl-item b-success">
                                         <div class="sl-content">
                                             <div class="sl-date text-muted">
-                                                @item.Class.DayOfWeek.ToString() @item.Class.StartTime.ToString("hh:mm tt") - @item.Class.EndTime.ToString("hh:mm tt")
+                                                @item.DayOfWeek.ToString() @item.StartTime.ToString("hh:mm tt") - @item.EndTime.ToString("hh:mm tt")
                                             </div>
-                                            <p>@item.Name
-                                                <span class="text-primary">@item.Class.Room</span>
+                                            <p>
+                                                <a href="/units/@item.UnitId/@Extensions.GenerateSlug(item.Unit)"
+                                                   title="Go to unit: @item.Unit">
+                                                    @item.Unit
+                                                </a>
+                                                <span class="text-primary">@item.Room</span>
                                             </p>
                                         </div>
                                     </div>
@@ -197,7 +216,7 @@
                         }
                     }
                 </div>
-                <div class="col-sm-4 col-lg-3">
+                <div class="col-md-4">
                     <div>
                         @{ 
                             Html.RenderPartial("Profiles/_Mates");

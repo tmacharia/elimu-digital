@@ -117,7 +117,6 @@
             $scope.selectedExam = exam;
             
             fetchExamDetails(exam.id);
-            $('#examDetailsModal').modal('show');
         }
 
         function postExam() {
@@ -186,7 +185,6 @@
                 method: 'GET',
                 url: '/api/exams/' + id,
                 success: function (res) {
-                    console.log(res);
                     $scope.$apply(function () {
                         $scope.selectedExam = res;
                     })
@@ -334,7 +332,6 @@
                     }
                 });
             });
-            console.log(data);
         }
     }
 })();

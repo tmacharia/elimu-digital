@@ -85,7 +85,7 @@
 
             $.ajax({
                 method: 'POST',
-                url: '/api/discussionboards/' + id + '/post/' + msg,
+                url: '/api/discussionboards/' + id + '/post?message=' + msg,
                 success: function (res) {
                     yay('Posted!');
                     $scope.$apply(function () {

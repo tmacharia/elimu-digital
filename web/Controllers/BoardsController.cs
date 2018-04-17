@@ -28,10 +28,12 @@ namespace web.Controllers
         [Route("discussionboards")]
         public IActionResult Index()
         {
-            IList<DiscussionBoard> boards = this.GetMyBoards();
+            IList<DiscussionBoard> boards = this.GetMyBoards()
+                                                .OrderByDescending(x => x.Posts.Count)
+                                                .ToList();
 
             ViewBag.Title = "Discussion Boards";
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(boards);
         }
 
@@ -101,7 +103,7 @@ namespace web.Controllers
         }
 
         [HttpPost]
-        [Route("api/discussionboards/{id}/post/{message}")]
+        [Route("api/discussionboards/{id}/post")]
         public IActionResult PostOnBoard(int id,string message)
         {
             if(id < 1)

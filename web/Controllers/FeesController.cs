@@ -43,7 +43,7 @@ namespace web.Controllers
                 _base = _repos.BaseFeeStructures.Create(_base);
                 _repos.Commit();
             }
-
+            ViewBag.Notifications = this.GetNotifications();
             return View(_base);
         }
 
@@ -68,6 +68,7 @@ namespace web.Controllers
         [HttpGet]
         public IActionResult Index(IList<FeesViewModel> model)
         {
+            ViewBag.Notifications = this.GetNotifications();
             return View(model);
         }
 

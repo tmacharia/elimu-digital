@@ -230,14 +230,15 @@ namespace web.Controllers
 
             int account = this.GetAccountId();
 
-            if(User.Role() == "Student")
+            if(User.IsInRole("Student"))
             {
                 ViewBag.progress = _progressTracker.GetProgress(content.Id, account);
             }
-            else if(User.Role() == "Lecturer")
+            else if(User.IsInRole("Lecturer") || User.IsInRole("Admin"))
             {
                 ViewBag.studentsProgress = _progressTracker.TrackProgress(content.Id);
             }
+
             ViewBag.Notifications = this.GetNotifications();
             return View(content);
         }

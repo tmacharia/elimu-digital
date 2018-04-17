@@ -157,8 +157,13 @@ namespace Services
             IDistributedCache _cache = (IDistributedCache)controller.HttpContext
                                                                     .RequestServices
                                                                     .GetService(typeof(IDistributedCache));
+            string s = string.Empty;
+            byte[] bytes = _cache.Get("AccountId");
 
-            string s = new UnicodeEncoding().GetString(_cache.Get("AccountId"));
+            if(bytes != null)
+            {
+                s = new UnicodeEncoding().GetString(bytes);
+            }
 
             if (string.IsNullOrWhiteSpace(s))
                 return 0;

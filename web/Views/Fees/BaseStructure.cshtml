@@ -193,9 +193,9 @@
                                  </span>
                              }
                               <span>
-                                by <a data-toggle="modal" data-target="#profViewModal" 
-                                      class="pointer by"
-                                      ng-click="onViewProfile('@Model.PreparedBy.Serialize()','Administrator')"
+                                by <a class="pointer by"
+                                      data-toggle="modal" data-target="#profViewModal" 
+                                      ng-click="onViewProfile('@Model.PreparedBy.Profile.Serialize()','Administrator','@Model.PreparedBy.AccountId')"
                                       >@Model.PreparedBy.Profile.FullNames</a> <i>(Admin)</i>
                               </span>
                         </div>

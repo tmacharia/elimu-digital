@@ -1,4 +1,5 @@
-﻿using DAL.Extensions;
+﻿using Common.ViewModels;
+using DAL.Extensions;
 using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -32,25 +33,26 @@ namespace web.Controllers
         public IActionResult Index(int page = 1, int itemsperpage = 10)
         {
             int account = this.GetAccountId();
-            IEnumerable<Class> classes = new List<Class>();
+            IEnumerable<ClassUnitViewModel> classes = new List<ClassUnitViewModel>();
 
             if(User.Role() == "Administrator")
             {
                 classes = _repos.Classes
-                                .ListWith("Units", "Likes");
+                                .ListWith("Units", "Likes")
+                                .Select(Predicates.ToClass());
             }
             else if(User.Role() == "Lecturer")
             {
                 classes = _dataManager.MyClasses<Lecturer>(account)
-                                      .TakeWhile(x => x != null);
+                                      .Where(x => x != null);
             }
             else if(User.Role() == "Student")
             {
                 classes = _dataManager.MyClasses<Student>(account)
-                                      .TakeWhile(x => x != null);
+                                      .Where(x => x != null);
             }
 
-            Result<Class> model = classes.ToPaged(page, itemsperpage);
+            Result<ClassUnitViewModel> model = classes.ToPaged(page, itemsperpage);
 
             ViewBag.Notifications = this.GetNotifications();
 

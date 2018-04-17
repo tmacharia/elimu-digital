@@ -5,10 +5,11 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using Common.ViewModels;
 
 namespace Services
 {
-    public static class SearchFuncs
+    public static class Predicates
     {
         public static Func<School, bool> School(string query)
         {
@@ -93,6 +94,58 @@ namespace Services
 
             return func;
         }
+        public static Func<Class, ClassUnitViewModel> ToClass()
+        {
+            ClassUnitViewModel func(Class @class)
+            {
+                if(@class != null)
+                {
+                    return new ClassUnitViewModel()
+                    {
+                        DayOfWeek = @class.DayOfWeek,
+                        EndTime = @class.EndTime,
+                        Likes = @class.Likes,
+                        Room = @class.Room,
+                        StartTime = @class.StartTime,
+                        Units = @class.Units,
+                        Unit = string.Empty,
+                        ClassId = @class.Id
+                    };
+                }
+                else { return null; }
+            }
 
+            return func;
+        }
+        public static Func<Unit, ClassUnitViewModel> UnitToClass()
+        {
+            ClassUnitViewModel func(Unit unit)
+            {
+                // check if unit is null
+                if(unit != null)
+                {
+                    // check if class is null
+                    if(unit.Class != null)
+                    {
+                        return new ClassUnitViewModel()
+                        {
+                            DayOfWeek = unit.Class.DayOfWeek,
+                            EndTime = unit.Class.EndTime,
+                            Likes = unit.Class.Likes,
+                            Room = unit.Class.Room,
+                            StartTime = unit.Class.StartTime,
+                            Units = unit.Class.Units,
+                            Unit = unit.Name,
+                            UnitId = unit.Id,
+                            ClassId = unit.Class.Id
+                        };
+                    }
+                    else { return null; }
+                }
+                else { return null; }
+                
+            }
+            return func;
+        }
     }
 }

@@ -315,7 +315,10 @@ namespace Services
         public static string Serialize<TModel>(this TModel model)
             where TModel : class
         {
-            return JsonConvert.SerializeObject(model);
+            return JsonConvert.SerializeObject(model, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
     }
 }

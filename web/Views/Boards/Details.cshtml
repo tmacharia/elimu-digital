@@ -50,6 +50,7 @@
         margin-left:30px;
         padding-bottom:10px;
     }
+    
 </style>
 
 <div ng-app="gobel-app">
@@ -99,7 +100,7 @@
                             <li>
                                 <button class="pointer no-btn" id="like-btn" title="Like Content"
                                         ng-click="onLike(post)">
-                                    <span class="likes-count"> {{post.likes.length}} </span>
+                                    <span class="badge badge-primary likes-count"> {{post.likes.length}} </span>
                                     <i class="fa fa-thumbs-o-up" title="Like Content"></i>
                                     Like
                                 </button>
@@ -150,19 +151,18 @@
             </div>
             <div class="col-md-4">
                 <div class="box">
-                    <div class="box-header">
+                    <div class="box-header" style="padding-bottom:0px">
                         <h5>Participants</h5>
                     </div>
-                    <div class="box-body">
+                    <div class="box-body" style="padding:0px;">
                         <ul class="list no-border">
                             <li class="list-item" ng-repeat="user in participants">
                                 <a href="#">
                                     <span class="w-40 avatar">
-                                        <img alt="..." src="{{user.photo}}">
-                                        <i class="on bottom"></i>
+                                        <img alt="..." src="{{user.photo}}" class="img-thumbnail img-responsive">
                                     </span>
                                 </a>
-                                <div class="list-body">
+                                <div class="list-body" style="padding-left:0px;">
                                     <div>
                                         <a href="#">{{user.names}}</a>
                                     </div><small class="text-muted text-ellipsis">{{user.role}}</small>

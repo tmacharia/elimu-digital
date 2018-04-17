@@ -97,11 +97,17 @@
                     if (Model.Lecturer != null)
                     {
                         <div class="list-item">
-                            <span class="w-40 avatar circle blue-grey">
+                            <a class="w-40 avatar circle blue-grey"
+                               data-toggle="modal" data-target="#profViewModal" 
+                               ng-click="onViewProfile('@Model.Lecturer.Profile.Serialize()','Lecturer','@Model.Lecturer.AccountId')"
+                               >
                                 <img alt="." src="@Url.Content(Model.Lecturer.Profile.PhotoUrl)">
-                            </span>
+                            </a>
                             <div class="list-body">
-                                <a class="item-title _500" href="#">@Model.Lecturer.Profile.FullNames</a>
+                                <a class="item-title _500"
+                                   data-toggle="modal" data-target="#profViewModal" 
+                                   ng-click="onViewProfile('@Model.Lecturer.Profile.Serialize()','Lecturer','@Model.Lecturer.AccountId')"
+                                   >@Model.Lecturer.Profile.FullNames</a>
                                 <div class="item-except text-sm text-muted h-1x">
                                     Lecturer
                                 </div>

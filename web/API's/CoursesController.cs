@@ -194,7 +194,7 @@ namespace web.API_s
 
             IList<Course> courses = _repos.Courses
                                           .ListWith("School", "Units")
-                                          .Where(SearchFuncs.Course(query))
+                                          .Where(Predicates.Course(query))
                                           .ToList();
 
             return Ok(courses);

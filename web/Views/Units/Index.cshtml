@@ -9,6 +9,10 @@
     {
         ViewBag.Title = "Units";
     }
+    else if (User.IsInRole("Lecturer"))
+    {
+        ViewBag.Title = "Assigned Units";
+    }
     else
     {
         ViewBag.Title = "My Units";
@@ -60,7 +64,7 @@
                             <th>Name</th>
                             <th>Course</th>
                             <th>Lecturer</th>
-                            <th>Total students</th>
+                            <th>Class</th>
                             <th>Likes</th>
                         </tr>
                     </thead>
@@ -104,7 +108,20 @@
                                             </span>
                                          }
                                     </td>
-                                    <td>@item.UnitStudents.Distinct().ToList().Count</td>
+                                    <td>
+                                        @{ 
+                                            if(item.Class == null)
+                                            {
+                                                <span class="text-danger">
+                                                    <i class="fa fa-times"></i> no class
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span>@item.Class.Room, <i>@item.Class.DayOfWeek.ToString()</i></span>
+                                            }
+                                        }
+                                    </td>
                                     <td>
                                         <i class="fa fa-thumbs-up" title="Likes"></i> @item.Likes.Count
                                     </td>

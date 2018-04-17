@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MailKit.Security;
 using MimeKit.Text;
+using System.Linq;
 
 namespace Services
 {
@@ -17,7 +18,13 @@ namespace Services
         private readonly string Title;
         private readonly string mail;
         private readonly string _password;
-
+        public string Footer
+        {
+            get
+            {
+                return $"<br/><br/>Cheers!<br/>{Title} Team.";
+            }
+        }
         public AuthMessageSender()
         {
 
@@ -40,10 +47,13 @@ namespace Services
                 for (int i = 0; i < emails.Length; i++)
                 {
                     mime.To.Add(new MailboxAddress(emails[i]));
+                    mime.Body = new TextPart(TextFormat.Html)
+                    {
+                        Text = $"Hello {emails[i].Split('@').First()},<br/>{message}{Footer}"
+                    };
                 }
 
                 mime.Subject = subject;
-                mime.Body = new TextPart(TextFormat.Html) { Text = message };
 
                 using (var client = new SmtpClient())
                 {

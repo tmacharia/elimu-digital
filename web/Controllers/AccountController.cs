@@ -17,12 +17,15 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Services;
+using DAL.Extensions;
+using Common.ViewModels;
 
 namespace web.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        #region Dependencies
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IRepositoryFactory _repos;
@@ -35,6 +38,7 @@ namespace web.Controllers
         private readonly ILogger _logger;
         private readonly IDistributedCache _cache;
         private readonly string _externalCookieScheme;
+        #endregion
 
         public AccountController(
             UserManager<AppUser> userManager,
@@ -119,15 +123,15 @@ namespace web.Controllers
 
         [HttpGet]
         [Route("account/profile/{names}")]
-        public async Task<IActionResult> Profile(string names)
+        public IActionResult Profile(string names)
         {
-            var user = await _userManager.GetUserAsync(User);
-            var profile = GetProfile(user);
+            int account = this.GetAccountId();
+            var profile = GetProfile();
 
             ViewBag.likes = _repos.Likes.ListWith("By").Where(x => x.By.Id == profile.Id).ToList();
             ViewBag.comments = _repos.Comments.ListWith("By").Where(x => x.Id == profile.Id).ToList();
 
-            if (user.AccountType == AccountType.Student)
+            if (User.IsInRole("Student"))
             {
                 var student = _repos.Students
                                         .ListWith("StudentUnits","StudentUnits.Unit.Class","StudentUnits.Unit.Course", "Course", "Scores", "Profile")
@@ -137,11 +141,12 @@ namespace web.Controllers
 
                 ViewBag.student = student;
 
-                ViewBag.units = _dataManager.MyUnits<Student>(user.AccountId,10).ToList();
+                ViewBag.units = _dataManager.MyUnits<Student>(account,10).ToList();
+                ViewBag.classes = _dataManager.MyClasses<Student>(account, 10).ToList();
 
-                ViewBag.mates = _dataManager.MyClassMates(user.AccountId).ToList();
+                ViewBag.mates = _dataManager.MyClassMates(account).ToList();
             }
-            else if(user.AccountType == AccountType.Lecturer)
+            else if(User.IsInRole("Lecturer"))
             {
                 var lecturer = _repos.Lecturers
                                          .ListWith("Units", "Units.Class", "Units.Course", "UploadedContent", "Likes", "Profile")
@@ -149,21 +154,45 @@ namespace web.Controllers
                                          .FirstOrDefault();
 
                 ViewBag.lecturer = lecturer;
-                ViewBag.units = _dataManager.MyUnits<Lecturer>(user.AccountId).ToList();
+                ViewBag.units = _dataManager.MyUnits<Lecturer>(account).ToList();
+                ViewBag.classes = _dataManager.MyClasses<Lecturer>(account, 10).ToList();
 
-                ViewBag.colleagues = _dataManager.MyColleagues(user.AccountId).Take(10).ToList();
+                ViewBag.colleagues = _dataManager.MyColleagues(account).Take(10).ToList();
             }
+
+            ViewBag.Notifications = this.GetNotifications();
 
             return View(profile);
         }
+        [HttpGet]
+        [Route("api/accounts/{id}/profile")]
+        public async Task<IActionResult> GetProfile(string id)
+        {
+            UserViewModel model = new UserViewModel();
 
+            AppUser user = await _userManager.FindByIdAsync(id);
+
+            if(user == null)
+            {
+                return NotFound("User account not found.");
+            }
+
+            model.Email = user.Email;
+
+            if(user.AccountType == AccountType.Student)
+            {
+                var student = _repos.Students.Get(user.AccountId);
+                model.RegNo = student.RegNo;
+            }
+
+            return Ok(model);
+        }
         [HttpGet]
         [Route("account/edit/{names}")]
-        public async Task<IActionResult> Edit(string names)
+        public IActionResult Edit(string names)
         {
-            var user = await _userManager.GetUserAsync(User);
-            var profile = GetProfile(user);
-
+            var profile = GetProfile();
+            ViewBag.Notifications = this.GetNotifications();
             return View(profile);
         }
 
@@ -319,35 +348,11 @@ namespace web.Controllers
             return View(model);
         }
 
-        private Profile GetProfile(AppUser user)
+        private Profile GetProfile()
         {
             Profile profile = null;
 
-            switch (user.AccountType)
-            {
-                case AccountType.Administrator:
-                    profile = _lepadContext.Administrators
-                                        .Include(x => x.Profile)
-                                        .FirstOrDefault(x => x.AccountId.ToString() == user.Id)
-                                        ?.Profile;
-                    break;
-                case AccountType.Lecturer:
-                    profile = _lepadContext.Lecturers
-                                        .Include(x => x.Profile)
-                                        .FirstOrDefault(x => x.AccountId.ToString() == user.Id)
-                                        ?.Profile;
-                    break;
-                case AccountType.Student:
-                    profile = _lepadContext.Students
-                                        .Include(x => x.Profile)
-                                        .FirstOrDefault(x => x.AccountId.ToString() == user.Id)
-                                        ?.Profile;
-                    break;
-                case AccountType.None:
-                    break;
-                default:
-                    break;
-            }
+            profile = _repos.Profiles.GetWith(User.ProfileId(),"Location");
 
             if (profile == null)
                 return new Profile()

@@ -97,17 +97,6 @@
                                                         Where education &amp; collaboration meet in today's mobile world.
                                                     </i>
                                                 </p>
-                                                @*<form role="form" class="subscribe-form">
-                <div class="form-group">
-                    <input type="email" class="form-control"
-                           placeholder="Enter your email.." />
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-info">
-                        Subscribe Now
-                    </button>
-                </div>
-            </form>*@
                                             </div>
 
                                         </div>
@@ -128,12 +117,15 @@
                                         {
                                             foreach (var item in lecturers)
                                             {
-                                                <div class="list-item" data-id="item-5">
+                                                <div class="list-item" data-id="item-5" >
                                                     <span class="w-50 avatar img-circle img-thumbnail img-responsive">
                                                         <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
                                                     </span>
                                                     <div class="list-body">
-                                                        <a class="item-title _500" href="#">@item.Profile.FullNames</a>
+                                                        <a class="item-title _500" 
+                                                           ng-click="onViewProfile('@item.Profile.Serialize()','Lecturer','@item.AccountId')"
+                                                           data-toggle="modal" data-target="#profViewModal" 
+                                                           >@item.Profile.FullNames</a>
                                                         <div class="item-except text-sm text-muted h-1x">
                                                             Lecturer
                                                         </div>
@@ -174,12 +166,15 @@
                                 {
                                     foreach (var item in students.TakeWhile(x => x.Profile != null))
                                     {
-                                        <div class="list-item" data-id="item-11">
+                                        <div class="list-item" data-id="item-11" >
                                             <span class="avatar w-50 img-circle img-thumbnail img-responsive">
                                                 <img alt="." src="@Url.Content(item?.Profile?.PhotoUrl)" />
                                             </span>
                                             <div class="list-body">
-                                                <a class="item-title _500" href="#">@item.Profile.FullNames</a>
+                                                <a class="item-title _500"
+                                                   ng-click="onViewProfile('@item.Profile.Serialize()','Student','@item.AccountId')"
+                                                   data-toggle="modal" data-target="#profViewModal" 
+                                                   >@item.Profile.FullNames</a>
                                                 <div class="item-except text-sm text-muted h-1x">
                                                     @{ 
                                                         if (item.Course == null)
@@ -326,7 +321,10 @@
                                             <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
                                         </span>
                                         <div class="list-body">
-                                            <a class="item-title _500" href="#">@item.Profile.FullNames</a>
+                                            <a class="item-title _500" 
+                                               ng-click="onViewProfile('@item.Profile.Serialize()','Lecturer','@item.AccountId')"
+                                               data-toggle="modal" data-target="#profViewModal"
+                                               >@item.Profile.FullNames</a>
                                             <div class="item-except text-sm text-muted h-1x">
                                                 Lecturer
                                             </div>
@@ -356,7 +354,10 @@
                                             <img alt="." class="w-40 circle" src="@Url.Content(item.Profile.PhotoUrl)" />
                                         </span>
                                         <div class="list-body">
-                                            <a class="item-title _500" href="#">@item.Profile.FullNames</a>
+                                            <a class="item-title _500" 
+                                               ng-click="onViewProfile('@item.Profile.Serialize()','Student','@item.AccountId')"
+                                               data-toggle="modal" data-target="#profViewModal"
+                                               >@item.Profile.FullNames</a>
                                             <div class="item-except text-sm text-muted h-1x">
                                                 Student
                                             </div>
