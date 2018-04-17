@@ -6,18 +6,19 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using DAL.Contexts;
 
 namespace Services.Implementations
 {
     public class NotificationManager : INotificationManager
     {
-        private readonly UserManager<AppUser> _userManager;
+        private readonly AppDbContext _appDb;
         private readonly IRepositoryFactory _repos;
         private readonly IEmailSender _emailSender;
 
-        public NotificationManager(UserManager<AppUser> userManager, IRepositoryFactory factory, IEmailSender emailSender)
+        public NotificationManager(AppDbContext appDbContext, IRepositoryFactory factory, IEmailSender emailSender)
         {
-            _userManager = userManager;
+            _appDb = appDbContext;
             _repos = factory;
             _emailSender = emailSender;
         }
@@ -104,7 +105,9 @@ namespace Services.Implementations
 
             foreach (var item in students)
             {
-                var user = _userManager.Users.FirstOrDefault(x => x.Id == item.AccountId.ToString());
+                string s = item.AccountId.ToString();
+
+                var user = _appDb.Users.FirstOrDefault(x => x.Id == s);
 
                 if(user != null)
                 {
@@ -119,8 +122,15 @@ namespace Services.Implementations
             var post = new Post()
             {
                 Message = $"Uploaded content: {content.Title}",
-                By = content.UploadedBy?.Profile
             };
+
+            if(content.UploadedBy != null)
+            {
+                if(content.UploadedBy.Profile != null)
+                {
+                    post.By = content.UploadedBy.Profile;
+                }
+            }
 
             post.Medias = new List<Content>
             {
@@ -131,7 +141,7 @@ namespace Services.Implementations
             // get unit board
             var board = _repos.DiscussionBoards
                               .ListWith("Unit", "Posts")
-                              .FirstOrDefault(x => x?.Unit.Id == content.Unit.Id);
+                              .FirstOrDefault(x => x.UnitId == content.Unit.Id);
 
             if(board == null)
             {
@@ -144,7 +154,13 @@ namespace Services.Implementations
                 board = _repos.DiscussionBoards.Create(board);
             }
 
+            _repos.Commit();
+            if(board.Posts == null)
+            {
+                board.Posts = new List<Post>();
+            }
             board.Posts.Add(post);
+            board = _repos.DiscussionBoards.Update(board);
         }
         private void PostExamToBoard(Exam exam, string message)
         {

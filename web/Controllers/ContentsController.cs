@@ -112,7 +112,7 @@ namespace web.Controllers
             int account = this.GetAccountId();
 
             // get lecturer account
-            var lec = _repos.Lecturers.Get(account);
+            var lec = _repos.Lecturers.GetWith(account,"Profile");
 
             if(lec == null)
             {
