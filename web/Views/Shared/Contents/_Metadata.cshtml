@@ -106,7 +106,7 @@
                 @{
                     if (Model.Comments.Count > 0)
                     {
-                        foreach (var item in Model.Comments)
+                        foreach (var item in Model.Comments.OrderByDescending(x => x.Timestamp))
                         {
                             <div class="sl-item">
                                 <div class="sl-left">

@@ -222,16 +222,22 @@
 @if (User.Role() == "Student")
 {
     <script type="text/javascript">
-    window.onbeforeunload = onExit;
+    //window.onbeforeunload = onExit;
+        $(document).ready(function () {
+            info('When viewing coursework, click the little refresh button on the right on your right side of your percentage to update progress.');
 
+            setTimeout(function () {
+                error('N.B progress will only be recorded when you click reload.')
+            },6000)
+        })
     $('#refreshBtn').click(function (e) {
         e.preventDefault();
 
-        location.reload();
+        //location.reload();
+        onRefresh();
     });
 
-    function onExit(e) {
-
+    function onRefresh(e) {
         var cont_type = '@Model.Type';
         var vm = player;
         var total = parseFloat('@progress.Overall');
@@ -240,14 +246,14 @@
         if (cont_type === 'Video') {
             if (_complete === 'False') {
                 if (isNaN(total) || total < 1) {
-                    postInitialProgress('@progress.Id', vm.getCurrentTime(), vm.getDuration());
+                    console.log('Initial..');
+                    postInitialProgress('@progress.Id', vm.media.currentTime, vm.media.duration);
                 } else {
-                    postProgress('@progress.Id', vm.getCurrentTime());
+                    console.log('Recurring...');
+                    postProgress('@progress.Id', vm.media.currentTime);
                 }
             }
         }
-
-        return;
     };
     </script>
 }

@@ -320,5 +320,75 @@ namespace Services
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             });
         }
+        /// <summary>
+        /// Updates <paramref name="entity"/> property values from the database with new/updated
+        /// values from the <paramref name="model"/> received from the user. If any slight differences
+        /// occur in the properties, the <paramref name="entity"/> is updated with the new value.        
+        /// </summary>
+        /// <typeparam name="TEntity">Class type for the entity in use</typeparam>
+        /// <typeparam name="TModel">Class type for the model in use</typeparam>
+        /// <param name="entity">Entity object from the database</param>
+        /// <param name="model">Model/ViewModel from the user</param>
+        /// <returns>
+        /// A dictionary with the key showing the total number of edits or successful updates made
+        /// from the <paramref name="model"/> to the <paramref name="entity"/>. The value in the dictionary
+        /// store the actual updated <paramref name="entity"/> object that can be pushed to the database
+        /// with an update to save changes.
+        /// </returns>
+        public static IDictionary<int,TEntity> TryUpdate<TEntity, TModel>(TEntity entity, TModel model)
+            where TEntity : class
+            where TModel : class
+        {
+            IDictionary<int, TEntity> dictionary = new Dictionary<int, TEntity>();
+            int total = 0;
+
+            PropertyInfo[] entityProps = typeof(TEntity).GetProperties();
+            PropertyInfo[] modelProps = typeof(TModel).GetProperties();
+
+            for (int i = 0; i < modelProps.Length; i++)
+            {
+                if(modelProps[i].Name.ToLower() == "id") { continue; }
+
+                var m = modelProps[i].GetValue(model);
+                var e = entityProps[i].GetValue(entity);
+
+                if (m == null || e == null)
+                {
+                    if (m == null && e != null)
+                    {
+                        entityProps[i].SetValue(entity, m);
+                        total++;
+                        continue;
+                    }
+                    else if (e == null && m != null)
+                    {
+                        entityProps[i].SetValue(entity, m);
+                        total++;
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (e.GetType().IsArray || e.GetType().IsNested)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        if (!m.Equals(e))
+                        {
+                            entityProps[i].SetValue(entity, m);
+                            total++;
+                            continue;
+                        }
+                        else { continue; }
+                    }
+                }
+                
+            }
+
+            dictionary.Add(total, entity);
+            return dictionary;
+        }
     }
 }

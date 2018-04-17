@@ -63,7 +63,7 @@ function postInitialProgress(progressId, current, total)
         data: { id: progressId, current: current, overall: total},
         type: 'json',
         success: function (res) {
-          console.log(res);
+            yay('Progress updated!');
         },
         error: function (res) {
             parseError(res.responseText);
@@ -77,13 +77,16 @@ function postProgress(id, current) {
         data: { id: id, current: current},
         type: 'json',
         success: function (res) {
-            console.log(res);
             if (res.isComplete) {
                 yay('Coursework completed! Please refresh page.')
             }
         },
         error: function (res) {
-            parseError(res.responseText);
+            if (res.responseText) {
+                parseError(res.responseText);
+            } else {
+                error(res.statusText);
+            }
         }
     })
 }

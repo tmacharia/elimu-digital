@@ -173,12 +173,11 @@ namespace web.Controllers
 
                 await _notify.OnNewContent(content);
 
-                return Redirect($"/contents/{content.Id}/{content.Title.GenerateSlug()}");
-                //return RedirectPermanent($"/contents/{content.Id}/{Services.Extensions.GenerateSlug(content.Title)}");
+                return LocalRedirect($"/contents/{content.Id}/{Services.Extensions.GenerateSlug(content.Title)}");
             }
             catch (Exception ex)
             {
-                throw ex;
+                return this.Error(ex);
             }
         }
 

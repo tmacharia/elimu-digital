@@ -26,10 +26,12 @@ namespace DAL.Models
 
         [Required]
         public Guid AccountId { get; set; }
+        public string Bio { get; set; }
 
         public virtual Profile Profile { get; set; }
         public virtual ICollection<Unit> Units { get; set; }
         public virtual ICollection<Content> UploadedContent { get; set; }
+        public virtual ICollection<Skill> Skills { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
     }
 }

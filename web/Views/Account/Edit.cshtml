@@ -7,78 +7,160 @@
 
     ViewBag.Title = $"Edit Profile ({User.Identity.Name})";
     ViewBag.Action = "Account";
+    var skills = (List<Skill>)ViewBag.skills;
+    string bio = (string)ViewBag.bio;
+    string error = (string)ViewBag.error;
 }
+<style>
+    #skillsTab {
+        list-style-type: none;
+        -webkit-padding-start: 0px;
+    }
 
+        #skillsTab li {
+            display: inline-block !important;
+            margin-right: 5px;
+            margin-bottom: 5px !important;
+        }
+</style>
 <div class="padding">
-    <h4>
-        Edit Profile
-    </h4>
+    <h4>@ViewBag.Title</h4>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="box">
                 <div class="box-header">
                     <h2>Basic Info</h2>
                 </div>
                 <div class="box-divider m-0"></div>
                 <div class="box-body">
-                    <form>
+                    <form action="/account/editprofile"
+                          method="post"
+                          role="form"
+                          name="editProfileForm">
+                        @Html.HiddenFor(x => x.Id)
+                        @Html.HiddenFor(x => x.PhotoUrl)
+                        @Html.HiddenFor(x => x.Timestamp)
                         <div class="form-group">
                             <label for="exampleInputEmail1">Full Names</label>
-                            @Html.TextBoxFor(x => x.FullNames, new { @class = "form-control" })
+                            @Html.TextBoxFor(x => x.FullNames, new { @class = "form-control", @required = true })
                         </div>
-
                         <div class="form-group">
                             <label for="exampleInputPassword1">National ID Number</label>
                             @Html.TextBoxFor(x => x.NationalID, new { @class = "form-control", @type = "number" })
                         </div>
-                        <button class="btn primary" type="submit">Submit</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="box">
-                <div class="box-body">
-                    <h6>Avatar</h6>
-                    <form>
+                        <br />
+                        <h6>Social Media Accounts</h6>
+                        <p>
+                            <i>Enter username only.</i>
+                        </p>
                         <div class="form-group">
-                            <span class="w-96">
-                                <img id="userImgPrw" class="img-thumbnail w-96" src="@Url.Content(User.PhotoUrl())" />
-                                <i class="on"></i>
-                            </span>
-                            <input type="file" name="file" id="userImg" />
+                            <label><i class="fa fa-facebook-official"></i> Facebook</label>
+                            @Html.TextBoxFor(x => x.Facebook, new { @class = "form-control", @type = "text", @placeholder = "hint: username only" })
                         </div>
-                        <button class="btn primary" type="submit">Submit</button>
+                        <div class="form-group">
+                            <label><i class="fa fa-twitter"></i> Twitter</label>
+                            @Html.TextBoxFor(x => x.Twitter, new { @class = "form-control", @type = "text", @placeholder = "hint: twitter handle only" })
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa fa-linkedin-square"></i> Linkedin</label>
+                            @Html.TextBoxFor(x => x.Linkedin, new { @class = "form-control", @type = "text", @placeholder = "hint: username only" })
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa fa-instagram"></i> Instagram</label>
+                            @Html.TextBoxFor(x => x.Facebook, new { @class = "form-control", @type = "text", @placeholder = "hint: username only" })
+                        </div>
+                        <button class="btn btn-success" type="submit">Save changes</button>
                     </form>
                 </div>
             </div>
         </div>
+        @{ 
+            if (User.IsInRole("Lecturer"))
+            {
+                <div class="col-md-4">
+                    <div class="box" ng-init="initLecBio('@bio','@skills.Serialize()')">
+                        <div class="box-body">
+                            <div name="lecBioForm"
+                                 id="lecBioForm">
+                                <h6>Lecturer Bio</h6>
+                                <p>
+                                    <i>Write a short description about you and your career.</i>
+                                </p>
+                                <textarea class="form-control"
+                                          placeholder="type here..."
+                                          ng-model="lec.Bio"
+                                          rows="3"></textarea>
+                                <br />
+                                <h6>Skills <span class="badge badge-info">{{lec.Skills.length}}</span></h6>
+                                <form role="form"
+                                      ng-submit="onNewSkill()"
+                                      name="newSkillForm" id="newSkillForm">
+                                    <input type="text" class="form-control"
+                                           required
+                                           placeholder="e.g Microsoft Office, Procurement, Management"
+                                           ng-model="skill.Name" />
+                                </form>
+                                <br />
+                                <ul id="skillsTab" ng-show="lec.Skills.length > 0">
+                                    <li ng-repeat="skl in lec.Skills">
+                                        <button class="btn btn-default btn-sm">
+                                            {{skl.Name}} <i class="ion ion-android-cancel text-muted pointer"
+                                                            ng-click="onRemoveSkill(skl)"
+                                                            title="Remove skill?"></i>
+                                        </button>
+                                    </li>
+                                </ul>
+                                <center ng-hide="lec.Skills.length > 0">
+                                    No skills added. Add one today
+                                </center>
+                                <br />
+                                <div class="form-group">
+                                    <button type="button" ng-click="onUpdate()"
+                                            id="saveBioBtn" class="btn btn-success">
+                                        Save changes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
         <div class="col-md-3">
             <div class="box">
                 <div class="box-body">
                     <h6>Location</h6>
 
-                    @{ 
-                        if(Model.Location != null)
+                    @{
+                        if (Model.Location != null)
                         {
-                            <form>
+                            <form action="/api/locations/update"
+                                  method="post">
+                                @Html.HiddenFor(x => x.Location.Id)
+                                @Html.HiddenFor(x => x.Location.Latitude)
+                                @Html.HiddenFor(x => x.Location.Longitude)
+                                <div class="form-group">
+                                    <label>Full Address</label>
+                                    @Html.TextBoxFor(x => x.Location.FullAddress, new { @class = "form-control" })
+                                </div>
                                 <div class="form-group">
                                     <label>Street</label>
-                                    @Html.TextBoxFor(x => x.Location.Street, new { @class="form-control"})
+                                    @Html.TextBoxFor(x => x.Location.Street, new { @class = "form-control" })
                                 </div>
-
                                 <div class="form-group">
                                     <label>City</label>
-                                    @Html.TextBoxFor(x => x.Location.City, new { @class="form-control" })
+                                    @Html.TextBoxFor(x => x.Location.City, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success">Save changes</button>
                                 </div>
                             </form>
                         }
                         else
                         {
                             <p id="locationData"></p>
-                            <button id="locationBtn" class="btn btn-primary">Get current location</button>
-
+                            <button id="locationBtn" type="button" class="btn btn-primary">Get current location</button>
                         }
                     }
                 </div>
@@ -86,14 +168,34 @@
         </div>
     </div>
 </div>
+@*<div class="box">
+        <div class="box-body">
+            <h6>Avatar</h6>
+            <form>
+                <div class="form-group">
+                    <span class="w-96">
+                        <img id="userImgPrw" class="img-thumbnail w-96" src="@Url.Content(User.PhotoUrl())" />
+                        <i class="on"></i>
+                    </span>
+                    <input type="file" name="file" id="userImg" />
+                </div>
+                <button class="btn primary" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>*@
 
 <script>
     $(document).ready(function (e) {
+
         $('#locationBtn').click(function (e) {
             onGetLocation();
-        })
+        });
+        // check error
+        var _err = '@error';
+        if (_err) {
+            error(_err);
+        }
     })
-
     function onGetLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition(showPosition);
@@ -103,5 +205,31 @@
     }
     function showPosition(position) {
         console.log(position);
+
+        loadingBtn('locationBtn', true);
+        $.ajax({
+            method: 'POST',
+            url: '/api/locations?latitude='+position.coords.latitude+
+                                '&longitude=' + position.coords.longitude,
+            success: function (res) {
+                loadingBtn('locationBtn', false);
+                console.log('Server results:', res);
+                yay('Location tagged successfully!');
+
+                setTimeout(function () {
+                    window.location.reload();
+                }, 2000);
+            },
+            error: function (res) {
+                loadingBtn('locationBtn', false);
+                if (res.responseText) {
+                    parseError(res.responseText);
+                } else {
+                    error(res.statusText);
+                }
+            }
+
+        })
+
     }
 </script>

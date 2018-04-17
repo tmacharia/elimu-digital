@@ -34,19 +34,18 @@
                                 </span>
                             </a>
                             <div class="media-body mx-3 mb-2">
-                                <h4>@User.FullNames()</h4>
+                                <h4>@Model.FullNames</h4>
                                 <p class="text-muted">
                                     <span class="m-r">@User.Role()</span> 
                                     <small><i class="fa fa-map-marker mr-2"></i>
                                         @{ 
                                             if(Model.Location != null)
                                             {
-                                                <span>@Model.Location.Street, @Model.Location.City</span>
+                                                <span>@Model.Location.FullAddress</span>
                                             }
                                             else
                                             {
                                                 <span>no location</span>
-
                                             }
                                         }
                                     </small>
@@ -64,7 +63,7 @@
                                         <i class="fa fa-instagram"></i> 
                                         <i class="fa fa-instagram indigo"></i>
                                     </a> 
-                                    <a class="btn btn-icon btn-social btn-rounded b-a btn-sm" target="_blank" href="https://linkedin.com/in/devtimmy">
+                                    <a class="btn btn-icon btn-social btn-rounded b-a btn-sm" target="_blank" href="https://linkedin.com/in/@Model.Linkedin">
                                         <i class="fa fa-linkedin"></i> 
                                         <i class="fa fa-linkedin cyan"></i>
                                     </a>

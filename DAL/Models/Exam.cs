@@ -20,7 +20,6 @@ namespace DAL.Models
         [Required]
         public DateTime Start { get; set; }
         [Required]
-        [TimeCompare(Comparison.GreaterThan,"Start",DurationSpec.Hours,3)]
         public DateTime End { get; set; }
         public DateTime Date { get; set; }
 

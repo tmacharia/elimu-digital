@@ -9,10 +9,8 @@ using DAL.Contexts;
 using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -164,6 +162,7 @@ namespace web.Controllers
 
             return View(profile);
         }
+
         [HttpGet]
         [Route("api/accounts/{id}/profile")]
         public async Task<IActionResult> GetProfile(string id)
@@ -187,13 +186,65 @@ namespace web.Controllers
 
             return Ok(model);
         }
+
         [HttpGet]
         [Route("account/edit/{names}")]
         public IActionResult Edit(string names)
         {
             var profile = GetProfile();
+
+            // get skills
+            if (User.IsInRole("Lecturer"))
+            {
+                var lecturer = _repos.Lecturers
+                                     .GetWith(this.GetAccountId(),
+                                     "Skills");
+                ViewBag.bio = lecturer.Bio;
+                ViewBag.skills = lecturer.Skills.ToList();
+            }
+
             ViewBag.Notifications = this.GetNotifications();
             return View(profile);
+        }
+
+        [HttpPost]
+        [Route("account/editprofile")]
+        public async Task<IActionResult> Edit(Profile model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(ModelState);
+            }
+
+            var profile = _repos.Profiles.Get(model.Id);
+            if(profile != null)
+            {
+                var result = Services.Extensions.TryUpdate(profile, model).First();
+
+                if(result.Key > 0)
+                {
+                    profile = _repos.Profiles.Update(result.Value);
+                    _repos.Commit();
+
+                    if(profile.FullNames != User.FullNames())
+                    {
+                        // update claims
+                        AppUser user = await _userManager.GetUserAsync(User);
+                        IList<Claim> claims = await _userManager.GetClaimsAsync(user);
+
+                        // get fullnames claim
+                        var claim = claims.FirstOrDefault(x => x.Type == "FullNames");
+                        var new_claim = new Claim("FullNames", profile.FullNames);
+
+                        await _userManager.ReplaceClaimAsync(user, claim, new_claim);
+                    }
+
+                    return LocalRedirect($"/account/profile/{Services.Extensions.GenerateSlug(profile.FullNames)}");
+                }
+            }
+            ViewBag.error = "An error occured.";
+
+            return View(model);
         }
 
         [HttpPost]

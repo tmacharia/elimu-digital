@@ -45,7 +45,6 @@
             $scope.question = {
                 Answers: []
             };
-            $('#addQuestionModal').modal('show');
         }
         $scope.onAddAnswer = function () {
             if (!$scope.question.Text) {

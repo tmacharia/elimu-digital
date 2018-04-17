@@ -74,6 +74,7 @@ namespace web
             services.AddTransient<IEmailSender>(e => new AuthMessageSender(SystemName,AdminEmail,MailPassword));
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddTransient<IUploader>(u => new UploaderService(BlobAccount));
+            services.AddTransient<IGoogleMapsService>(g => new GoogleMapsService(GoogleMapsApiKey));
             services.AddTransient<IRepositoryFactory, RepositoryFactory>();
             services.AddTransient<IDataManager, DataManager>();
             services.AddTransient<INotificationManager, NotificationManager>();

@@ -35,6 +35,7 @@ namespace web.Controllers
             var notifications = _repos.Notifications
                                       .List
                                       .Where(x => x.AccountId == this.GetAccountId())
+                                      .OrderByDescending(x => x.Timestamp)
                                       .ToList();
 
             return Ok(notifications);

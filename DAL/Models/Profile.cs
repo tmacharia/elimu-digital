@@ -8,8 +8,6 @@ namespace DAL.Models
     public class Profile : Base
     {
         [Required]
-        [MinLength(8)]
-        [MaxLength(8)]
         public long NationalID { get; set; }
         [Required]
         [MaxLength(50)]
@@ -22,6 +20,7 @@ namespace DAL.Models
         public string Facebook { get; set; }
         public string Twitter { get; set; }
         public string Instagram { get; set; }
+        public string Linkedin { get; set; }
 
         public virtual Location Location { get; set; }
     }

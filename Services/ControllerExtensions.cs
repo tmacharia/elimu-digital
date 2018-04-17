@@ -81,17 +81,17 @@ namespace Services
                 case "Administrator":
                     return _repos.Administrators
                                  .GetWith(account,
-                                 "Profile")
+                                 "Profile","Profile.Location")
                                  .Profile;
                 case "Lecturer":
                     return _repos.Lecturers
                                  .GetWith(account,
-                                 "Profile")
+                                 "Profile","Profile.Location")
                                  .Profile;
                 case "Student":
                     return _repos.Students
                                  .GetWith(account,
-                                 "Profile")
+                                 "Profile","Profile.Location")
                                  .Profile;
                 default:
                     break;
