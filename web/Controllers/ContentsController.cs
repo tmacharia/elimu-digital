@@ -109,10 +109,11 @@ namespace web.Controllers
             }
 
             // get current user account
-            int account = this.GetAccountId();
+            AppUser user = await _userManager.GetUserAsync(User);
+            //int account = this.GetAccountId();
 
             // get lecturer account
-            var lec = _repos.Lecturers.GetWith(account,"Profile");
+            var lec = _repos.Lecturers.GetWith(user.AccountId,"Profile");
 
             if(lec == null)
             {
