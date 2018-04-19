@@ -19,6 +19,8 @@ namespace web.API_s
 {
     [Route("api/contents")]
     [Authorize]
+    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+
     public class ContentsController : Controller
     {
         private readonly IRepositoryFactory _repos;
@@ -327,7 +329,7 @@ namespace web.API_s
                 return this.Error(HttpStatusCode.InternalServerError, "An error occured.");
             }
 
-            return Ok("Commented!");
+            return Ok("Comment Posted!");
         }
 
 

@@ -179,7 +179,18 @@
                                     </a>
                                 }
                             </li>
-                            @for (int i = 0; i < Model.TotalPages; i++)
+                            @{ 
+                                int totalPages = 0;
+
+                                if(Model.TotalPages >= 9){
+                                    totalPages = 9;
+                                }
+                                else
+                                {
+                                    totalPages = Model.TotalPages;
+                                }
+                            }
+                            @for (int i = 0; i < totalPages; i++)
                             {
                                 int n = i + 1;
                                 if (n == Model.Page)
@@ -194,7 +205,6 @@
                                         <a class="page-link" href="/units?page=@n&itemsperpage=@Model.ItemsPerPage">@n</a>
                                     </li>
                                 }
-
                             }
                             <li class="page-item">
                                 @if (Model.Page < Model.TotalPages)

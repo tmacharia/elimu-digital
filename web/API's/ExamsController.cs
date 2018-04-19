@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 namespace web.API_s
 {
     [Route("api/exams")]
+    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+
     public class ExamsController : Controller
     {
         private readonly IMapper _mapper;

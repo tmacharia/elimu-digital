@@ -18,7 +18,6 @@
             $scope.profile = JSON.parse(prof);
             $scope.profile.Role = role;
             $scope.profile.AccountId = id;
-            $('.modal-bg').css('background-image', 'url(' + $scope.profile.PhotoUrl + ')');
 
             fetchProfile(id);
         }
@@ -44,6 +43,24 @@
         }
         $scope.onUpdate = function () {
             updateBio();
+        }
+        $scope.isSocialValid = function () {
+            var count = 0;
+            if ($scope.profile.Facebook) {
+                count++;
+            }
+            if ($scope.profile.Twitter) {
+                count++;
+            }
+            if ($scope.profile.Instagram) {
+                count++;
+            }
+
+            if (count > 0) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         function updateBio() {

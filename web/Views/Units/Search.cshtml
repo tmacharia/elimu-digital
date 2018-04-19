@@ -4,9 +4,10 @@
 @using Paginator.Models
 @model Result<Unit>
 @{
-    ViewBag.Title = "Search Results(Units)";
+    ViewBag.Title = $"{(string)ViewBag.Query} - Units Search";
     ViewBag.Action = "Units";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    TimeSpan span = (TimeSpan)ViewBag.timespan;
 }
 
 <style>
@@ -16,20 +17,26 @@
 </style>
 
 <div class="padding">
-    <h2>
-        Search Results : @ViewBag.Query
-        <span class="ml-auto h6"><b class="badge danger">@Model.TotalItems</b></span>
+    <h4>
+        <a class="text-muted" href="/units">Units / </a>  Search
 
-        <span class="h6 pull-right top-right">
-            <i>
-                Includes units across all courses offered at
-            </i>
-            <br />
-            <b class="pull-right">
-                @Extensions.Uni
-            </b>
+        <span class="pull-right h6">
+            <b class="badge danger">@Model.TotalItems</b> 
+            @{ 
+                if(Model.TotalItems == 1)
+                {
+                    <span>result</span>
+                }
+                else
+                {
+                    <span>results</span>
+                }
+            }
+            <span class="text-muted h6">
+                in (@span.TotalSeconds.RoundOff(3) seconds)
+            </span>
         </span>
-    </h2>
+    </h4>
 
     <div class="">
         <div class="box">
@@ -49,7 +56,7 @@
                             <th>Name</th>
                             <th>Course</th>
                             <th>Lecturer</th>
-                            <th>Total students</th>
+                            <th>Class</th>
                             <th>Likes</th>
                         </tr>
                     </thead>
@@ -85,7 +92,20 @@
                                             </span>
                                         }
                                     </td>
-                                    <td>@item.UnitStudents.Count</td>
+                                    <td>
+                                        @{ 
+                                            if(item.Class == null)
+                                            {
+                                                <span class="text-danger">
+                                                    <i class="fa fa-times"></i> no class
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span>@item.Class.Room, <i>@item.Class.DayOfWeek.ToString()</i></span>
+                                            }
+                                        }
+                                    </td>
                                     <td>
                                         <i class="fa fa-thumbs-up" title="Likes"></i> @item.Likes.Count
                                     </td>

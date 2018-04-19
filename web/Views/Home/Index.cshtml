@@ -46,16 +46,23 @@
         background: rgba(255, 255, 255, 0.20);
         color: #b3b3b3;
     }
+    .box{
+        padding-bottom:15px;
+    }
+    .box-header{
+        padding-bottom:0px;
+    }
+    .list-item{
+        padding-bottom:0px;
+    }
 </style>
 <div class="padding">
-
     @{
         if (User.Role() == "Administrator")
         {
             Html.RenderPartial("Dashboard/_Summary");
         }
     }
-
     @{
         if (User.Role() == "Unknown")
         {
@@ -72,10 +79,10 @@
             if (User.Role() == "Lecturer")
             {
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-5">
                         <div class="row">
                             <div class="col-12">
-                                <div class="box" style="background:#978ba2;">
+                                <div class="box" style="background:#462565;">
                                     <div class="box-body">
                                         <div class="row">
                                             <div class="col-lg-4 col-md-5" style="display:flex; justify-content:center;align-items:center;">
@@ -93,9 +100,9 @@
                                                     </span>
                                                 </h1>
                                                 <p class="text-white">
-                                                    <i>
+                                                    
                                                         Where education &amp; collaboration meet in today's mobile world.
-                                                    </i>
+                                                    
                                                 </p>
                                             </div>
 
@@ -111,7 +118,7 @@
                                         </h3>
                                         <span>Other lecturers who teach in the same Courses as you do.</span>
                                     </div>
-                                    <div class="list inset">
+                                    <div class="list">
                                     @{
                                         if (lecturers != null)
                                         {
@@ -127,10 +134,7 @@
                                                            data-toggle="modal" data-target="#profViewModal" 
                                                            >@item.Profile.FullNames</a>
                                                         <div class="item-except text-sm text-muted h-1x">
-                                                            Lecturer
-                                                        </div>
-                                                        <div class="item-tag tag">
-                                                            <span class="item-date text-xs text-muted">@item.Timestamp.ToString("M MMM")</span>
+                                                            Lecturer, @item.Units.First().Course.Name
                                                         </div>
                                                     </div>
                                                     <div>
@@ -154,14 +158,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-5">
                         <div class="box">
                             <div class="box-header">
                                 <h3>
                                     My Students
                                 </h3>
+                                <span>Enrolled to some of the courses you lecture.</span>
                             </div>
-                            <div class="list inset">
+                            <div class="list">
                                 @if (students != null)
                                 {
                                     foreach (var item in students.TakeWhile(x => x.Profile != null))

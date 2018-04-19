@@ -9,19 +9,13 @@
         padding: 0px;
     }
     .modal-bg {
-        height:155px;
-        width:100%;
-        background-position: bottom;
-        background-size: cover;
-        -webkit-filter: blur(20px);
-        -moz-filter: blur(20px);
-        -o-filter: blur(20px);
-        -ms-filter: blur(20px);
-        filter: blur(20px);
+        height: 155px;
+        width: 100%;
+        background: #462565;
     }
-    .modal-header1 img{
-        width:100%;
-        margin-top:-20%;
+    .modal-header1 img {
+        width: 100%;
+        margin-top: -20%;
         -webkit-filter: blur(20px);
         -moz-filter: blur(20px);
         -o-filter: blur(20px);
@@ -96,12 +90,12 @@
                     </div>
                     <h3>{{profile.FullNames}}</h3>
                     <h6>{{profile.Role}}</h6>
-                    <span class="social">
-                        <a href="https://facebook.com/{{profile.Facebook}}"><i class="fa fa-facebook-official"></i></a>
-                        <a href="https://twitter.com/{{profile.Twitter}}"><i class="fa fa-twitter-square"></i></a>
-                        <a href="https://instagram.com/{{profile.Instagram}}"><i class="fa fa-instagram"></i></a>
+                    <span class="social" ng-show="isSocialValid()">
+                        <a ng-show="profile.Facebook.length > 0" href="https://facebook.com/{{profile.Facebook}}"><i class="fa fa-facebook-official"></i></a>
+                        <a ng-show="profile.Twitter.length > 0" href="https://twitter.com/{{profile.Twitter}}"><i class="fa fa-twitter-square"></i></a>
+                        <a ng-show="profile.Instagram.length > 0" href="https://instagram.com/{{profile.Instagram}}"><i class="fa fa-instagram"></i></a>
+                        <br />
                     </span>
-                    <br />
                     <a href="mailto:{{profile.Email}}" style="color:#0094ff; text-decoration:underline;">
                         {{profile.Email}}
                     </a>

@@ -3,22 +3,26 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
-    <ApplicationIcon>Graduation_Hat-512.ico</ApplicationIcon>
+    <ApplicationIcon>Elimu_Digital_Favicon.ico</ApplicationIcon>
     <UserSecretsId>26ed89a1-72a1-454b-8efc-d420256fc1bc</UserSecretsId>
     <AssemblyName>web</AssemblyName>
     <StartupObject>web.Program</StartupObject>
-    <PackageId>E-Learning Pad</PackageId>
-    <Authors>Timothy Maina</Authors>
+    <PackageId>Elimu Digital</PackageId>
+    <Authors>Timothy Macharia, Victor Stevens</Authors>
     <Company>Neon Clouds</Company>
-    <Product>E-Learning Pad</Product>
+    <Product>Elimu Digital</Product>
     <Description>e-learning application to support students &amp; lecturers in campuses collaborate virtually on learning materials, unit registrations, exam scheduling &amp; progress tracking.</Description>
-    <PackageLicenseUrl>https://github.com/devTimmy/E-Learning-Pad/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/devTimmy/E-Learning-Pad</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/devTimmy/E-Learning-Pad/master/web/wwwroot/images/Graduation_Hat-512.ico</PackageIconUrl>
-    <RepositoryUrl>https://github.com/devTimmy/E-Learning-Pad</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/devTimmy/elimu-digital/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://elimu-digital.com</PackageProjectUrl>
+    <PackageIconUrl>https://devtimmystorage.blob.core.windows.net/files/Elimu_Digital_favicon_ICO.ico</PackageIconUrl>
+    <RepositoryUrl>https://github.com/devTimmy/elimu-digital</RepositoryUrl>
     <PackageTags>elearning, asp-net-core, elearn, school-management</PackageTags>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <SignAssembly>false</SignAssembly>
+    <RepositoryType>git</RepositoryType>
+    <Version>1.2.0</Version>
+    <ApplicationInsightsResourceId>/subscriptions/565e5a81-0826-4edb-955f-4d0b75325b06/resourcegroups/VNET-RESOURCE-GROUP/providers/microsoft.insights/components/elimudigital</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/565e5a81-0826-4edb-955f-4d0b75325b06/resourcegroups/VNET-RESOURCE-GROUP/providers/microsoft.insights/components/elimudigital</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,6 +38,7 @@
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="2.6.375" />
     <PackageReference Include="LinqPaginator" Version="1.0.2" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="1.1.5" />
@@ -81,8 +86,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Lecturers\" />
     <Folder Include="Views\Units\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
 </Project>

@@ -390,5 +390,16 @@ namespace Services
             dictionary.Add(total, entity);
             return dictionary;
         }
+        /// <summary>
+        /// Rounds off a double number to the specified number of <paramref name="precision"/>
+        /// places.
+        /// </summary>
+        /// <param name="d">Decimal number to round off</param>
+        /// <param name="precision">Count of numbers after the decimal point</param>
+        /// <returns>A rounded off number</returns>
+        public static double RoundOff(this double d,int precision)
+        {
+            return Math.Round(d, precision);
+        }
     }
 }

@@ -12,6 +12,8 @@ namespace web.API_s
 {
     [Authorize]
     [Route("api/locations")]
+    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+
     public class LocationsController : Controller
     {
         private readonly IRepositoryFactory _repos;

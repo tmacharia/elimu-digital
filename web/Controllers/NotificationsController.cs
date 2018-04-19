@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace web.Controllers
 {
     [Authorize]
+
     public class NotificationsController : Controller
     {
         private readonly IRepositoryFactory _repos;

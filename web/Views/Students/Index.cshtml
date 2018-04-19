@@ -3,11 +3,11 @@
 @using Services
 @model IList<Student>
 @{
-    if(User.Role() == "Lecturer")
+    if (User.Role() == "Lecturer")
     {
         ViewBag.Title = "My Students";
     }
-    else if(User.Role() == "Student")
+    else if (User.Role() == "Student")
     {
         ViewBag.Title = "My Classmates";
     }
@@ -20,6 +20,21 @@
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
 }
 
+<style>
+    .students {
+        max-height: 165px;
+        background: #fff;
+        width: 100%;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    .students:hover {
+        box-shadow: 1px 1px 8px #d8d8d8;
+        cursor: pointer;
+    }
+</style>
 <div class="padding">
     <h4>
         @ViewBag.Title
@@ -27,101 +42,71 @@
     </h4>
     <br />
 
-    <div class="box col-md-6">
-        <div class="box-header">
-            <h3>
-                @ViewBag.Action;
-            </h3>
-        </div>
-
-        <div class="list inset">
+    <div class="row">
+        @if (Model.Count > 0)
+        {
             @foreach (var item in Model)
             {
-                <div class="list-item" data-id="item-5">
-                    <span class="w-50 avatar img-circle img-responsive img-thumbnail">
-                        @if (item != null)
-                        {
-                            if (item.Profile != null)
-                            {
-                                <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
-                            }
-                            else
-                            {
-                                <img alt="." src="~/images/avatar-1577909_960_720.png" />
-                            }
-
-                         }
-                         else
-                         {
-                             <img alt="." src="~/images/avatar-1577909_960_720.png" />
-                         }
-                    </span>
-                    <div class="list-body">
-                        <a class="item-title _500"
-                           data-toggle="modal" data-target="#profViewModal" 
-                           ng-click="onViewProfile('@item.Profile.Serialize()','Student','@item.AccountId')"
-                           >
-                            @{ 
-                                if(item.Profile == null)
+                if (item != null)
+                {
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6"
+                         data-toggle="modal" data-target="#profViewModal"
+                         ng-click="onViewProfile('@item.Profile.Serialize()','Student','@item.AccountId')">
+                        <div class="students">
+                            <span class="avatar w-50 img-circle img-thumbnail img-responsive">
+                                @if (item != null)
                                 {
-                                    <span class="text-warning">Pending registration..</span>
+                                    if (item.Profile != null)
+                                    {
+                                        <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
+                                    }
+                                    else
+                                    {
+                                        <img alt="." src="~/images/avatar-1577909_960_720.png" />
+                                    }
+
                                 }
                                 else
                                 {
-                                    <span>@item.Profile.FullNames</span>
-
+                                    <img alt="." src="~/images/avatar-1577909_960_720.png" />
                                 }
-                            }
-                        </a>
-                        <div class="item-except text-sm text-muted h-1x">
-                            @{ 
-                                if(item.Course != null)
-                                {
-                                    <span>
-                                        @switch (item.Course.Type)
+                            </span>
+                            <div class="list-body">
+                                <a class="item-title _500">
+                                    @{
+                                        if (!string.IsNullOrWhiteSpace(item.Profile.FullNames))
                                         {
-                                            case CourseType.Certificate:
-                                                <i class="fa fa-certificate"></i>
-                                                break;
-                                            case CourseType.Diploma:
-                                                <i class="fa fa-certificate text-warning"></i>
-                                                break;
-                                            case CourseType.Degree:
-                                                <i class="fa fa-certificate text-success"></i>
-                                                break;
-                                            case CourseType.Masters:
-                                                <i class="fa fa-certificate text-info"></i>
-                                                break;
-                                            case CourseType.Phd:
-                                                <i class="fa fa-certificate text-danger"></i>
-                                                break;
-                                            default:
-                                                break;
+                                            <span>@item.Profile.FullNames</span>
                                         }
-                                        @item.Course.Name, Year of study<b>@item.YearOfStudy</b>
-                                    </span>
-                                    <span>
-                                         Units: @item.StudentUnits.Count
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span>
-                                        <i class="fa fa-times text-danger"></i> not enrolled to any course yet
-                                    </span>
-                                }
-                            }
-                            
+                                        else
+                                        {
+                                            <span>No name.</span>
+                                        }
+                                    }
+                                </a>
+                                <div class="item-except text-sm text-muted h-1x">
+                                    @{ 
+                                        if(item.Course != null)
+                                        {
+                                            <span>@item.Course.Name</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger"><i class="fa fa-close"></i> not enrolled</span>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div>
+                                <span class="item-date text-xs text-muted">@item.Timestamp.ToMoment()</span>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <span class="item-date text-xs text-muted">@item.Timestamp.ToString()</span>
-                    </div>
-                </div>
+                }
             }
-        </div>
+        }
     </div>
-
 </div>
+
 
 

@@ -77,6 +77,8 @@ namespace web.Controllers
 
             return View();
         }
+
+        [Route("about-us")]
         [AllowAnonymous]
         public IActionResult About()
         {

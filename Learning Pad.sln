@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "web", "web\web.csproj", "{4DF99B5A-A82E-4211-9C63-98A924DEDF3D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{B9198A95-D5CA-45B3-B955-BACF68CDC8D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{4DF99B5A-A82E-4211-9C63-98A924DEDF3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DF99B5A-A82E-4211-9C63-98A924DEDF3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DF99B5A-A82E-4211-9C63-98A924DEDF3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9198A95-D5CA-45B3-B955-BACF68CDC8D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9198A95-D5CA-45B3-B955-BACF68CDC8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9198A95-D5CA-45B3-B955-BACF68CDC8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9198A95-D5CA-45B3-B955-BACF68CDC8D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

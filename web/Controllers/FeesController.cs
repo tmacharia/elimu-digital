@@ -13,6 +13,8 @@ namespace web.Controllers
 {
     [Authorize]
     [Route("fees")]
+    [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Any)]
+
     public class FeesController : Controller
     {
         private readonly IRepositoryFactory _repos;

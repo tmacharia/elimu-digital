@@ -14,7 +14,20 @@
     ViewBag.Action = "Lecturers";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
 }
-
+<style>
+    .lecs {
+        max-height: 165px;
+        background: #fff;
+        width:100%;
+        padding:15px;
+        border-radius:5px;
+        margin-bottom:10px;
+    }
+    .lecs:hover{
+        box-shadow:1px 1px 8px #d8d8d8;
+        cursor:pointer;
+    }
+</style>
 <div class="padding">
     <h4>
         @ViewBag.Title
@@ -22,78 +35,64 @@
     </h4>
     <br />
 
-    <div class="box col-md-6">
-        <div class="box-header">
-            <h3>
-                @ViewBag.Action
-            </h3>
-        </div>
-
-        <div class="list inset ">
+    <div class="row">
             @if (Model.Count > 0)
             {
                 @foreach (var item in Model)
                 {
                     if (item != null)
                     {
-                        <div class="list-item " data-id="item-5">
-                            <span class="avatar w-50 img-circle img-thumbnail img-responsive">
-                                @if (item != null)
-                                {
-                                    if (item.Profile != null)
+                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6"
+                             data-toggle="modal" data-target="#profViewModal" 
+                             ng-click="onViewProfile('@item.Profile.Serialize()','Lecturer','@item.AccountId')"
+                             >
+                            <div class="lecs">
+                                <span class="avatar w-50 img-circle img-thumbnail img-responsive">
+                                    @if (item != null)
                                     {
-                                        <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
-                                    }
-                                    else
-                                    {
-                                        <img alt="." src="~/images/avatar-1577909_960_720.png" />
-                                    }
+                                        if (item.Profile != null)
+                                        {
+                                            <img alt="." src="@Url.Content(item.Profile.PhotoUrl)">
+                                        }
+                                        else
+                                        {
+                                            <img alt="." src="~/images/avatar-1577909_960_720.png" />
+                                        }
 
-                                 }
-                                 else
-                                 {
-                                     <img alt="." src="~/images/avatar-1577909_960_720.png" />
-                                 }
-                            </span>
-                        <div class="list-body">
-                            <a class="item-title _500"
-                               data-toggle="modal" data-target="#profViewModal" 
-                               ng-click="onViewProfile('@item.Profile.Serialize()','Lecturer','@item.AccountId')"
-                               >
-                                @{
-                                    if (!string.IsNullOrWhiteSpace(item.Profile.FullNames))
-                                    {
-                                        <span>@item.Profile.FullNames</span>
-                                    }
-                                    else
-                                    {
-                                        <span>No name.</span>
-                                    }
-                                 }
-                                </a>
-                                <div class="item-except text-sm text-muted h-1x">
-                                    <span>
-                                        Units: @item.Units.Count
-                                    </span>
-                                    <span title="Likes">
-                                        <i class="fa fa-thumbs-up" title="Likes"></i> @item.Likes.Count
-                                    </span>
+                                     }
+                                     else
+                                     {
+                                         <img alt="." src="~/images/avatar-1577909_960_720.png" />
+                                     }
+                                </span>
+                                <div class="list-body">
+                                    <a class="item-title _500"
+                                       >
+                                        @{
+                                            if (!string.IsNullOrWhiteSpace(item.Profile.FullNames))
+                                            {
+                                                <span>@item.Profile.FullNames</span>
+                                            }
+                                            else
+                                            {
+                                                <span>No name.</span>
+                                            }
+                                         }
+                                    </a>
+                                    <div class="item-except text-sm text-muted h-1x">
+                                        <span>
+                                            @item.Units.First().Course.Name
+                                        </span>
+                                    </div>
                                 </div>
-                                <div class="item-tag tag">
-
+                                <div>
+                                    <span class="item-date text-xs text-muted">@item.Timestamp.ToMoment()</span>
                                 </div>
                             </div>
-                            <div>
-
-                            <span class="item-date text-xs text-muted">@item.Timestamp.ToString()</span>
                         </div>
-                    </div>
                     }
                  }
-
              }
-        </div>
     </div>
-
 </div>
 

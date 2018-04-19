@@ -5,23 +5,27 @@ using Microsoft.AspNetCore.Mvc;
 using Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace web.Controllers
 {
     [Authorize]
+    [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Any)]
     public class BoardsController : Controller
     {
         private readonly IRepositoryFactory _repos;
         private readonly UserManager<AppUser> _userManager;
         private readonly IDataManager _dataManager;
+        private readonly Stopwatch _watch;
 
         public BoardsController(IRepositoryFactory factory, UserManager<AppUser> userManager, IDataManager dataManager)
         {
             _repos = factory;
             _userManager = userManager;
             _dataManager = dataManager;
+            _watch = new Stopwatch();
         }
 
         [HttpGet]
@@ -36,7 +40,25 @@ namespace web.Controllers
             ViewBag.Notifications = this.GetNotifications();
             return View(boards);
         }
+        [HttpGet]
+        [Route("discussionboards/search")]
+        public IActionResult Search(string q)
+        {
+            ViewBag.Query = q;
 
+            _watch.Start();
+
+            IList<DiscussionBoard> boards = this.GetMyBoards();
+            boards = boards.Where(Predicates.Boards(q))
+                           .OrderByDescending(x => x.Posts.Count)
+                           .ToList();
+            _watch.Stop();
+            ViewBag.timespan = _watch.Elapsed;
+            _watch.Reset();
+
+            ViewBag.Notifications = this.GetNotifications();
+            return View(boards);
+        }
         [HttpGet]
         [Route("discussionboards/{id}/{name}")]
         public IActionResult Details(int id,string name)

@@ -18,6 +18,8 @@
     {
         notifications = (int)ViewBag.Notifications;
     }
+
+    string q = (string)ViewBag.Query;
 }
 <style>
     .sidenav{
@@ -89,7 +91,16 @@
                     </span>
                 </button>
             </span>
-            <input class="form-control no-border no-bg no-shadow" name="q" id="searchQuery" placeholder="Search @ViewBag.Action..." type="text">
+            @{ 
+                if (string.IsNullOrWhiteSpace(q))
+                {
+                    <input class="form-control no-border no-bg no-shadow" name="q" id="searchQuery" placeholder="Search @ViewBag.Action..." type="text">
+                }
+                else
+                {
+                    <input class="form-control no-border no-bg no-shadow" name="q" id="searchQuery" placeholder="Search @ViewBag.Action..." type="text" value="@q">
+                }
+            }
         </form>
     </div>
 </div>
@@ -97,7 +108,7 @@
 
 
 <script>
-    var search_log = ['courses','units','lecturers','students'];
+    var search_log = ['courses','units','lecturers','students','discussionboards'];
 
     $(document).ready(function () {
         checkPristineUser();

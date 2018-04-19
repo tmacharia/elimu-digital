@@ -3,7 +3,8 @@
 @model IList<Course>
 @{
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
-    ViewBag.Title = "Search Results(Courses)";
+    ViewBag.Title = $"{(string)ViewBag.Query} - Courses Search";
+    TimeSpan span = (TimeSpan)ViewBag.timespan;
 }
 
 <style>
@@ -14,10 +15,23 @@
 
 <div class="padding">
     <h4>
-        Search Results : @ViewBag.Query
-
+        <a class="text-muted" href="/courses">Courses / </a>  Search
+        
         <span class="pull-right h6">
-            <b class="badge danger">@Model.Count</b>
+            <b class="badge danger">@Model.Count</b> 
+            @{ 
+                if(Model.Count == 1)
+                {
+                    <span>result</span>
+                }
+                else
+                {
+                    <span>results</span>
+                }
+            }
+            <span class="text-muted h6">
+                in (@span.TotalSeconds.RoundOff(3) seconds)
+            </span>
         </span>
     </h4>
     <br />
@@ -27,13 +41,18 @@
             {
                 <li class="col-sm-4 col-12 col-md-3">
                     <div class="p-3 box pointer">
-                        <a class="d-block" href="/courses/@item.Id/@item.GenerateSlug()">
-                            @item.Name.Trancate()
+                        <span class="d-block">
+                            <a href="/courses/@item.Id/@item.GenerateSlug()">
+                                @item.Name.Trancate()
+                            </a>
 
-                            <span class="pull-right pointer text-default">
-                                <i class="ion ion-trash-a" onclick="onDeleteCourse(@item.Id)"></i>
-                            </span>
-                        </a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <span class="pull-right pointer text-default">
+                                    <i class="ion ion-trash-a text-danger" onclick="onDeleteCourse(@item.Id)"></i>
+                                </span>
+                            }
+                        </span>
                         <br />
                         <div class="text-xs">
                             <span>

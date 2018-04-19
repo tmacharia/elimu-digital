@@ -10,6 +10,7 @@ using Services;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ namespace web.Controllers
         private readonly IDataManager _dataManager;
         private readonly IRepositoryFactory _repos;
         private readonly IMapper _mapper;
+        private readonly Stopwatch _watch;
 
         public UnitsController(INotificationManager notificationManager,UserManager<AppUser> userManager,IDataManager dataManager, IRepositoryFactory factory, IMapper mapper)
         {
@@ -33,6 +35,7 @@ namespace web.Controllers
             _dataManager = dataManager;
             _repos = factory;
             _mapper = mapper;
+            _watch = new Stopwatch();
         }
 
         [HttpGet]
@@ -110,6 +113,7 @@ namespace web.Controllers
             IEnumerable<Unit> units = new List<Unit>();
             int account = this.GetAccountId();
 
+            _watch.Start();
             if(User.Role() == "Student")
             {
                 units = _dataManager.MyUnits<Student>(account);
@@ -131,6 +135,9 @@ namespace web.Controllers
 
             Result<Unit> rest = units.Where(x => x.Name != null && Regex.IsMatch(x.Name, pattern, RegexOptions.IgnoreCase))
                                       .ToPaged(page, itemsperpage);
+            _watch.Stop();
+            ViewBag.timespan = _watch.Elapsed;
+            _watch.Reset();
 
             return View(rest);
         }

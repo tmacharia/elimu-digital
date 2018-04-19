@@ -12,6 +12,8 @@ namespace web.API_s
 {
     [Authorize]
     [Route("api/classes")]
+    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+
     public class ClassesController : Controller
     {
         private readonly IRepositoryFactory _repos;

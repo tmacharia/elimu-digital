@@ -74,6 +74,64 @@ namespace Services
 
             return func;
         }
+        public static Func<Lecturer, bool> Lecturer(string query)
+        {
+            string pattern = "(" + query + ")";
+
+            bool func(Lecturer item)
+            {
+                // search by course name
+                if (!string.IsNullOrWhiteSpace(item.Profile.FullNames))
+                {
+                    if (Regex.IsMatch(item.Profile.FullNames, pattern, RegexOptions.IgnoreCase)) return true;
+                    else return false;
+                }
+
+                return false;
+            };
+
+            return func;
+        }
+        public static Func<Student, bool> Student(string query)
+        {
+            string pattern = "(" + query + ")";
+
+            bool func(Student item)
+            {
+                // search by course name
+                if (!string.IsNullOrWhiteSpace(item.Profile.FullNames))
+                {
+                    if (Regex.IsMatch(item.Profile.FullNames, pattern, RegexOptions.IgnoreCase)) return true;
+                    else return false;
+                }
+
+                return false;
+            };
+
+            return func;
+        }
+        public static Func<DiscussionBoard, bool> Boards(string query)
+        {
+            string pattern = "(" + query + ")";
+
+            bool func(DiscussionBoard item)
+            {
+                // search by course name
+                if (!string.IsNullOrWhiteSpace(item.Name))
+                {
+                    if (Regex.IsMatch(item.Name, pattern, RegexOptions.IgnoreCase) ||
+                        Regex.IsMatch(item.Unit.Name, pattern, RegexOptions.IgnoreCase))
+                        return true;
+                    else
+                        return false;
+                }
+
+                return false;
+            };
+
+            return func;
+        }
+
         public static Func<Unit, bool> Unit(string query)
         {
             string pattern = "(" + query + ")";

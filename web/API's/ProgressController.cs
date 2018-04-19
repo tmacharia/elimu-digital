@@ -14,6 +14,8 @@ namespace web.API_s
 {
     [Authorize]
     [Route("api/progress")]
+    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+
     public class ProgressController : Controller
     {
         private readonly IProgressTracker _tracker;

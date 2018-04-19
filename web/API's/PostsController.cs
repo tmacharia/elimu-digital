@@ -13,6 +13,8 @@ namespace web.API_s
 {
     [Authorize]
     [Route("api/posts")]
+    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+
     public class PostsController : Controller
     {
         private readonly IRepositoryFactory _repos;

@@ -18,6 +18,8 @@ using DAL.Extensions;
 namespace web.API_s
 {
     [Route("api/units")]
+    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+
     public class UnitsController : Controller
     {
         private readonly IMapper _mapper;

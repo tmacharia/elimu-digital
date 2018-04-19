@@ -7,6 +7,7 @@ using Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using web.Extensions;
@@ -20,6 +21,7 @@ namespace web.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IRepositoryFactory _repos;
         private readonly IDataManager _dataManager;
+        private readonly Stopwatch _watch;
 
         public CoursesController(UserManager<AppUser> userManager,
                                  IRepositoryFactory factory,
@@ -28,6 +30,7 @@ namespace web.Controllers
             _userManager = userManager;
             _repos = factory;
             _dataManager = dataManager;
+            _watch = new Stopwatch();
         }
 
         [HttpGet]
@@ -242,11 +245,14 @@ namespace web.Controllers
             ViewBag.Query = q;
 
             string pattern = "(" + q + ")";
-
+            _watch.Start();
             IList<Course> courses = _repos.Courses
                                           .ListWith("Units")
                                           .Where(Predicates.Course(q))
                                           .ToList();
+            _watch.Stop();
+            ViewBag.timespan = _watch.Elapsed;
+            _watch.Reset();
             ViewBag.Notifications = this.GetNotifications();
             return View(courses);
         }

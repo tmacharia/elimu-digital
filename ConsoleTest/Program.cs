@@ -39,12 +39,33 @@ namespace ConsoleTest
             //DayHandler();
             //SeedProfileIdClaims();
             //SendEmail("timothy.macharia@outlook.com", "Test Subject", "Hey there.");
-            RenameDiscussionBoards();
+            //RenameDiscussionBoards();
+            SetCourseLevels();
             //InitializeGet<School>();
             //SeedSchool("Online");
             //Get<School>(1, "Location");
 
             Console.ReadKey();
+        }
+        static void SetCourseLevels()
+        {
+            Console.WriteLine("Fetching courses...");
+            var courses = _context.Courses.ToList();
+
+            foreach (var item in courses)
+            {
+                if(item.Years == 0)
+                {
+                    Console.WriteLine($"Updating {item.Name}...");
+                    item.Years = 4;
+                    _context.Entry(item).State = EntityState.Modified;
+                }
+            }
+
+            Console.WriteLine("Updating DONE!");
+            Console.WriteLine("Saving changes to database");
+            _context.SaveChanges();
+            Console.WriteLine("Operation completed successfully!");
         }
         static void RenameDiscussionBoards()
         {

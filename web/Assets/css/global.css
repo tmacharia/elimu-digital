@@ -46,7 +46,9 @@ html, body {
 .text-danger {
     color: #ea2e49 !important;
 }
-
+.text-blue{
+    color:#0094ff;
+}
 /*================================
      Button styles & overrides
  *===============================*/
@@ -61,7 +63,10 @@ html, body {
     background: #ea2e49 !important;
     border: 1px #ea2e49 solid;
 }
-
+.btn-purple {
+    background: #815aa6;
+    border-color: #815aa6;
+}
 /*================================
      Global CSS3 Animations
  *===============================*/

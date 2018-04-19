@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,6 +21,7 @@ namespace web.Controllers
         private readonly IDataManager _dataManager;
         private readonly IRepositoryFactory _repos;
         private readonly IMapper _mapper;
+        private readonly Stopwatch _watch;
 
         public LecturersController(UserManager<AppUser> userManager,IDataManager dataManager,IRepositoryFactory factory, IMapper mapper)
         {
@@ -27,6 +29,7 @@ namespace web.Controllers
             _dataManager = dataManager;
             _repos = factory;
             _mapper = mapper;
+            _watch = new Stopwatch();
         }
 
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Client)]
@@ -37,13 +40,13 @@ namespace web.Controllers
             if(User.Role() == "Administrator")
             {
                 lecturers = _repos.Lecturers
-                                  .ListWith("Profile", "Units", "Likes")
+                                  .ListWith("Profile", "Units","Units.Course", "Likes")
                                   .ToList();
             }
             else if(User.Role() == "Lecturer")
             {
                 lecturers = _repos.Lecturers
-                                  .ListWith("Profile", "Units", "Likes")
+                                  .ListWith("Profile", "Units","Units.Course", "Likes")
                                   .ToList();
             }
             else if(User.Role() == "Student")
@@ -69,6 +72,45 @@ namespace web.Controllers
         public IActionResult Details(int id, string names)
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Search(string q)
+        {
+            IEnumerable<Lecturer> lecturers = new List<Lecturer>();
+            ViewBag.Query = q;
+            _watch.Start();
+
+            if (User.Role() == "Administrator")
+            {
+                lecturers = _repos.Lecturers
+                                  .ListWith("Profile", "Units", "Units.Course", "Likes");
+            }
+            else if (User.Role() == "Lecturer")
+            {
+                lecturers = _repos.Lecturers
+                                  .ListWith("Profile", "Units", "Units.Course", "Likes");
+            }
+            else if (User.Role() == "Student")
+            {
+                lecturers = _dataManager.MyLecturers(this.GetAccountId());
+            }
+
+            if (lecturers == null)
+            {
+                lecturers = new List<Lecturer>();
+            }
+
+            var model = lecturers.SkipWhile(x => x == null);
+            model = model.Where(Predicates.Lecturer(q))
+                         .ToList();
+            _watch.Stop();
+            ViewBag.timespan = _watch.Elapsed;
+            _watch.Reset();
+
+            ViewBag.Notifications = this.GetNotifications();
+
+            return View(model);
         }
     }
 }

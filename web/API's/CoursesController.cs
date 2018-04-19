@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 namespace web.API_s
 {
     [Route("api/courses")]
+    [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+
     public class CoursesController : Controller
     {
         private readonly IUploader _uploader;

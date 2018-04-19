@@ -8,10 +8,17 @@
         notifications = (int)ViewBag.Notifications;
     }
 }
-
+<style>
+    .sidenav .nav-active-text .active > a{
+        color:#fff;
+    }
+    .app-aside .scroll{
+        width:auto;
+    }
+</style>
 <div aria-hidden="true" class="app-aside fade box-shadow-x nav-expand white" id="aside">
-    <div class="sidenav hv white" ui-class="white">
-        <div class="navbar lt">
+    <div class="sidenav hv"  style="background:#462565; color:#fff;">
+        <div class="navbar lt" >
             <a class="navbar-brand" href="/">
                 <span>
                     <img alt="logo" height="30" src="~/images/mobile_eduction_logo_fine_circle.png" />
@@ -145,7 +152,7 @@
 
                         <li class="nav-header hidden-folded"><span class="text-xs">Collection</span></li>
                     
-                    @if(ViewBag.Action == "Discussions")
+                    @if(ViewBag.Action == "DiscussionBoards")
                     {
                         <li class="active">
                             <a href="/discussionboards"><span class="nav-icon"><i class="ion ion-chatboxes"></i></span> <span class="nav-text">Discussion Boards</span></a>
@@ -194,16 +201,13 @@
                         <li>
                             <a href="#"><span class="nav-icon"><i class="fa fa-calendar"></i></span> <span class="nav-text">Calendar</span></a>
                         </li>
-                        <li>
-                            <a href="/home/about"><span class="nav-icon"><i class="fa fa-info-circle"></i></span> <span class="nav-text">About Us</span></a>
-                        </li>
                     }
                     else
                     {
-                        <li>
-                            <a href="/home/about"><span class="nav-icon"><i class="fa fa-info-circle"></i></span> <span class="nav-text">About Us</span></a>
-                        </li>
                     }
+                    <li>
+                      <a href="/about-us"><span class="nav-icon"><i class="fa fa-info-circle"></i></span> <span class="nav-text">About Us</span></a>
+                    </li>
                 </ul>
             </div>
         </div>
